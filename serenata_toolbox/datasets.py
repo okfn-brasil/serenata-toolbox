@@ -1,4 +1,5 @@
 import os
+from urllib.request import urlretrieve
 
 def fetch_latest_backup(destination_path,
                         aws_bucket='serenata-de-amor-data',

@@ -5,10 +5,10 @@ from urllib.request import urlretrieve
 from zipfile import ZipFile
 import numpy as np
 import pandas as pd
+from .reimbursements import Reimbursements
 
-class CEAPDataset():
+class CEAPDataset:
     def __init__(self, path):
-        super(CEAPDataset, self).__init__()
         self.path = path
 
 
@@ -43,7 +43,9 @@ class CEAPDataset():
 
 
     def clean(self):
-        pass
+        reimbursements = Reimbursements(self.path)
+        dataset = reimbursements.group(reimbursements.receipts)
+        reimbursements.write_reimbursement_file(dataset)
 
 
     def __convert_file_to_csv(self, xml_path):
