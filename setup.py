@@ -14,7 +14,8 @@ setup(
     ],
     description='Toolbox for Serenata de Amor project',
     install_requires=[
-        'requests',
+        'numpy>=1.11',
+        'pandas>=0.18',
     ],
     keywords='serenata de amor, data science, brazil, corruption',
     license='MIT',
