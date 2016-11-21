@@ -14,6 +14,7 @@ setup(
     ],
     description='Toolbox for Serenata de Amor project',
     install_requires=[
+        'beautifulsoup4>=4.4',
         'pandas>=0.18',
     ],
     keywords='serenata de amor, data science, brazil, corruption',
