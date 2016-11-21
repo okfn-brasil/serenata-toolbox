@@ -7,8 +7,7 @@ import numpy as np
 
 class Reimbursements:
 
-    DATE = datetime.date.today().strftime('%Y-%m-%d')
-    FILE_BASE_NAME = '{}-reimbursements.xz'.format(DATE)
+    FILE_BASE_NAME = 'reimbursements.xz'
 
     CSV_PARAMS = {
         'compression': 'xz',
