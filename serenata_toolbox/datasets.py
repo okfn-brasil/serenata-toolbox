@@ -10,7 +10,11 @@ def fetch_latest_backup(destination_path,
              '2016-08-08-ceap-datasets.md',
              '2016-08-08-datasets-format.html',
              '2016-09-03-companies.xz',
-             '2016-11-11-congressperson-relatives.xz']
+             '2016-11-11-congressperson-relatives.xz',
+             '2016-11-19-current-year.xz',
+             '2016-11-19-last-year.xz',
+             '2016-11-19-previous-years.xz',
+             '2016-11-19-reimbursements.xz']
     for filename in files:
         url = 'https://{}.amazonaws.com/{}/{}'.format(aws_region,
                                                       aws_bucket,
