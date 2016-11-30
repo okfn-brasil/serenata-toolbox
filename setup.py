@@ -22,6 +22,7 @@ setup(
     license='MIT',
     long_description='Check `Serenata Toolbox at GitHub <{}>`_.'.format(REPO_URL),
     name='serenata-toolbox',
+    scripts=['scripts/xml2csv.py'],
     packages=['serenata_toolbox'],
     url=REPO_URL,
     version='0.0.1'
