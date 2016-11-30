@@ -1,6 +1,5 @@
 import os.path
 import subprocess
-import sys
 from urllib.request import urlretrieve
 from zipfile import ZipFile
 import numpy as np
@@ -103,7 +102,6 @@ class CEAPDataset:
         data['subquota_description'] = \
             data['subquota_description'].astype('category')
 
-        keys = data['subquota_description'].cat.categories
         categories = {
             'ASSINATURA DE PUBLICAÇÕES':
                 'Publication subscriptions',
