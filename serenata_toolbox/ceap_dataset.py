@@ -1,10 +1,10 @@
 import os.path
-import subprocess
 from urllib.request import urlretrieve
 from zipfile import ZipFile
 import numpy as np
 import pandas as pd
 from .reimbursements import Reimbursements
+from .xml2csv import convert_xml_to_csv
 
 class CEAPDataset:
     def __init__(self, path):
@@ -32,7 +32,8 @@ class CEAPDataset:
     def convert_to_csv(self):
         for filename in ['AnoAtual', 'AnoAnterior', 'AnosAnteriores']:
             xml_path = os.path.join(self.path, '{}.xml'.format(filename))
-            self.__convert_file_to_csv(xml_path)
+            csv_path = xml_path.replace('.xml', '.csv')
+            convert_xml_to_csv(xml_path, csv_path)
 
 
     def translate(self):
@@ -45,12 +46,6 @@ class CEAPDataset:
         reimbursements = Reimbursements(self.path)
         dataset = reimbursements.group(reimbursements.receipts)
         reimbursements.write_reimbursement_file(dataset)
-
-
-    def __convert_file_to_csv(self, xml_path):
-        script_path = os.path.join(os.path.dirname(__file__), 'xml2csv.py')
-        csv_path = xml_path.replace('.xml', '.csv')
-        subprocess.call(['python', script_path, xml_path, csv_path])
 
 
     def __translate_file(self, csv_path):

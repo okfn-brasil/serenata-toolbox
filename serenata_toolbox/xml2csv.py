@@ -8,10 +8,6 @@ from io import StringIO
 from bs4 import BeautifulSoup
 from lxml.etree import iterparse
 
-XML_FILE_PATH = sys.argv[1]
-CSV_FILE_PATH = sys.argv[2]
-HTML_FILE_PATH = os.path.join(os.path.dirname(XML_FILE_PATH),
-                              'datasets-format.html')
 
 
 def output(*args, **kwargs):
@@ -56,28 +52,32 @@ def create_csv(csv_path, headers):
         writer = DictWriter(csv_file, fieldnames=headers)
         writer.writeheader()
 
+def convert_xml_to_csv(xml_file_path, csv_file_path):
+    """Converts the xml file to a file in CSV format"""
+    html_file_path = os.path.join(os.path.dirname(xml_file_path),
+                                 'datasets-format.html')
+    output('Creating the CSV file')
+    headers = list(csv_header(html_file_path))
+    create_csv(csv_file_path, headers)
+    output('Reading the XML file')
+    count = 1
+    for json_io in xml_parser(xml_file_path):
+        # convert json to csv
+        csv_io = StringIO()
+        writer = DictWriter(csv_io, fieldnames=headers)
+        writer.writerow(json.loads(json_io.getvalue()))
+        output('Writing record #{:,} to the CSV'.format(count), end='\r')
+        with open(csv_file_path, 'a') as csv_file:
+            print(csv_io.getvalue(), file=csv_file)
+        csv_io.close()
+        json_io.close()
+        csv_io.close()
+        count += 1
+    print('')  # clean the last output (the one with end='\r')
+    output('Done!')
 
-output('Creating the CSV file')
-headers = list(csv_header(HTML_FILE_PATH))
-create_csv(CSV_FILE_PATH, headers)
 
-output('Reading the XML file')
-count = 1
-for json_io in xml_parser(XML_FILE_PATH):
-
-    # convert json to csv
-    csv_io = StringIO()
-    writer = DictWriter(csv_io, fieldnames=headers)
-    writer.writerow(json.loads(json_io.getvalue()))
-
-    output('Writing record #{:,} to the CSV'.format(count), end='\r')
-    with open(CSV_FILE_PATH, 'a') as csv_file:
-        print(csv_io.getvalue(), file=csv_file)
-    csv_io.close()
-
-    json_io.close()
-    csv_io.close()
-    count += 1
-
-print('')  # clean the last output (the one with end='\r')
-output('Done!')
+if __name__ == "__main__":
+    XML_FILE_PATH = sys.argv[1]
+    CSV_FILE_PATH = sys.argv[2]
+    convert_xml_to_csv(XML_FILE_PATH, CSV_FILE_PATH)
