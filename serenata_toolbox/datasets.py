@@ -1,6 +1,16 @@
 import os
 from urllib.request import urlretrieve
 
+def fetch(filename, destination_path,
+          aws_bucket='serenata-de-amor-data',
+          aws_region='s3-sa-east-1'):
+    url = 'https://{}.amazonaws.com/{}/{}'.format(aws_region,
+                                                  aws_bucket,
+                                                  filename)
+    filepath = os.path.join(destination_path, filename)
+    if not os.path.exists(filepath):
+        urlretrieve(url, filepath)
+
 def fetch_latest_backup(destination_path,
                         aws_bucket='serenata-de-amor-data',
                         aws_region='s3-sa-east-1'):
@@ -17,9 +27,4 @@ def fetch_latest_backup(destination_path,
              '2016-11-19-reimbursements.xz',
              '2016-11-28-congressperson-civil-names.xz']
     for filename in files:
-        url = 'https://{}.amazonaws.com/{}/{}'.format(aws_region,
-                                                      aws_bucket,
-                                                      filename)
-        filepath = os.path.join(destination_path, filename)
-        if not os.path.exists(filepath):
-            urlretrieve(url, filepath)
+        fetch(filename, destination_path, aws_bucket, aws_region)
