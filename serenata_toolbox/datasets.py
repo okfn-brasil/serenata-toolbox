@@ -15,7 +15,8 @@ def fetch_latest_backup(destination_path,
              '2016-11-19-last-year.xz',
              '2016-11-19-previous-years.xz',
              '2016-11-19-reimbursements.xz',
-             '2016-11-28-congressperson-civil-names.xz']
+             '2016-11-28-congressperson-civil-names.xz',
+             '2016-11-29-yelp-companies.xz']
     for filename in files:
         url = 'https://{}.amazonaws.com/{}/{}'.format(aws_region,
                                                       aws_bucket,
