@@ -8,11 +8,11 @@ As this is a _work in progress_ clone the repo and use `$ python setup.py develo
 
 ## Usage
 
-### Hello world
+### Output
 
 ```console
-$ python
->>> from serenata_toolbox import hello_world
->>> hello_world()
-'Ahoy!'
+$ python3
+>>> from serenata_toolbox import xml2csv
+>>> xml2csv.output('Spam and eggs')
+2016-12-01 18:14:26 Spam and eggs
 ```
