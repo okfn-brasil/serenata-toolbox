@@ -1,0 +1,8 @@
+# Build PDF & ePub
+formats:
+    - epub
+    - pdf
+python:
+    version: 3
+python:
+    setup_py_install: true
