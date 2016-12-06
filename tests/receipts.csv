@@ -1,0 +1,4 @@
+year,applicant_id,document_id,reimbursement_number,document_value,net_value,reimbursement_value
+2016,999,100,1,90,20,20
+2016,999,100,2,90,30,30
+2016,999,100,3,90,40,40

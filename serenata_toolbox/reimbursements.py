@@ -17,7 +17,7 @@ class Reimbursements:
         self.path = path
 
     def read_csv(self, name):
-        filepath = os.path.join(self.path, '{}.xz'.format(name))
+        filepath = os.path.join(self.path, name)
         print('Loading {}…'.format(name))
         dtype = {
             'applicant_id': np.str,
@@ -41,7 +41,7 @@ class Reimbursements:
     @property
     def receipts(self):
         print('Merging all datasets…')
-        datasets = ('current-year', 'last-year', 'previous-years')
+        datasets = ('current-year.xz', 'last-year.xz', 'previous-years.xz')
         data = (self.read_csv(name) for name in datasets)
         return pd.concat(data)
 
@@ -59,13 +59,11 @@ class Reimbursements:
         print('Dropping rows without document_value or reimbursement_number…')
         subset = ('document_value', 'reimbursement_number')
         receipts = receipts.dropna(subset=subset)
+        groupby_keys = ('year', 'applicant_id', 'document_id')
+        receipts = receipts.dropna(subset=subset + groupby_keys)
 
         print('Grouping dataset by applicant_id, document_id and year…')
-        keys = ('year', 'applicant_id', 'document_id')
-        valid_receipts = receipts[(~receipts['document_id'].isnull()) &
-                                  (~receipts['year'].isnull()) &
-                                  (~receipts['applicant_id'].isnull())]
-        grouped = valid_receipts.groupby(keys)
+        grouped = receipts.groupby(groupby_keys)
 
         print('Gathering all reimbursement numbers together…')
         numbers = self.aggregate(
@@ -93,10 +91,11 @@ class Reimbursements:
 
         print('Generating the new dataset…')
         final = pd.merge(
-            pd.merge(pd.merge(total, net_total, on=keys), numbers, on=keys),
-            valid_receipts,
-            on=keys
+            pd.merge(pd.merge(total, net_total, on=groupby_keys), numbers, on=groupby_keys),
+            receipts,
+            on=groupby_keys
         )
+        final = final.drop_duplicates(subset=groupby_keys)
         final.rename(columns={'net_value': 'net_values',
                               'reimbursement_value': 'reimbursement_values'},
                      inplace=True)
