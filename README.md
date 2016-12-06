@@ -16,3 +16,9 @@ $ python3
 >>> xml2csv.output('Spam and eggs')
 2016-12-01 18:14:26 Spam and eggs
 ```
+
+## Test suite
+
+```console
+$ python -m unittest discover tests
+```
