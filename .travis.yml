@@ -1,0 +1,4 @@
+language: python
+python: 3.5
+install: python setup.py develop
+script: python -m unittest discover tests
