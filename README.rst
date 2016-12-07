@@ -2,8 +2,8 @@
    :target: http://serenata-toolbox.readthedocs.io/en/latest/?badge=latest
    :alt: Documentation Status
 
-.. image:: https://landscape.io/github/jonDel/serenata-toolbox/master/landscape.svg?style=flat
-   :target: https://landscape.io/github/jonDel/serenata-toolbox/master
+.. image:: https://landscape.io/github/datasciencebr/serenata-toolbox/master/landscape.svg?style=flat
+   :target: https://landscape.io/github/datasciencebr/serenata-toolbox/master
    :alt: Code Health
 
 .. image:: https://img.shields.io/pypi/v/serenata_toolbox.svg
