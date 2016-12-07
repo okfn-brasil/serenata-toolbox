@@ -1,3 +1,7 @@
+.. image:: https://travis-ci.org/datasciencebr/serenata-toolbox.svg?branch=master
+   :target: https://travis-ci.org/datasciencebr/serenata-toolbox
+   :alt: Travis CI build status (Linux)
+
 .. image:: https://readthedocs.org/projects/serenata-toolbox/badge/?version=latest
    :target: http://serenata-toolbox.readthedocs.io/en/latest/?badge=latest
    :alt: Documentation Status
@@ -55,6 +59,13 @@ You will need sphinx installed in your machine
 
   $ cd docs
   $ make clean;make rst;rm source/modules.rst;make html
+  
+Run Unit Test suite
+-------------------
+
+::
+
+  $ python -m unittest discover tests
 
 Source Code
 -----------
