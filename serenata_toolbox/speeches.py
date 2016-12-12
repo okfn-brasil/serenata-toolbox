@@ -2,8 +2,9 @@ import os
 import pandas as pd
 import numpy as np
 import xml.etree.ElementTree as ET
-
 import urllib
+
+from datetime import datetime
 
 class Speeches:
 
@@ -25,20 +26,20 @@ class Speeches:
         records = []
         root = t.getroot()
         for i, session in enumerate(root):
-            session_code = session.find('codigo').text
-            session_date = session.find('data').text
-            session_num  = session.find('numero').text
+            session_code = session.find('codigo').text.strip()
+            session_date = datetime.strptime(session.find('data').text.strip(), "%d/%m/%Y")
+            session_num  = session.find('numero').text.strip()
             for phase in session.find('fasesSessao').getchildren():
-                phase_code = phase.find('codigo').text
-                phase_desc = phase.find('descricao').text
+                phase_code = phase.find('codigo').text.strip()
+                phase_desc = phase.find('descricao').text.strip()
                 for speech in phase.find('discursos').getchildren():
-                    speech_speaker_num   = speech.find('orador/numero').text
-                    speech_speaker_name  = speech.find('orador/nome').text
-                    speech_speaker_party = speech.find('orador/partido').text
-                    speech_speaker_state = speech.find('orador/uf').text
-                    speech_started_at    = speech.find('horaInicioDiscurso').text
-                    speech_room_num      = speech.find('numeroQuarto').text
-                    speech_insertion_num = speech.find('numeroInsercao').text
+                    speech_speaker_num   = speech.find('orador/numero').text.strip()
+                    speech_speaker_name  = speech.find('orador/nome').text.strip()
+                    speech_speaker_party = speech.find('orador/partido').text.strip()
+                    speech_speaker_state = speech.find('orador/uf').text.strip()
+                    speech_started_at    = datetime.strptime(speech.find('horaInicioDiscurso').text.strip(), "%d/%m/%Y %H:%M:%S")
+                    speech_room_num      = speech.find('numeroQuarto').text.strip()
+                    speech_insertion_num = speech.find('numeroInsercao').text.strip()
                     records.append([
                         session_code,
                         session_date,
