@@ -4,8 +4,6 @@ import numpy as np
 import xml.etree.ElementTree as ET
 
 import urllib
-# from .xml2csv import convert_xml_to_csv
-from xml2csv import convert_xml_to_csv
 
 class Speeches:
 
