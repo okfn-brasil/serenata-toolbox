@@ -1,0 +1,9 @@
+# Build PDF & ePub
+formats:
+    - epub
+    - pdf
+python:
+    version: 3
+python:
+    setup_py_install: false
+    # Changed to false due to issue https://github.com/rtfd/readthedocs.org/issues/2542
