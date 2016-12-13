@@ -23,37 +23,8 @@ class Speeches:
         file=urllib.request.urlopen(url)
 
         t = ET.ElementTree(file=file)
-        records = []
         root = t.getroot()
-        for i, session in enumerate(root):
-            session_code = session.find('codigo').text.strip()
-            session_date = datetime.strptime(session.find('data').text.strip(), "%d/%m/%Y")
-            session_num  = session.find('numero').text.strip()
-            for phase in session.find('fasesSessao').getchildren():
-                phase_code = phase.find('codigo').text.strip()
-                phase_desc = phase.find('descricao').text.strip()
-                for speech in phase.find('discursos').getchildren():
-                    speech_speaker_num   = speech.find('orador/numero').text.strip()
-                    speech_speaker_name  = speech.find('orador/nome').text.strip()
-                    speech_speaker_party = speech.find('orador/partido').text.strip()
-                    speech_speaker_state = speech.find('orador/uf').text.strip()
-                    speech_started_at    = datetime.strptime(speech.find('horaInicioDiscurso').text.strip(), "%d/%m/%Y %H:%M:%S")
-                    speech_room_num      = speech.find('numeroQuarto').text.strip()
-                    speech_insertion_num = speech.find('numeroInsercao').text.strip()
-                    records.append([
-                        session_code,
-                        session_date,
-                        session_num,
-                        phase_code,
-                        phase_desc,
-                        speech_speaker_num,
-                        speech_speaker_name,
-                        speech_speaker_party,
-                        speech_speaker_state,
-                        speech_started_at,
-                        speech_room_num,
-                        speech_insertion_num
-                    ])
+        records = self.parse_speeches(root)
 
         return pd.DataFrame(records, columns=[
             'session_code',
@@ -76,6 +47,50 @@ class Speeches:
         df.to_csv(filepath, **self.CSV_PARAMS)
 
         print('Done.')
+
+    def parse_speeches(self, root):
+        for session in root:
+            session_code = self.__extract_text(session, 'codigo')
+            session_date = self.__extract_date(session, 'data')
+            session_num  = self.__extract_text(session, 'numero')
+            for phase in session.find('fasesSessao'):
+                phase_code = self.__extract_text(phase, 'codigo')
+                phase_desc = self.__extract_text(phase, 'descricao')
+                for speech in phase.find('discursos'):
+                    speech_speaker_num   = self.__extract_text(speech, 'orador/numero')
+                    speech_speaker_name  = self.__extract_text(speech, 'orador/nome')
+                    speech_speaker_party = self.__extract_text(speech, 'orador/partido')
+                    speech_speaker_state = self.__extract_text(speech, 'orador/uf')
+                    speech_started_at    = self.__extract_datetime(speech, 'horaInicioDiscurso')
+                    speech_room_num      = self.__extract_text(speech, 'numeroQuarto')
+                    speech_insertion_num = self.__extract_text(speech, 'numeroInsercao')
+
+                    yield [
+                        session_code,
+                        session_date,
+                        session_num,
+                        phase_code,
+                        phase_desc,
+                        speech_speaker_num,
+                        speech_speaker_name,
+                        speech_speaker_party,
+                        speech_speaker_state,
+                        speech_started_at,
+                        speech_room_num,
+                        speech_insertion_num
+                    ]
+
+    @staticmethod
+    def __extract_date(node, xpath):
+        return datetime.strptime(Speeches.__extract_text(node, xpath), "%d/%m/%Y")
+
+    @staticmethod
+    def __extract_datetime(node, xpath):
+        return datetime.strptime(Speeches.__extract_text(node, xpath), "%d/%m/%Y %H:%M:%S")
+
+    @staticmethod
+    def __extract_text(node, xpath):
+        return node.find(xpath).text.strip()
 
 # TODO: Read date range and output path from user input
 range_start = '01/11/2016'
