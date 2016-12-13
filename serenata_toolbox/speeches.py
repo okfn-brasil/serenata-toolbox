@@ -8,7 +8,12 @@ from datetime import datetime
 
 class Speeches:
 
-    URL = 'http://www.camara.leg.br/SitCamaraWS/SessoesReunioes.asmx/ListarDiscursosPlenario?dataIni={dataIni}&dataFim={dataFim}&codigoSessao=&parteNomeParlamentar=&siglaPartido=&siglaUF='
+    URL = (
+        'http://www.camara.leg.br/SitCamaraWS/SessoesReunioes.asmx/ListarDiscursosPlenario'
+        '?dataIni={dataIni}'
+        '&dataFim={dataFim}'
+        '&codigoSessao=&parteNomeParlamentar=&siglaPartido=&siglaUF='
+    )
     FILE_BASE_NAME = 'speeches.xz'
 
     CSV_PARAMS = {
