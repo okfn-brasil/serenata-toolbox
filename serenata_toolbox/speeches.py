@@ -6,6 +6,18 @@ import urllib
 
 from datetime import datetime
 
+"""
+Usage:
+
+    range_start = '01/11/2016'
+    range_end = '30/11/2016'
+    output = 'data/2016-11-speeches.xz'
+
+    speeches = Speeches()
+    df = speeches.fetch(range_start, range_end)
+    speeches.write_file(output, df)
+"""
+
 class Speeches:
 
     URL = (
@@ -14,7 +26,6 @@ class Speeches:
         '&dataFim={dataFim}'
         '&codigoSessao=&parteNomeParlamentar=&siglaPartido=&siglaUF='
     )
-    FILE_BASE_NAME = 'speeches.xz'
 
     CSV_PARAMS = {
         'compression': 'xz',
@@ -23,13 +34,20 @@ class Speeches:
     }
 
     def fetch(self, range_start, range_end):
+        """
+        Fetches speaches from the ListarDiscursosPlenario endpoint of the
+        SessoesReunioes (SessionsReunions) API.
+
+        The date range provided should be specified as a string using the
+        format supported by the API (%d/%m/%Y)
+        """
         range = {'dataIni': range_start, 'dataFim': range_end}
         url = self.URL.format(**range)
         file=urllib.request.urlopen(url)
 
         t = ET.ElementTree(file=file)
         root = t.getroot()
-        records = self.parse_speeches(root)
+        records = self.__parse_speeches(root)
 
         return pd.DataFrame(records, columns=[
             'session_code',
@@ -46,14 +64,14 @@ class Speeches:
             'speech_insertion_num'
         ])
 
-    def write_file(self, path, df):
+    def write_file(self, filepath, df):
+        """Save a compressed CSV file with the given df to the path specified as filepath"""
         print('Writing it to file…')
-        filepath = os.path.join(path, self.FILE_BASE_NAME)
         df.to_csv(filepath, **self.CSV_PARAMS)
 
         print('Done.')
 
-    def parse_speeches(self, root):
+    def __parse_speeches(self, root):
         for session in root:
             session_code = self.__extract_text(session, 'codigo')
             session_date = self.__extract_date(session, 'data')
@@ -96,13 +114,3 @@ class Speeches:
     @staticmethod
     def __extract_text(node, xpath):
         return node.find(xpath).text.strip()
-
-# TODO: Read date range and output path from user input
-range_start = '01/11/2016'
-range_end = '30/11/2016'
-output = '.'
-
-if __name__ == '__main__':
-    speeches = Speeches()
-    df = speeches.fetch(range_start, range_end)
-    speeches.write_file(output, df)
