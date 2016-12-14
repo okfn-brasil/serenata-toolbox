@@ -35,7 +35,7 @@ class Speeches:
 
     def fetch(self, range_start, range_end):
         """
-        Fetches speaches from the ListarDiscursosPlenario endpoint of the
+        Fetches speeches from the ListarDiscursosPlenario endpoint of the
         SessoesReunioes (SessionsReunions) API.
 
         The date range provided should be specified as a string using the
