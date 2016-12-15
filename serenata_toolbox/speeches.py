@@ -6,18 +6,6 @@ import urllib
 
 from datetime import datetime
 
-"""
-Usage:
-
-    range_start = '01/11/2016'
-    range_end = '30/11/2016'
-    output = 'data/2016-11-speeches.xz'
-
-    speeches = Speeches()
-    df = speeches.fetch(range_start, range_end)
-    speeches.write_file(output, df)
-"""
-
 class Speeches:
 
     URL = (
@@ -114,3 +102,13 @@ class Speeches:
     @staticmethod
     def __extract_text(node, xpath):
         return node.find(xpath).text.strip()
+
+def fetch_speeches(output, range_start, range_end):
+    """
+    :param output: (str) directory in which the output file will be saved
+    :param range_start: (str) date in the format dd/mm/yyyy
+    :param range_end: (str) date in the format dd/mm/yyyy
+    """
+    speeches = Speeches()
+    df = speeches.fetch(range_start, range_end)
+    speeches.write_file(output, df)
