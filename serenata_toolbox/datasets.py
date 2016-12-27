@@ -27,6 +27,8 @@ def fetch_latest_backup(destination_path,
              '2016-11-19-reimbursements.xz',
              '2016-11-28-congressperson-civil-names.xz',
              '2016-11-29-yelp-companies.xz',
-             '2016-12-02-foursquare-companies.xz']
+             '2016-12-02-foursquare-companies.xz',
+             '2016-12-15-speeches.xz',
+             '2016-12-21-speeches.xz']
     for filename in files:
         fetch(filename, destination_path, aws_bucket, aws_region)
