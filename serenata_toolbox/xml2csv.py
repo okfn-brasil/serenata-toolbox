@@ -1,5 +1,5 @@
 import json
-import os.path
+import os
 import sys
 from csv import DictWriter
 from datetime import datetime
@@ -7,7 +7,6 @@ from io import StringIO
 
 from bs4 import BeautifulSoup
 from lxml.etree import iterparse
-
 
 
 def output(*args, **kwargs):
@@ -52,27 +51,35 @@ def create_csv(csv_path, headers):
         writer = DictWriter(csv_file, fieldnames=headers)
         writer.writeheader()
 
+
 def convert_xml_to_csv(xml_file_path, csv_file_path):
     """Converts the xml file to a file in CSV format"""
-    html_file_path = os.path.join(os.path.dirname(xml_file_path),
-                                 'datasets-format.html')
+    if os.stat(xml_file_path).st_size < 2 ** 10:
+        output(xml_file_path, " is empty, so let's skip it!")
+        return
+
+    data_dir = os.path.dirname(xml_file_path)
+    html_file_path = os.path.join(data_dir, 'datasets-format.html')
+
     output('Creating the CSV file')
     headers = list(csv_header(html_file_path))
     create_csv(csv_file_path, headers)
-    output('Reading the XML file')
+
     count = 1
+    output('Reading the XML file')
     for json_io in xml_parser(xml_file_path):
-        # convert json to csv
         csv_io = StringIO()
         writer = DictWriter(csv_io, fieldnames=headers)
         writer.writerow(json.loads(json_io.getvalue()))
+
         output('Writing record #{:,} to the CSV'.format(count), end='\r')
         with open(csv_file_path, 'a') as csv_file:
             print(csv_io.getvalue(), file=csv_file)
-        csv_io.close()
+
         json_io.close()
         csv_io.close()
         count += 1
+
     print('')  # clean the last output (the one with end='\r')
     output('Done!')
 
