@@ -6,6 +6,11 @@ import urllib
 
 from datetime import datetime
 
+from serenata_toolbox import datasets
+from serenata_toolbox.cleanup import xml_extract_text, \
+                                     xml_extract_datetime, \
+                                     xml_extract_date
+
 class Speeches:
 
     URL = (
@@ -31,11 +36,10 @@ class Speeches:
         """
         range = {'dataIni': range_start, 'dataFim': range_end}
         url = self.URL.format(**range)
-        file=urllib.request.urlopen(url)
+        xml = urllib.request.urlopen(url)
 
-        t = ET.ElementTree(file=file)
-        root = t.getroot()
-        records = self.__parse_speeches(root)
+        tree = ET.ElementTree(file=xml)
+        records = self.__parse_speeches(tree.getroot())
 
         return pd.DataFrame(records, columns=[
             'session_code',
@@ -52,29 +56,22 @@ class Speeches:
             'speech_insertion_num'
         ])
 
-    def write_file(self, filepath, df):
-        """Save a compressed CSV file with the given df to the path specified as filepath"""
-        print('Writing it to file…')
-        df.to_csv(filepath, **self.CSV_PARAMS)
-
-        print('Done.')
-
     def __parse_speeches(self, root):
         for session in root:
-            session_code = self.__extract_text(session, 'codigo')
-            session_date = self.__extract_date(session, 'data')
-            session_num  = self.__extract_text(session, 'numero')
+            session_code = xml_extract_text(session, 'codigo')
+            session_date = xml_extract_date(session, 'data')
+            session_num  = xml_extract_text(session, 'numero')
             for phase in session.find('fasesSessao'):
-                phase_code = self.__extract_text(phase, 'codigo')
-                phase_desc = self.__extract_text(phase, 'descricao')
+                phase_code = xml_extract_text(phase, 'codigo')
+                phase_desc = xml_extract_text(phase, 'descricao')
                 for speech in phase.find('discursos'):
-                    speech_speaker_num   = self.__extract_text(speech, 'orador/numero')
-                    speech_speaker_name  = self.__extract_text(speech, 'orador/nome')
-                    speech_speaker_party = self.__extract_text(speech, 'orador/partido')
-                    speech_speaker_state = self.__extract_text(speech, 'orador/uf')
-                    speech_started_at    = self.__extract_datetime(speech, 'horaInicioDiscurso')
-                    speech_room_num      = self.__extract_text(speech, 'numeroQuarto')
-                    speech_insertion_num = self.__extract_text(speech, 'numeroInsercao')
+                    speech_speaker_num   = xml_extract_text(speech, 'orador/numero')
+                    speech_speaker_name  = xml_extract_text(speech, 'orador/nome')
+                    speech_speaker_party = xml_extract_text(speech, 'orador/partido')
+                    speech_speaker_state = xml_extract_text(speech, 'orador/uf')
+                    speech_started_at    = xml_extract_datetime(speech, 'horaInicioDiscurso')
+                    speech_room_num      = xml_extract_text(speech, 'numeroQuarto')
+                    speech_insertion_num = xml_extract_text(speech, 'numeroInsercao')
 
                     yield [
                         session_code,
@@ -91,24 +88,12 @@ class Speeches:
                         speech_insertion_num
                     ]
 
-    @staticmethod
-    def __extract_date(node, xpath):
-        return datetime.strptime(Speeches.__extract_text(node, xpath), "%d/%m/%Y")
-
-    @staticmethod
-    def __extract_datetime(node, xpath):
-        return datetime.strptime(Speeches.__extract_text(node, xpath), "%d/%m/%Y %H:%M:%S")
-
-    @staticmethod
-    def __extract_text(node, xpath):
-        return node.find(xpath).text.strip()
-
-def fetch_speeches(output, range_start, range_end):
+def fetch_speeches(data_dir, range_start, range_end):
     """
-    :param output: (str) directory in which the output file will be saved
+    :param data_dir: (str) directory in which the output file will be saved
     :param range_start: (str) date in the format dd/mm/yyyy
     :param range_end: (str) date in the format dd/mm/yyyy
     """
     speeches = Speeches()
     df = speeches.fetch(range_start, range_end)
-    speeches.write_file(output, df)
+    datasets.save(df, data_dir, "speeches")
