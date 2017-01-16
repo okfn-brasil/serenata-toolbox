@@ -1,128 +1,14 @@
-import os
 import urllib
 import xml.etree.ElementTree as ET
 import time
-import socket
-from datetime import datetime
 
-import numpy as np
 import pandas as pd
 
-
-CSV_PARAMS = {
-    'compression': 'xz',
-    'encoding': 'utf-8',
-    'index': False
-}
-
-TODAY = datetime.strftime(datetime.now(), '%Y-%m-%d')
-
-
-def extract_text(node, xpath):
-    text = node.find(xpath).text
-    if text != None:
-        text = text.strip()
-    return text
-
-def extract_date(node, xpath):
-    return datetime.strptime(extract_text(node, xpath), "%d/%m/%Y")
-
-def extract_datetime(node, xpath):
-    return datetime.strptime(extract_text(node, xpath), "%d/%m/%Y %H:%M:%S")
-
-def translate_column(df, column, translations):
-    df[column] = df[column].astype('category')
-    translations = [translations[cat]
-                   for cat in df[column].cat.categories]
-
-    df[column].cat.rename_categories(translations,
-                                     inplace=True)
-
-
-###############################################################################
-## Deputies dataset
-
-
-class Deputies:
-
-    URL = 'http://www.camara.leg.br/SitCamaraWS/deputados.asmx/ObterDeputados'
-
-    def fetch(self):
-        """
-        Fetches the list of deputies for the current term.
-        """
-        xml = urllib.request.urlopen(self.URL)
-
-        tree = ET.ElementTree(file=xml)
-        records = self.__parse_deputies(tree.getroot())
-
-        df = pd.DataFrame(records, columns=(
-            'congressperson_id',
-            'budget_id',
-            'condition',
-            'congressperson_document',
-            'civil_name',
-            'congressperson_name',
-            'picture_url',
-            'gender',
-            'state',
-            'party',
-            'phone_number',
-            'email'
-        ))
-        return self.__translate(df)
-
-    def __parse_deputies(self, root):
-        for deputy in root:
-            yield (
-                extract_text(deputy, 'ideCadastro'),
-                extract_text(deputy, 'codOrcamento'),
-                extract_text(deputy, 'condicao'),
-                extract_text(deputy, 'matricula'),
-                extract_text(deputy, 'nome'),
-                extract_text(deputy, 'nomeParlamentar'),
-                extract_text(deputy, 'urlFoto'),
-                extract_text(deputy, 'sexo'),
-                extract_text(deputy, 'uf'),
-                extract_text(deputy, 'partido'),
-                extract_text(deputy, 'fone'),
-                extract_text(deputy, 'email'),
-            )
-
-    def __translate(self, df):
-        translate_column(df, 'gender', {
-            'masculino': 'male',
-            'feminino': 'female',
-        })
-
-        translate_column(df, 'condition', {
-            'Titular': 'Holder',
-            'Suplente': 'Substitute',
-        })
-
-        return df
-
-def fetch_deputies(data_dir):
-    """
-    :param data_dir: (str) directory in which the output file will be saved
-    """
-    file_path = os.path.join(data_dir, '{}-deputies.xz'.format(TODAY))
-
-    deputies = Deputies()
-    df = deputies.fetch()
-    df.to_csv(file_path, **CSV_PARAMS)
-
-    holders = df.condition == 'Holder'
-    substitutes = df.condition == 'Substitute'
-    print("Total deputies:", len(df))
-    print("Holder deputies:", len(df[holders]))
-    print("Substitute deputies:", len(df[substitutes]))
-    return df
-
-
-###############################################################################
-## Presence in sessions
-
+from serenata_toolbox import datasets
+from serenata_toolbox.cleanup import xml_extract_text, \
+                                     xml_extract_datetime, \
+                                     xml_extract_date, \
+                                     translate_column
 
 class Presences:
 
@@ -146,6 +32,7 @@ class Presences:
         df = pd.DataFrame(records, columns=(
             'term',
             'congressperson_document',
+            # TODO: Rename to something else to avoid confusion (maybe just congressperson?)
             'congressperson_name',
             'party',
             'state',
@@ -203,17 +90,17 @@ class Presences:
 
 
     def __parse_deputy_presences(self, root):
-        term = extract_text(root, 'legislatura')
-        congressperson_document = extract_text(root, 'carteiraParlamentar')
+        term = xml_extract_text(root, 'legislatura')
+        congressperson_document = xml_extract_text(root, 'carteiraParlamentar')
         # Please note that this name contains the party and state
-        congressperson_name = extract_text(root, 'nomeParlamentar')
-        party = extract_text(root, 'siglaPartido')
-        state = extract_text(root, 'siglaUF')
+        congressperson_name = xml_extract_text(root, 'nomeParlamentar')
+        party = xml_extract_text(root, 'siglaPartido')
+        state = xml_extract_text(root, 'siglaUF')
 
         for day in root.findall('.//dia'):
-            date = extract_datetime(day, 'data')
-            present_on_day = extract_text(day, 'frequencianoDia')
-            justification = extract_text(day, 'justificativa')
+            date = xml_extract_datetime(day, 'data')
+            present_on_day = xml_extract_text(day, 'frequencianoDia')
+            justification = xml_extract_text(day, 'justificativa')
             for session in day.findall('.//sessao'):
                 yield (
                     term,
@@ -224,8 +111,8 @@ class Presences:
                     date,
                     present_on_day,
                     justification,
-                    extract_text(session, 'descricao'),
-                    extract_text(session, 'frequencia')
+                    xml_extract_text(session, 'descricao'),
+                    xml_extract_text(session, 'frequencia')
                 )
 
     def __translate(self, df):
@@ -267,69 +154,12 @@ def fetch_presences(data_dir, deputies, date_start, date_end):
     :param date_start: (str) a date in the format dd/mm/yyyy
     :param date_end: (str) a date in the format dd/mm/yyyy
     """
-    file_path = os.path.join(data_dir, '{}-presences.xz'.format(TODAY))
-
     presences = Presences()
     df = presences.fetch(deputies, date_start, date_end)
-    df.to_csv(file_path, **CSV_PARAMS)
+    datasets.save(df, data_dir, "presences")
 
     print("Presence records:", len(df))
     print("Records of deputies present on a session:", len(df[df.presence == 'Present']))
     print("Records of deputies absent from a session:", len(df[df.presence == 'Absent']))
 
-    return df
-
-
-###############################################################################
-## Session start times
-
-
-class SessionStartTimes:
-    URL = (
-        'http://www.camara.leg.br/SitCamaraWS/sessoesreunioes.asmx/ListarPresencasDia'
-        '?siglaPartido=&siglaUF='
-        '&data={0}'
-        '&numMatriculaParlamentar={1}'
-    )
-
-    def fetch(self, pivot, session_dates):
-        """
-        :param pivot: (int) a congressperson document to use as a pivot for scraping the data
-        :param session_dates: (str) a list of datetime objects to fetch the start times for
-        """
-
-        records = self.__all_start_times(pivot, session_dates)
-        return pd.DataFrame(records, columns=(
-            'date',
-            'session',
-            'started_at'
-        ))
-
-    def __all_start_times(self, pivot, session_dates):
-        for date in session_dates:
-            print(date.strftime("%d/%m/%Y"))
-            file = urllib.request.urlopen(self.URL.format(date.strftime("%d/%m/%Y"), pivot))
-            t = ET.ElementTree(file=file)
-            for session in t.getroot().findall('.//sessaoDia'):
-                yield (
-                    date,
-                    extract_text(session, 'descricao'),
-                    extract_datetime(session, 'inicio')
-                )
-
-def fetch_session_start_times(data_dir, pivot, session_dates):
-    """
-    :param data_dir: (str) directory in which the output file will be saved
-    :param pivot: (int) a congressperson document to use as a pivot for scraping the data
-    :param session_dates: (str) a list of datetime objects to fetch the start times for
-    """
-    file_path = os.path.join(data_dir, '{}-session-start-times.xz'.format(TODAY))
-
-    session_start_times = SessionStartTimes()
-    df = session_start_times.fetch(pivot, session_dates)
-    df.to_csv(file_path, **CSV_PARAMS)
-
-    print("Dates requested:", len(session_dates))
-    found = pd.to_datetime(df['date'], format="%Y-%m-%d %H:%M:%S").dt.date.unique()
-    print("Dates found:", len(found))
     return df

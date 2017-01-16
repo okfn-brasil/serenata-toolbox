@@ -1,5 +1,13 @@
 import os
+
 from urllib.request import urlretrieve
+from datetime import datetime
+
+CSV_PARAMS = {
+    'compression': 'xz',
+    'encoding': 'utf-8',
+    'index': False
+}
 
 def fetch(filename, destination_path,
           aws_bucket='serenata-de-amor-data',
@@ -37,3 +45,8 @@ def fetch_latest_backup(destination_path,
     )
     for filename in files:
         fetch(filename, destination_path, aws_bucket, aws_region)
+
+def save(df, data_dir, name):
+    today = datetime.strftime(datetime.now(), '%Y-%m-%d')
+    file_path = os.path.join(data_dir, '{}-{}.xz'.format(today, name))
+    df.to_csv(file_path, **CSV_PARAMS)
