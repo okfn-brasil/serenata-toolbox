@@ -20,11 +20,11 @@ def xml_parser(xml_path, tag='DESPESA'):
     Generator that parses the XML yielding a StringIO object for each record
     found. The StringIO holds the data in JSON format.
     """
-    for event, element in iterparse(xml_path, tag=tag):
+    for _, node in iterparse(xml_path, tag=tag):
 
         # get data
-        fields = {c.tag: c.text for c in element.iter() if c.tag != tag}
-        element.clear()
+        fields = {c.tag.lower(): c.text for c in node.iter() if c.tag != tag}
+        node.clear()
 
         # export in JSON format
         yield StringIO(json.dumps(fields))
@@ -35,12 +35,12 @@ def csv_header(html_path):
     Generator that yields the CSV headers reading them from a HTML file (e.g.
     datasets-format.html).
     """
-    yield 'ideDocumento'  # this field is missing from the reference
+    yield 'idedocumento'  # this field is missing from the reference
     with open(html_path, 'rb') as file_handler:
         parsed = BeautifulSoup(file_handler.read(), 'lxml')
         for row in parsed.select('.tabela-2 tr'):
             try:
-                yield row.select('td')[0].text.strip()
+                yield row.select('td')[0].text.strip().lower()
             except IndexError:
                 pass
 
