@@ -73,7 +73,7 @@ def convert_xml_to_csv(xml_file_path, csv_file_path):
         writer.writerow(json.loads(json_io.getvalue()))
 
         output('Writing record #{:,} to the CSV'.format(count), end='\r')
-        with open(csv_file_path, 'a') as csv_file:
+        with open(csv_file_path, 'a', encoding='utf-8') as csv_file:
             print(csv_io.getvalue(), file=csv_file)
 
         json_io.close()
