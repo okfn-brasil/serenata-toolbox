@@ -147,6 +147,7 @@ class CEAPDataset:
                       for cat in data['subquota_description'].cat.categories]
         data['subquota_description'].cat.rename_categories(categories,
                                                            inplace=True)
-        data.to_csv(output_file_path, compression='xz', index=False)
+        data.to_csv(output_file_path, compression='xz', index=False,
+                    encoding='utf-8')
 
         return output_file_path
