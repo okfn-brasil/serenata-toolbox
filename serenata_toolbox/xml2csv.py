@@ -62,7 +62,7 @@ def convert_xml_to_csv(xml_file_path, csv_file_path):
     html_file_path = os.path.join(data_dir, 'datasets-format.html')
 
     output('Creating the CSV file')
-    headers = list(csv_header(html_file_path))
+    headers = [name.lower() for name in csv_header(html_file_path)]
     create_csv(csv_file_path, headers)
 
     count = 1
@@ -70,7 +70,8 @@ def convert_xml_to_csv(xml_file_path, csv_file_path):
     for json_io in xml_parser(xml_file_path):
         csv_io = StringIO()
         writer = DictWriter(csv_io, fieldnames=headers)
-        writer.writerow(json.loads(json_io.getvalue()))
+        row = {k.lower(): v for k, v in json.loads(json_io.getvalue()).items()}
+        writer.writerow(row)
 
         output('Writing record #{:,} to the CSV'.format(count), end='\r')
         with open(csv_file_path, 'a', encoding='utf-8') as csv_file:
