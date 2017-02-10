@@ -56,12 +56,12 @@ class CEAPDataset:
             .replace('.csv', '.xz')
 
         data = pd.read_csv(csv_path,
-                           dtype={'ideDocumento': np.str,
-                                  'ideCadastro': np.str,
-                                  'nuCarteiraParlamentar': np.str,
-                                  'codLegislatura': np.str,
-                                  'txtCNPJCPF': np.str,
-                                  'numRessarcimento': np.str})
+                           dtype={'idedocumento': np.str,
+                                  'idecadastro': np.str,
+                                  'nucarteiraparlamentar': np.str,
+                                  'codlegislatura': np.str,
+                                  'txtcnpjcpf': np.str,
+                                  'numressarcimento': np.str})
         data.rename(columns={
             'idedocumento': 'document_id',
             'txnomeparlamentar': 'congressperson_name',
