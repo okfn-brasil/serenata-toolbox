@@ -27,7 +27,6 @@ def fetch_latest_backup(destination_path,
         '2016-11-19-current-year.xz',
         '2016-11-19-last-year.xz',
         '2016-11-19-previous-years.xz',
-        '2016-11-19-reimbursements.xz',
         '2016-11-28-congressperson-civil-names.xz',
         '2016-11-29-yelp-companies.xz',
         '2016-12-02-foursquare-companies.xz',
@@ -41,6 +40,7 @@ def fetch_latest_backup(destination_path,
         '2016-12-21-speeches.xz',
         '2016-12-22-agreements.xz',
         '2016-12-22-amendments.xz',
+        '2017-03-15-reimbursements.xz',
         '2017-03-20-purchase-suppliers.xz'
     )
     for filename in files:
