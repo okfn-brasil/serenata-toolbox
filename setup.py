@@ -14,9 +14,12 @@ setup(
     ],
     description='Toolbox for Serenata de Amor project',
     install_requires=[
+        'aiofiles',
+        'aiohttp',
         'beautifulsoup4>=4.4',
         'lxml>=3.6',
         'pandas>=0.18',
+        'tqdm'
     ],
     keywords='serenata de amor, data science, brazil, corruption',
     license='MIT',
@@ -24,5 +27,5 @@ setup(
     name='serenata-toolbox',
     packages=['serenata_toolbox'],
     url=REPO_URL,
-    version='0.0.1'
+    version='7.5.1'
 )
