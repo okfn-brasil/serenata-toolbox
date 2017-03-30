@@ -58,7 +58,6 @@ class Downloader:
 
         loop = asyncio.get_event_loop()
         loop.run_until_complete(self.main(loop, files))
-        loop.close()
 
     async def main(self, loop, files):
         if len(files) == 1:
