@@ -1,7 +1,7 @@
 import os
 import pandas as pd
 import numpy as np
-
+from datetime import date
 
 class Reimbursements:
 
@@ -41,7 +41,7 @@ class Reimbursements:
     @property
     def receipts(self):
         print('Merging all datasets…')
-        datasets = ('current-year.xz', 'last-year.xz', 'previous-years.xz')
+        datasets = ["reimbursements-{}.xz".format(n) for n in range(2009, date.today().year+1)]
         data = (self.read_csv(name) for name in datasets)
         return pd.concat(data)
 

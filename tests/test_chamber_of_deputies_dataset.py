@@ -1,4 +1,5 @@
 import os
+from datetime import date
 from tempfile import gettempdir
 from unittest import main, skipIf, TestCase, TestLoader
 
@@ -11,34 +12,30 @@ class TestChamberOfDeputiesDataset(TestCase):
     def setUp(self):
         self.path = gettempdir()
         self.subject = ChamberOfDeputiesDataset(self.path)
+        self.years = [n for n in range(2009, date.today().year + 1)]
 
     @skipIf(os.environ.get('RUN_INTEGRATION_TESTS') != '1',
             'Skipping integration test')
-    def test_fetch_saves_raw_files(self):
+    def test_1_fetch_saves_raw_files(self):
         self.subject.fetch()
-        for name in ['AnoAtual.xml', 'AnoAnterior.xml', 'AnosAnteriores.xml', 'datasets-format.html']:
+        files = ["Ano-{}.csv".format(n) for n in self.years]
+        files.append('datasets-format.html')
+
+        for name in files:
             file_path = os.path.join(self.path, name)
             assert(os.path.exists(file_path))
 
     @skipIf(os.environ.get('RUN_INTEGRATION_TESTS') != '1',
             'Skipping integration test')
-    def test_convert_to_csv_creates_csvs_for_every_xml_from_fetch(self):
-        self.subject.convert_to_csv()
-        for name in ['AnoAtual.csv', 'AnoAnterior.csv', 'AnosAnteriores.csv']:
-            file_path = os.path.join(self.path, name)
-            assert(os.path.exists(file_path))
-
-    @skipIf(os.environ.get('RUN_INTEGRATION_TESTS') != '1',
-            'Skipping integration test')
-    def test_translate_creates_english_versions_for_every_csv(self):
+    def test_2_translate_creates_english_versions_for_every_csv(self):
         self.subject.translate()
-        for name in ['current-year.xz', 'last-year.xz', 'previous-years.xz']:
+        for name in ["reimbursements-{}.xz".format(n) for n in self.years]:
             file_path = os.path.join(self.path, name)
             assert(os.path.exists(file_path))
 
     @skipIf(os.environ.get('RUN_INTEGRATION_TESTS') != '1',
             'Skipping integration test')
-    def test_clean_creates_a_reimbursements_file(self):
+    def test_3_clean_creates_a_reimbursements_file(self):
         self.subject.clean()
         file_path = os.path.join(self.path, 'reimbursements.xz')
         assert(os.path.exists(file_path))

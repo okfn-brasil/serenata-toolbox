@@ -1,10 +1,10 @@
 import os.path
+from datetime import date
 from urllib.request import urlretrieve
 from zipfile import ZipFile
 import numpy as np
 import pandas as pd
 from .reimbursements import Reimbursements
-from .xml2csv import convert_xml_to_csv
 
 class ChamberOfDeputiesDataset:
     def __init__(self, path):
@@ -12,13 +12,12 @@ class ChamberOfDeputiesDataset:
 
 
     def fetch(self):
-        urls = ['http://www.camara.gov.br/cotas/AnoAtual.zip',
-                'http://www.camara.gov.br/cotas/AnoAnterior.zip',
-                'http://www.camara.gov.br/cotas/AnosAnteriores.zip']
-        filenames = map(lambda url: url.split('/')[-1], urls)
+        base_url = "http://www.camara.leg.br/cotas/Ano-{}.csv.zip"
 
-        for url, filename in zip(urls, filenames):
-            zip_file_path = os.path.join(self.path, filename)
+        years = [n for n in range(2009, date.today().year+1)]
+        for year in years:
+            zip_file_path = os.path.join(self.path, "Ano-{}.zip".format(year))
+            url = base_url.format(year)
             urlretrieve(url, zip_file_path)
             zip_file = ZipFile(zip_file_path, 'r')
             zip_file.extractall(self.path)
@@ -30,15 +29,13 @@ class ChamberOfDeputiesDataset:
 
 
     def convert_to_csv(self):
-        for filename in ['AnoAtual', 'AnoAnterior', 'AnosAnteriores']:
-            xml_path = os.path.join(self.path, '{}.xml'.format(filename))
-            csv_path = xml_path.replace('.xml', '.csv')
-            convert_xml_to_csv(xml_path, csv_path)
+        # deprecated but still here so we don't break poor Rosie (for now)
+        pass
 
 
     def translate(self):
-        for filename in ['AnoAtual', 'AnoAnterior', 'AnosAnteriores']:
-            csv_path = os.path.join(self.path, '{}.csv'.format(filename))
+        for year in [n for n in range(2009, date.today().year+1)]:
+            csv_path = os.path.join(self.path, 'Ano-{}.csv'.format(year))
             self.__translate_file(csv_path)
 
 
@@ -50,48 +47,50 @@ class ChamberOfDeputiesDataset:
 
     def __translate_file(self, csv_path):
         output_file_path = csv_path \
-            .replace('AnoAtual', 'current-year') \
-            .replace('AnoAnterior', 'last-year') \
-            .replace('AnosAnteriores', 'previous-years') \
-            .replace('.csv', '.xz')
+                           .replace('.csv', '.xz') \
+                           .replace('Ano-', 'reimbursements-')
 
         data = pd.read_csv(csv_path,
-                           dtype={'idedocumento': np.str,
+                           error_bad_lines=False, #some old reimbursements are messed up
+                           warn_bad_lines=False,
+                           encoding='utf-8',
+                           delimiter=";",
+                           dtype={'ideDocumento': np.str,
                                   'idecadastro': np.str,
-                                  'nucarteiraparlamentar': np.str,
-                                  'codlegislatura': np.str,
-                                  'txtcnpjcpf': np.str,
-                                  'numressarcimento': np.str})
+                                  'nuCarteiraParlamentar': np.str,
+                                  'codLegislatura': np.str,
+                                  'txtCNPJCPF': np.str,
+                                  'numRessarcimento': np.str})
         data.rename(columns={
-            'idedocumento': 'document_id',
-            'txnomeparlamentar': 'congressperson_name',
+            'ideDocumento': 'document_id',
+            'txNomeParlamentar': 'congressperson_name',
             'idecadastro': 'congressperson_id',
-            'nucarteiraparlamentar': 'congressperson_document',
-            'nulegislatura': 'term',
-            'sguf': 'state',
-            'sgpartido': 'party',
-            'codlegislatura': 'term_id',
-            'numsubcota': 'subquota_number',
-            'txtdescricao': 'subquota_description',
-            'numespecificacaosubcota': 'subquota_group_id',
-            'txtdescricaoespecificacao': 'subquota_group_description',
-            'txtfornecedor': 'supplier',
-            'txtcnpjcpf': 'cnpj_cpf',
-            'txtnumero': 'document_number',
-            'indtipodocumento': 'document_type',
-            'datemissao': 'issue_date',
-            'vlrdocumento': 'document_value',
-            'vlrglosa': 'remark_value',
-            'vlrliquido': 'net_value',
-            'nummes': 'month',
-            'numano': 'year',
-            'numparcela': 'installment',
-            'txtpassageiro': 'passenger',
-            'txttrecho': 'leg_of_the_trip',
-            'numlote': 'batch_number',
-            'numressarcimento': 'reimbursement_number',
-            'vlrrestituicao': 'reimbursement_value',
-            'nudeputadoid': 'applicant_id',
+            'nuCarteiraParlamentar': 'congressperson_document',
+            'nuLegislatura': 'term',
+            'sgUF': 'state',
+            'sgPartido': 'party',
+            'codLegislatura': 'term_id',
+            'numSubCota': 'subquota_number',
+            'txtDescricao': 'subquota_description',
+            'numEspecificacaoSubCota': 'subquota_group_id',
+            'txtDescricaoEspecificacao': 'subquota_group_description',
+            'txtFornecedor': 'supplier',
+            'txtCNPJCPF': 'cnpj_cpf',
+            'txtNumero': 'document_number',
+            'indTipoDocumento': 'document_type',
+            'datEmissao': 'issue_date',
+            'vlrDocumento': 'document_value',
+            'vlrGlosa': 'remark_value',
+            'vlrLiquido': 'net_value',
+            'numMes': 'month',
+            'numAno': 'year',
+            'numParcela': 'installment',
+            'txtPassageiro': 'passenger',
+            'txtTrecho': 'leg_of_the_trip',
+            'numLote': 'batch_number',
+            'numRessarcimento': 'reimbursement_number',
+            'vlrRestituicao': 'reimbursement_value',
+            'nuDeputadoId': 'applicant_id',
         }, inplace=True)
 
         data['subquota_description'] = \
@@ -138,7 +137,7 @@ class ChamberOfDeputiesDataset:
                 'Purchase of office supplies',
             'AQUISIÇÃO OU LOC. DE SOFTWARE; SERV. POSTAIS; ASS.':
                 'Software purchase or renting; Postal services; Subscriptions',
-            'LOCAÇÃO DE VEÍCULOS AUTOMOTORES OU FRETAMENTO DE EMBARCAÇÕES ':
+            'LOCAÇÃO DE VEÍCULOS AUTOMOTORES OU FRETAMENTO DE EMBARCAÇÕES':
                 'Automotive vehicle renting or watercraft charter',
             'LOCOMOÇÃO, ALIMENTAÇÃO E  HOSPEDAGEM':
                 'Locomotion, meal and lodging',
