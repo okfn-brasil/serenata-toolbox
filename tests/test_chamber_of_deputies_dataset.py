@@ -16,7 +16,7 @@ class TestChamberOfDeputiesDataset(TestCase):
 
     @skipIf(os.environ.get('RUN_INTEGRATION_TESTS') != '1',
             'Skipping integration test')
-    def test_1_fetch_saves_raw_files(self):
+    def test_fetch_translate_clean_integration(self):
         self.subject.fetch()
         files = ["Ano-{}.csv".format(n) for n in self.years]
         files.append('datasets-format.html')
@@ -25,17 +25,11 @@ class TestChamberOfDeputiesDataset(TestCase):
             file_path = os.path.join(self.path, name)
             assert(os.path.exists(file_path))
 
-    @skipIf(os.environ.get('RUN_INTEGRATION_TESTS') != '1',
-            'Skipping integration test')
-    def test_2_translate_creates_english_versions_for_every_csv(self):
         self.subject.translate()
         for name in ["reimbursements-{}.xz".format(n) for n in self.years]:
             file_path = os.path.join(self.path, name)
             assert(os.path.exists(file_path))
 
-    @skipIf(os.environ.get('RUN_INTEGRATION_TESTS') != '1',
-            'Skipping integration test')
-    def test_3_clean_creates_a_reimbursements_file(self):
         self.subject.clean()
         file_path = os.path.join(self.path, 'reimbursements.xz')
         assert(os.path.exists(file_path))
