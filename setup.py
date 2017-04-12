@@ -16,6 +16,7 @@ setup(
     install_requires=[
         'aiofiles',
         'aiohttp',
+        'boto3',
         'beautifulsoup4>=4.4',
         'lxml>=3.6',
         'pandas>=0.18',
