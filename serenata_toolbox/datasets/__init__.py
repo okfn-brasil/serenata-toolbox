@@ -7,19 +7,27 @@ from serenata_toolbox.datasets.remote import RemoteDatasets
 
 class Datasets:
     """
-    This is a wrapper for three different classes together handles the datasets
-    locally and remotelly.
+    This is a wrapper for three different classes that together handle the
+    datasets (locally and remotelly).
 
-    Inside the instantiated object there are three main objects: local, remote,
-    and downloader:
+    Datasets class takes one argument: the path to the local directory of the
+    dataset files (e.g. data/ or /tmp/serenata-data). The argument is optional
+    and the default value is data/ (following the default usage in the main
+    repo, serenata-de-amor).
+
+    The remote part of the class expect to find Amazon credentials in a
+    config.ini file with an Amazon section (e.g. config.ini.exemple).
+
+    Inside it object there are three main objects: local, remote, and
+    downloader:
 
     * `Datasets.local` handles listing all local datasets through the property
-      `Datasets.local.all` and deleting local datasets with the method
-      `Datasets.local.delete(filename)`;
+      `Datasets.local.all` (hint: it's a generator) and deleting local datasets
+      with the method `Datasets.local.delete(filename)`;
 
-    * `Datasets.remote` has the `Datasets.remote.all` property and
-      `Dataset.remote.delete(filename)` method just like its local equivalent;
-      in addition to them this object offers the
+    * `Datasets.remote` has the `Datasets.remote.all` property (hint: it's also
+      a generator) and `Dataset.remote.delete(filename)` method just like its
+      local equivalent; in addition to them this object offers the
       `Datasets.remote.upload(file_path)` method to upload a local file to the
       remote bucket; `Datasets.remote` does not handles downloads because
       `boto3` does not support `asyncio` and we prefer to use async tasks to
@@ -31,12 +39,11 @@ class Datasets:
 
     Yet this wrapper implement the `Dataset.upload_all()` method to upload all
     local datasets that are not present in the remote bucket.
+
+    :param local_directory: (str) path to local directory of the datasets
     """
 
     def __init__(self, local_directory=None):
-        """
-        :param local_directory: (str) path to local directory of the datasets
-        """
         if not local_directory:
             local_directory = 'data'
 
