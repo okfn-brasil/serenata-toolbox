@@ -13,7 +13,7 @@ class LocalDatasets:
 
     @property
     def all(self):
-        yield from filter(os.path.isfile, os.listdir(self.directory))
+        yield from filter(self._is_file, os.listdir(self.directory))
 
     def delete(self, file_name):
         full_path = os.path.join(self.directory, file_name)
@@ -22,3 +22,7 @@ class LocalDatasets:
 
         with status_message('Deleting {}…'.format(file_name)):
             os.remove(full_path)
+
+    def _is_file(self, filename):
+        full_path = os.path.join(self.directory, filename)
+        return os.path.isfile(full_path)
