@@ -39,9 +39,9 @@ class TestLocal(TestCase):
         exists.return_value = True
         isdir.return_value = True
         isfile.side_effect = (True, False, True)
-        listdir.return_value = range(3)
+        listdir.return_value = ('0', '1', '2')
         local = LocalDatasets('test')
-        self.assertEqual((0, 2), tuple(local.all))
+        self.assertEqual(('0', '2'), tuple(local.all))
 
 
     @patch('serenata_toolbox.datasets.contextmanager.print')
