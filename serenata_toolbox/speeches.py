@@ -99,3 +99,4 @@ def fetch_speeches(data_dir, range_start, range_end):
     speeches = Speeches()
     df = speeches.fetch(range_start, range_end)
     datasets.save(df, data_dir, "speeches")
+    return df
