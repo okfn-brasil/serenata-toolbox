@@ -1,7 +1,5 @@
 import asyncio
 import os
-
-from urllib.request import urlretrieve
 from datetime import datetime
 
 import aiofiles
