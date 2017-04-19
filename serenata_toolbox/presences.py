@@ -5,10 +5,12 @@ import time
 import pandas as pd
 
 from serenata_toolbox import datasets
-from serenata_toolbox.cleanup import xml_extract_text, \
-                                     xml_extract_datetime, \
-                                     xml_extract_date, \
-                                     translate_column
+from serenata_toolbox.cleanup import (
+    xml_extract_text,
+    xml_extract_datetime,
+    xml_extract_date,
+    translate_column
+)
 
 class Presences:
 

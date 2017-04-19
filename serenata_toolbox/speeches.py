@@ -7,9 +7,11 @@ import urllib
 from datetime import datetime
 
 from serenata_toolbox import datasets
-from serenata_toolbox.cleanup import xml_extract_text, \
-                                     xml_extract_datetime, \
-                                     xml_extract_date
+from serenata_toolbox.cleanup import (
+    xml_extract_text,
+    xml_extract_datetime,
+    xml_extract_date
+)
 
 class Speeches:
 

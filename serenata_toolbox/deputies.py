@@ -4,8 +4,10 @@ import xml.etree.ElementTree as ET
 import pandas as pd
 
 from serenata_toolbox import datasets
-from serenata_toolbox.cleanup import xml_extract_text, \
-                                     translate_column
+from serenata_toolbox.cleanup import (
+    xml_extract_text,
+    translate_column
+)
 
 class Deputies:
 
