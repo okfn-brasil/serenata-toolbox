@@ -34,7 +34,6 @@ class Presences:
         df = pd.DataFrame(records, columns=(
             'term',
             'congressperson_document',
-            # TODO: Rename to something else to avoid confusion (maybe just congressperson?)
             'congressperson_name',
             'party',
             'state',
