@@ -20,11 +20,11 @@ def xml_parser(xml_path, tag='DESPESA'):
     Generator that parses the XML yielding a StringIO object for each record
     found. The StringIO holds the data in JSON format.
     """
-    for event, element in iterparse(xml_path, tag=tag):
+    for _, node in iterparse(xml_path, tag=tag):
 
         # get data
-        fields = {c.tag: c.text for c in element.iter() if c.tag != tag}
-        element.clear()
+        fields = {c.tag.lower(): c.text for c in node.iter() if c.tag != tag}
+        node.clear()
 
         # export in JSON format
         yield StringIO(json.dumps(fields))
@@ -35,12 +35,12 @@ def csv_header(html_path):
     Generator that yields the CSV headers reading them from a HTML file (e.g.
     datasets-format.html).
     """
-    yield 'ideDocumento'  # this field is missing from the reference
+    yield 'idedocumento'  # this field is missing from the reference
     with open(html_path, 'rb') as file_handler:
         parsed = BeautifulSoup(file_handler.read(), 'lxml')
         for row in parsed.select('.tabela-2 tr'):
             try:
-                yield row.select('td')[0].text.strip()
+                yield row.select('td')[0].text.strip().lower()
             except IndexError:
                 pass
 
@@ -62,7 +62,7 @@ def convert_xml_to_csv(xml_file_path, csv_file_path):
     html_file_path = os.path.join(data_dir, 'datasets-format.html')
 
     output('Creating the CSV file')
-    headers = list(csv_header(html_file_path))
+    headers = [name.lower() for name in csv_header(html_file_path)]
     create_csv(csv_file_path, headers)
 
     count = 1
@@ -70,10 +70,11 @@ def convert_xml_to_csv(xml_file_path, csv_file_path):
     for json_io in xml_parser(xml_file_path):
         csv_io = StringIO()
         writer = DictWriter(csv_io, fieldnames=headers)
-        writer.writerow(json.loads(json_io.getvalue()))
+        row = {k.lower(): v for k, v in json.loads(json_io.getvalue()).items()}
+        writer.writerow(row)
 
         output('Writing record #{:,} to the CSV'.format(count), end='\r')
-        with open(csv_file_path, 'a') as csv_file:
+        with open(csv_file_path, 'a', encoding='utf-8') as csv_file:
             print(csv_io.getvalue(), file=csv_file)
 
         json_io.close()
