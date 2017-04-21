@@ -1,23 +1,19 @@
-import os
-from configparser import NoSectionError, RawConfigParser
-from functools import partial
+from configparser import RawConfigParser
 from unittest import TestCase
 from unittest.mock import patch
 
 from serenata_toolbox.datasets.remote import RemoteDatasets
 
 
-class TestLocal(TestCase):
+class TestRemote(TestCase):
 
     @patch('serenata_toolbox.datasets.remote.print')
     @patch('serenata_toolbox.datasets.remote.os.path.exists')
     def test_init_without_config_ini(self, exists, print_):
         exists.return_value = False
         remote = RemoteDatasets()
-        with self.assertRaises(AttributeError):
-            remote.s3
-        with self.assertRaises(AttributeError):
-            remote.bucket
+        self.assertIsNone(remote.s3)
+        self.assertIsNone(remote.bucket)
         self.assertTrue(print_.called)
 
     @patch('serenata_toolbox.datasets.remote.print')
@@ -27,10 +23,8 @@ class TestLocal(TestCase):
         exists.return_value = True
         is_file.return_value = False
         remote = RemoteDatasets()
-        with self.assertRaises(AttributeError):
-            remote.s3
-        with self.assertRaises(AttributeError):
-            remote.bucket
+        self.assertIsNone(remote.s3)
+        self.assertIsNone(remote.bucket)
         self.assertTrue(print_.called)
 
     @patch.object(RawConfigParser, 'read')
@@ -41,10 +35,8 @@ class TestLocal(TestCase):
         exists.return_value = True
         is_file.return_value = True
         remote = RemoteDatasets()
-        with self.assertRaises(AttributeError):
-            remote.s3
-        with self.assertRaises(AttributeError):
-            remote.bucket
+        self.assertIsNone(remote.s3)
+        self.assertIsNone(remote.bucket)
         self.assertTrue(print_.called)
 
     @patch('serenata_toolbox.datasets.remote.boto3')

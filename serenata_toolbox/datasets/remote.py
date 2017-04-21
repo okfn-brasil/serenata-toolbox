@@ -11,6 +11,8 @@ class RemoteDatasets:
     CONFIG = 'config.ini'
 
     def __init__(self):
+        self.s3, self.bucket = None, None
+
         if not all((os.path.exists(self.CONFIG), os.path.isfile(self.CONFIG))):
             print('Could not find {} file.'.format(self.CONFIG))
             print('You need Amzon section in it to interact with S3')
