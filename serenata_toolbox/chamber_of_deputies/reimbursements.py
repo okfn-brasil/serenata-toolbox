@@ -13,6 +13,8 @@ class Reimbursements:
         'index': False
     }
 
+    YEARS = [n for n in range(2009, date.today().year+1)]
+
     def __init__(self, path):
         self.path = path
 
@@ -41,7 +43,7 @@ class Reimbursements:
     @property
     def receipts(self):
         print('Merging all datasets…')
-        datasets = ["reimbursements-{}.xz".format(n) for n in range(2009, date.today().year+1)]
+        datasets = ["reimbursements-{}.xz".format(n) for n in self.YEARS]
         data = (self.read_csv(name) for name in datasets)
         return pd.concat(data)
 

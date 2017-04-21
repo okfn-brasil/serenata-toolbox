@@ -7,6 +7,9 @@ import pandas as pd
 from .reimbursements import Reimbursements
 
 class ChamberOfDeputiesDataset:
+
+    YEARS = [n for n in range(2009, date.today().year+1)]
+
     def __init__(self, path):
         self.path = path
 
@@ -14,8 +17,7 @@ class ChamberOfDeputiesDataset:
     def fetch(self):
         base_url = "http://www.camara.leg.br/cotas/Ano-{}.csv.zip"
 
-        years = [n for n in range(2009, date.today().year+1)]
-        for year in years:
+        for year in self.YEARS:
             zip_file_path = os.path.join(self.path, "Ano-{}.zip".format(year))
             url = base_url.format(year)
             urlretrieve(url, zip_file_path)
@@ -34,7 +36,7 @@ class ChamberOfDeputiesDataset:
 
 
     def translate(self):
-        for year in [n for n in range(2009, date.today().year+1)]:
+        for year in self.YEARS:
             csv_path = os.path.join(self.path, 'Ano-{}.csv'.format(year))
             self.__translate_file(csv_path)
 
