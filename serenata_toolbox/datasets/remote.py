@@ -1,4 +1,5 @@
 import configparser
+from functools import partial
 import os
 
 import boto3
@@ -11,33 +12,53 @@ class RemoteDatasets:
     CONFIG = 'config.ini'
 
     def __init__(self):
-        self.s3, self.bucket = None, None
+        self.credentials = None
 
-        if not all((os.path.exists(self.CONFIG), os.path.isfile(self.CONFIG))):
+        if not self.config_exists:
             print('Could not find {} file.'.format(self.CONFIG))
             print('You need Amzon section in it to interact with S3')
             print('(Check config.ini.example if you need a reference.)')
             return
 
-        self.settings = configparser.RawConfigParser()
-        self.settings.read(self.CONFIG)
+        settings = configparser.RawConfigParser()
+        settings.read(self.CONFIG)
+        self.settings = partial(settings.get, 'Amazon')
 
         try:
-            self.credentials = dict(
-                aws_access_key_id=self.settings.get('Amazon', 'AccessKey'),
-                aws_secret_access_key=self.settings.get('Amazon', 'SecretKey'),
-                region_name=self.settings.get('Amazon', 'Region')
-            )
-            self.bucket = self.settings.get('Amazon', 'Bucket')
-
+            self.credentials = {
+                'aws_access_key_id': self.settings('AccessKey'),
+                'aws_secret_access_key': self.settings('SecretKey'),
+                'region_name': self.settings('Region')
+            }
         except configparser.NoSectionError:
-            msg = 'You need Amzon section in {}  to interact with S3'
+            msg = (
+                'You need an Amazon section in {} to interact with S3 '
+                '(Check config.ini.example if you need a reference.)'
+            )
             print(msg.format(self.CONFIG))
-            print('(Check config.ini.example if you need a reference.)')
-            return
 
-        else:
-            self.s3 = boto3.client('s3', **self.credentials)
+    @property
+    def config_exists(self):
+        return all((os.path.exists(self.CONFIG), os.path.isfile(self.CONFIG)))
+
+    @property
+    def bucket(self):
+        if hasattr(self, 'settings'):
+            try:
+                return self.settings('Bucket')
+            except configparser.NoSectionError:
+                return None
+
+    @property
+    def s3(self):
+        if hasattr(self, 'client'):
+            return self.client
+
+        if self.credentials:
+            self.client = boto3.client('s3', **self.credentials)
+            return self.s3
+
+        return None
 
     @property
     def all(self):
