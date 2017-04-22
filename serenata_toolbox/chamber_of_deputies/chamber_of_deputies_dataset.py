@@ -95,59 +95,34 @@ class ChamberOfDeputiesDataset:
             'nuDeputadoId': 'applicant_id',
         }, inplace=True)
 
-        data['subquota_description'] = \
-            data['subquota_description'].astype('category')
+        subquotas = (
+            (1, 'Maintenance of office supporting parliamentary activity'),
+            (2, 'Locomotion, meal and lodging'),
+            (3, 'Fuels and lubricants'),
+            (4, 'Consultancy, research and technical work'),
+            (5, 'Publicity of parliamentary activity'),
+            (6, 'Purchase of office supplies'),
+            (7, 'Software purchase or renting; Postal services; Subscriptions'),
+            (8, 'Security service provided by specialized company'),
+            (9, 'Flight tickets'),
+            (10, 'Telecommunication'),
+            (11, 'Postal services'),
+            (12, 'Publication subscriptions'),
+            (13, 'Congressperson meal'),
+            (14, 'Lodging, except for congressperson from Distrito Federal'),
+            (15, 'Automotive vehicle renting or watercraft charter'),
+            (119, 'Aircraft renting or charter of aircraft'),
+            (120, 'Automotive vehicle renting or charter'),
+            (121, 'Watercraft renting or charter'),
+            (122, 'Taxi, toll and parking'),
+            (123, 'Terrestrial, maritime and fluvial tickets'),
+            (137, 'Participation in course, talk or similar event'),
+            (999, 'Flight ticket issue')
+        )
 
-        categories = {
-            'ASSINATURA DE PUBLICAÇÕES':
-                'Publication subscriptions',
-            'COMBUSTÍVEIS E LUBRIFICANTES.':
-                'Fuels and lubricants',
-            'CONSULTORIAS, PESQUISAS E TRABALHOS TÉCNICOS.':
-                'Consultancy, research and technical work',
-            'DIVULGAÇÃO DA ATIVIDADE PARLAMENTAR.':
-                'Publicity of parliamentary activity',
-            'Emissão Bilhete Aéreo':
-                'Flight ticket issue',
-            'FORNECIMENTO DE ALIMENTAÇÃO DO PARLAMENTAR':
-                'Congressperson meal',
-            'HOSPEDAGEM ,EXCETO DO PARLAMENTAR NO DISTRITO FEDERAL.':
-                'Lodging, except for congressperson from Distrito Federal',
-            'LOCAÇÃO OU FRETAMENTO DE AERONAVES':
-                'Aircraft renting or charter of aircraft',
-            'LOCAÇÃO OU FRETAMENTO DE EMBARCAÇÕES':
-                'Watercraft renting or charter',
-            'LOCAÇÃO OU FRETAMENTO DE VEÍCULOS AUTOMOTORES':
-                'Automotive vehicle renting or charter',
-            'MANUTENÇÃO DE ESCRITÓRIO DE APOIO À ATIVIDADE PARLAMENTAR':
-                'Maintenance of office supporting parliamentary activity',
-            'PARTICIPAÇÃO EM CURSO, PALESTRA OU EVENTO SIMILAR':
-                'Participation in course, talk or similar event',
-            'PASSAGENS AÉREAS':
-                'Flight tickets',
-            'PASSAGENS TERRESTRES, MARÍTIMAS OU FLUVIAIS':
-                'Terrestrial, maritime and fluvial tickets',
-            'SERVIÇO DE SEGURANÇA PRESTADO POR EMPRESA ESPECIALIZADA.':
-                'Security service provided by specialized company',
-            'SERVIÇO DE TÁXI, PEDÁGIO E ESTACIONAMENTO':
-                'Taxi, toll and parking',
-            'SERVIÇOS POSTAIS':
-                'Postal services',
-            'TELEFONIA':
-                'Telecommunication',
-            'AQUISIÇÃO DE MATERIAL DE ESCRITÓRIO.':
-                'Purchase of office supplies',
-            'AQUISIÇÃO OU LOC. DE SOFTWARE; SERV. POSTAIS; ASS.':
-                'Software purchase or renting; Postal services; Subscriptions',
-            'LOCAÇÃO DE VEÍCULOS AUTOMOTORES OU FRETAMENTO DE EMBARCAÇÕES':
-                'Automotive vehicle renting or watercraft charter',
-            'LOCOMOÇÃO, ALIMENTAÇÃO E  HOSPEDAGEM':
-                'Locomotion, meal and lodging',
-        }
-        categories = [categories[cat]
-                      for cat in data['subquota_description'].cat.categories]
-        data['subquota_description'].cat.rename_categories(categories,
-                                                           inplace=True)
+        for code, name in subquotas:
+            data.loc[data['subquota_number']==code, ['subquota_description']] = name
+
         data.to_csv(output_file_path, compression='xz', index=False,
                     encoding='utf-8')
 
