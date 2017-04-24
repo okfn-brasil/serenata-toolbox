@@ -34,6 +34,7 @@ class Downloader:
         '2016-12-21-speeches.xz',
         '2016-12-22-agreements.xz',
         '2016-12-22-amendments.xz',
+        '2017-02-15-receipts-texts.xz',
         '2017-03-15-reimbursements.xz',
         '2017-03-20-purchase-suppliers.xz'
     )
