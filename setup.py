@@ -27,5 +27,5 @@ setup(
     name='serenata-toolbox',
     packages=['serenata_toolbox'],
     url=REPO_URL,
-    version='7.5.1'
+    version='7.6.1'
 )
