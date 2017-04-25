@@ -62,7 +62,17 @@ class ChamberOfDeputiesDataset:
                                   'nuCarteiraParlamentar': np.str,
                                   'codLegislatura': np.str,
                                   'txtCNPJCPF': np.str,
-                                  'numRessarcimento': np.str})
+                                  'numRessarcimento': np.str,
+                                  'vlrDocumento': np.float,
+                                  'vlrGlosa': np.float,
+                                  'vlrLiquido': np.float,
+                                  'vlrRestituicao': np.float},
+                           converters={
+                               'vlrDocumento': lambda x: float(x.replace(',','.')),
+                               'vlrGlosa': lambda x: float(x.replace(',','.')),
+                               'vlrLiquido': lambda x: float(x.replace(',','.')),
+                               'vlrRestituicao': lambda x: float(x.replace(',','.'))})
+
         data.rename(columns={
             'ideDocumento': 'document_id',
             'txNomeParlamentar': 'congressperson_name',
