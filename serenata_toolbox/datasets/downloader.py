@@ -5,8 +5,6 @@ import aiofiles
 import aiohttp
 from tqdm import tqdm
 
-AWS_BUCKET = 'serenata-de-amor-data'
-AWS_REGION = 's3-sa-east-1'
 MAX_REQUESTS = 4
 
 
@@ -41,19 +39,25 @@ class Downloader:
         '2017-03-20-purchase-suppliers.xz'
     )
 
-    def __init__(self, target, aws_bucket=None, aws_region=None):
-        self.aws_bucket = aws_bucket or AWS_BUCKET
-        self.aws_region = aws_region or AWS_REGION
-        self.target = os.path.abspath(target)
-        self.semaphore = asyncio.Semaphore(MAX_REQUESTS)
-        self.total = 0
+    def __init__(self, target, **kwargs):
+        self.bucket = kwargs.get('bucket')
+        self.region = kwargs.get('region_name')
+        if not all((self.bucket, self.region)):
+            raise RuntimeError('No bucket and/or region_name kwargs provided')
 
+        self.target = os.path.abspath(target)
         if not all((os.path.exists(self.target), os.path.isdir(self.target))):
             msg = '{} does not exist or is not a directory.'
             raise FileNotFoundError(msg.format(self.target))
 
+        self.semaphore = asyncio.Semaphore(MAX_REQUESTS)
+        self.total = 0
+
     def download(self, files):
-        files = list(files)  # generator wouldn't work, we loop through them 2x
+        if isinstance(files, str):
+            files = [files]
+
+        files = tuple(filter(bool, files))
         if not files:
             return
 
@@ -61,15 +65,15 @@ class Downloader:
         loop.run_until_complete(self.main(loop, files))
 
     async def main(self, loop, files):
+        desc = 'Downloading {} files'.format(len(files))
         if len(files) == 1:
-            desc = 'Downloading {}'.format(files[0])
-        else:
-            desc = 'Downloading {} files'.format(len(files))
+            first_file, *_ = files
+            desc = 'Downloading {}'.format(first_file)
 
         async with aiohttp.ClientSession(loop=loop) as client:
 
             # fetch total size (all files)
-            sizes = [self.fetch_size(client, filename) for filename in files]
+            sizes = [self.fetch_size(client, f) for f in files]
             await asyncio.gather(*sizes)
 
             # download
@@ -84,37 +88,23 @@ class Downloader:
             self.total = 0
 
     async def fetch_size(self, client, filename):
-        url = self.url(filename)
-
         with (await self.semaphore):
-            async with client.head(url) as response:
-                size = response.headers.get('CONTENT-LENGTH', '0')
+            async with client.head(self.url(filename)) as resp:
+                size = resp.headers.get('CONTENT-LENGTH', '0')
 
         self.total += int(size)
 
     async def fetch_file(self, client, filename):
         filepath = os.path.join(self.target, filename)
-        url = self.url(filename)
-
         with (await self.semaphore):
-            async with client.get(url, timeout=None) as response:
-                contents = await response.read()
+            async with client.get(self.url(filename), timeout=None) as resp:
+                contents = await resp.read()
 
-                async with aiofiles.open(filepath, 'wb') as fh:
-                    await fh.write(contents)
+            async with aiofiles.open(filepath, 'wb') as fh:
+                await fh.write(contents)
 
-                self.progress.update(len(contents))
+            self.progress.update(len(contents))
 
     def url(self, filename):
-        url = 'https://{}.amazonaws.com/{}/{}'
-        return url.format(self.aws_region, self.aws_bucket, filename)
-
-
-def fetch(filename, destination_path, aws_bucket=None, aws_region=None):
-    downloader = Downloader(destination_path, aws_bucket, aws_region)
-    return downloader.download([filename])
-
-
-def fetch_latest_backup(destination_path, aws_bucket=None, aws_region=None):
-    downloader = Downloader(destination_path, aws_bucket, aws_region)
-    return downloader.download(downloader.LATEST)
+        url = 'https://s3-{}.amazonaws.com/{}/{}'
+        return url.format(self.region, self.bucket, filename)

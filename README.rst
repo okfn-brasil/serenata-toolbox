@@ -38,6 +38,8 @@ serenata_toolbox is compatible with Python 3+
 Usage
 -----
 
+If you plan to upload data to a S3 server you should copy `config.ini.example` as `config.ini` and edit it with your own credentials.
+
 .. code:: python
 
   $ python3

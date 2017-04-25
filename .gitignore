@@ -1,3 +1,6 @@
 *.egg-info/
 *.pyc
+.coverage
 __pycache__/
+config.ini
+htmlcov/
