@@ -30,6 +30,18 @@ class RemoteDatasets:
                 'aws_secret_access_key': self.settings('SecretKey'),
                 'region_name': self.settings('Region')
             }
+
+            # friendly user message warning about old config.ini version
+            region = self.credentials.get('region_name', '')
+            if region and region.startswith('s3-'):
+                msg = (
+                    'It looks like you have an old version of the config.ini'
+                    'file. We do not need anymore the service (s3) appended to'
+                    'the region (sa-east-1). Please update your config.ini'
+                    'replacing regions like `s3-sa-east-1` by `sa-east-1`.'
+                )
+                print(msg)
+
         except configparser.NoSectionError:
             msg = (
                 'You need an Amazon section in {} to interact with S3 '
