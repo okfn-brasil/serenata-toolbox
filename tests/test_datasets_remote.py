@@ -41,6 +41,21 @@ class TestRemote(TestCase):
         self.assertTrue(print_.called)
 
     @patch.object(RemoteDatasets, 'config_exists', new_callable=PropertyMock)
+    @patch('serenata_toolbox.datasets.remote.print')
+    @patch('serenata_toolbox.datasets.remote.boto3')
+    @patch('serenata_toolbox.datasets.remote.configparser.RawConfigParser')
+    def test_init_with_old_config(self, raw_config_parser, boto3, print_, config_exists):
+        raw_config_parser.return_value.get.return_value = 's3-test'
+        RemoteDatasets()
+        expected = (
+            'It looks like you have an old version of the config.ini file. We '
+            'do not need anymore the service (s3) appended to the region '
+            '(sa-east-1). Please update your config.ini replacing regions '
+            'like `s3-sa-east-1` by `sa-east-1`.'
+        )
+        print_.assert_called_once_with(expected)
+
+    @patch.object(RemoteDatasets, 'config_exists', new_callable=PropertyMock)
     @patch('serenata_toolbox.datasets.remote.boto3')
     @patch('serenata_toolbox.datasets.remote.configparser.RawConfigParser')
     def test_successful_init(self, raw_config_parser, boto3, config_exists):
@@ -77,9 +92,9 @@ class TestRemote(TestCase):
     @patch('serenata_toolbox.datasets.remote.configparser.RawConfigParser')
     def test_bucket(self, raw_config_parser, config_exists):
         config_exists.return_value = True
-        raw_config_parser.return_value.get.return_value = 42
+        raw_config_parser.return_value.get.return_value = "42"
         remote = RemoteDatasets()
-        self.assertEqual(42, remote.bucket)
+        self.assertEqual("42", remote.bucket)
 
     @patch.object(RemoteDatasets, 'config_exists', new_callable=PropertyMock)
     @patch('serenata_toolbox.datasets.remote.configparser.RawConfigParser')
