@@ -16,7 +16,7 @@ class RemoteDatasets:
 
         if not self.config_exists:
             print('Could not find {} file.'.format(self.CONFIG))
-            print('You need Amzon section in it to interact with S3')
+            print('You need Amazon section in it to interact with S3')
             print('(Check config.ini.example if you need a reference.)')
             return
 
