@@ -2,15 +2,15 @@ import os
 from tempfile import gettempdir
 from unittest import main, skipIf, TestCase, TestLoader
 
-from serenata_toolbox.ceap_dataset import CEAPDataset
+from serenata_toolbox.chamber_of_deputies_dataset import ChamberOfDeputiesDataset
 
 if os.environ.get('RUN_INTEGRATION_TESTS') == '1':
     TestLoader.sortTestMethodsUsing = None
 
-class TestCEAPDataset(TestCase):
+class TestChamberOfDeputiesDataset(TestCase):
     def setUp(self):
         self.path = gettempdir()
-        self.subject = CEAPDataset(self.path)
+        self.subject = ChamberOfDeputiesDataset(self.path)
 
     @skipIf(os.environ.get('RUN_INTEGRATION_TESTS') != '1',
             'Skipping integration test')
