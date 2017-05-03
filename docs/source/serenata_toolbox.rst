@@ -4,10 +4,10 @@ serenata_toolbox package
 Submodules
 ----------
 
-serenata_toolbox.ceap_dataset module
+serenata_toolbox.chamber_of_deputies_dataset module
 ------------------------------------
 
-.. automodule:: serenata_toolbox.ceap_dataset
+.. automodule:: serenata_toolbox.chamber_of_deputies_dataset
     :members:
     :undoc-members:
     :show-inheritance:

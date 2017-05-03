@@ -6,7 +6,7 @@ import pandas as pd
 from .reimbursements import Reimbursements
 from .xml2csv import convert_xml_to_csv
 
-class CEAPDataset:
+class ChamberOfDeputiesDataset:
     def __init__(self, path):
         self.path = path
 
