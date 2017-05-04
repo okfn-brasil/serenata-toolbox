@@ -28,5 +28,5 @@ setup(
     name='serenata-toolbox',
     packages=['serenata_toolbox.chamber_of_deputies', 'serenata_toolbox.datasets'],
     url=REPO_URL,
-    version='8.0.3'
+    version='9.0.0'
 )
