@@ -2,7 +2,7 @@ import os
 from tempfile import gettempdir
 from unittest import main, skipIf, TestCase, TestLoader
 
-from serenata_toolbox.chamber_of_deputies_dataset import ChamberOfDeputiesDataset
+from serenata_toolbox.chamber_of_deputies.chamber_of_deputies_dataset import ChamberOfDeputiesDataset
 
 if os.environ.get('RUN_INTEGRATION_TESTS') == '1':
     TestLoader.sortTestMethodsUsing = None
