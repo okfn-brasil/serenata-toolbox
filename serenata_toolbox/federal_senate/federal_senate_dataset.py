@@ -3,14 +3,18 @@ from urllib.request import urlretrieve
 import numpy as np
 import pandas as pd
 
+from datetime import date
+
 class FederalSenateDataset:
     URL = 'http://www.senado.gov.br/transparencia/LAI/verba/{}.csv'
+    FIRST_YEAR = 2008
+    NEXT_YEAR = date.today().year + 1
 
     def __init__(self, path):
         self.path = path
 
     def fetch(self):
-        urls = [self.URL.format(year) for year in range(2008, 2018)]
+        urls = [self.URL.format(year) for year in range(self.FIRST_YEAR, self.NEXT_YEAR)]
         filename_from_url = lambda url: 'federal-senate-{}'.format(url.split('/')[-1])
         filenames = map(filename_from_url, urls)
 
@@ -19,14 +23,13 @@ class FederalSenateDataset:
             urlretrieve(url, csv_file_path)
 
     def translate(self):
-        filenames = ['federal-senate-{}.csv'.format(year) for year in range(2008, 2018)]
+        filenames = ['federal-senate-{}.csv'.format(year) for year in range(self.FIRST_YEAR, self.NEXT_YEAR)]
         for filename in filenames:
             csv_path = os.path.join(self.path, filename)
             self.__translate_file(csv_path)
 
     def __translate_file(self, csv_path):
-        output_file_path = csv_path \
-            .replace('.csv', '.xz')
+        output_file_path = csv_path.replace('.csv', '.xz')
 
 
         data = pd.read_csv(csv_path,

@@ -16,7 +16,7 @@ class TestFederalSenateDataset(TestCase):
             'Skipping integration test')
     def test_fetch_saves_raw_files(self):
         self.subject.fetch()
-        names = ['federal-senate-{}.csv'.format(year) for year in range(2008, 2018)]
+        names = ['federal-senate-{}.csv'.format(year) for year in range(self.subject.FIRST_YEAR, self.subject.NEXT_YEAR)]
         for name in names:
             file_path = os.path.join(self.path, name)
             assert(os.path.exists(file_path))
@@ -25,7 +25,7 @@ class TestFederalSenateDataset(TestCase):
             'Skipping integration test')
     def test_translate_creates_english_versions_for_every_csv(self):
         self.subject.translate()
-        names = ['federal-senate-{}.xz'.format(year) for year in range(2008, 2018)]
+        names = ['federal-senate-{}.xz'.format(year) for year in range(self.subject.FIRST_YEAR, self.subject.NEXT_YEAR)]
         for name in names:
             file_path = os.path.join(self.path, name)
             assert(os.path.exists(file_path))
