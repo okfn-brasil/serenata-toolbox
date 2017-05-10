@@ -14,13 +14,10 @@ class FederalSenateDataset:
         self.path = path
 
     def fetch(self):
-        urls = [self.URL.format(year) for year in range(self.FIRST_YEAR, self.NEXT_YEAR)]
-        filename_from_url = lambda url: 'federal-senate-{}'.format(url.split('/')[-1])
-        filenames = map(filename_from_url, urls)
-
-        for url, filename in zip(urls, filenames):
-            csv_file_path = os.path.join(self.path, filename)
-            urlretrieve(url, csv_file_path)
+        for year in range(self.FIRST_YEAR, self.NEXT_YEAR):
+            url = self.URL.format(year)
+            file_path = os.path.join(self.path, 'federal-senate-{}.csv'.format(year))
+            urlretrieve(url, file_path)
 
     def translate(self):
         filenames = ['federal-senate-{}.csv'.format(year) for year in range(self.FIRST_YEAR, self.NEXT_YEAR)]
