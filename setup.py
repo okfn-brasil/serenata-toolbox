@@ -13,6 +13,7 @@ setup(
         'Topic :: Utilities',
     ],
     description='Toolbox for Serenata de Amor project',
+    zip_safe=False,
     install_requires=[
         'aiofiles',
         'aiohttp',
@@ -28,5 +29,5 @@ setup(
     name='serenata-toolbox',
     packages=['serenata_toolbox.chamber_of_deputies', 'serenata_toolbox.datasets'],
     url=REPO_URL,
-    version='9.0.1'
+    version='9.0.2'
 )
