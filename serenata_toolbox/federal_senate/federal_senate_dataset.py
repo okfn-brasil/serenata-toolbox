@@ -2,6 +2,7 @@ import os.path
 from urllib.request import urlretrieve
 import numpy as np
 import pandas as pd
+from .federal_senate_reimbursements import FederalSenateReimbursements
 
 from datetime import date
 
@@ -24,6 +25,9 @@ class FederalSenateDataset:
         for filename in filenames:
             csv_path = os.path.join(self.path, filename)
             self.__translate_file(csv_path)
+
+    def clean(self):
+        reimbursements = FederalSenateReimbursements(self.path)
 
     def __translate_file(self, csv_path):
         output_file_path = csv_path.replace('.csv', '.xz')
