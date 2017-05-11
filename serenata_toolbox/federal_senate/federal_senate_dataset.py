@@ -28,7 +28,6 @@ class FederalSenateDataset:
     def __translate_file(self, csv_path):
         output_file_path = csv_path.replace('.csv', '.xz')
 
-
         data = pd.read_csv(csv_path,
                            sep=';',
                            encoding = "ISO-8859-1",
