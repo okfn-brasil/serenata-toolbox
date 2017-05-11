@@ -36,7 +36,8 @@ class Downloader:
         '2016-12-22-amendments.xz',
         '2017-02-15-receipts-texts.xz',
         '2017-03-15-reimbursements.xz',
-        '2017-03-20-purchase-suppliers.xz'
+        '2017-03-20-purchase-suppliers.xz',
+        '2017-05-10-tse-candidates.xz'
     )
 
     def __init__(self, target, **kwargs):
