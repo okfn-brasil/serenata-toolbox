@@ -14,16 +14,15 @@ class TestFederalSenateDataset(TestCase):
     def setUp(self):
         self.path = gettempdir()
         self.subject = FederalSenateDataset(self.path)
+        self.subject.fetch()
 
     def tearDown(self):
         for file_path in Path(self.path).glob('federal-senate-*'):
-            print(file_path)
-            # os.remove(file_path)
+            os.remove(file_path)
 
     @skipIf(os.environ.get('RUN_INTEGRATION_TESTS') != '1',
             'Skipping integration test')
     def test_fetch_saves_raw_files(self):
-        self.subject.fetch()
         names = ['federal-senate-{}.csv'.format(year) for year in range(self.subject.FIRST_YEAR, self.subject.NEXT_YEAR)]
         for name in names:
             file_path = os.path.join(self.path, name)
