@@ -13,6 +13,7 @@ setup(
         'Topic :: Utilities',
     ],
     description='Toolbox for Serenata de Amor project',
+    zip_safe=False,
     install_requires=[
         'aiofiles',
         'aiohttp',
