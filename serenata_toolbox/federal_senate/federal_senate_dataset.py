@@ -2,7 +2,6 @@ import os.path
 from urllib.request import urlretrieve
 import numpy as np
 import pandas as pd
-from .federal_senate_reimbursements import FederalSenateReimbursements
 
 from datetime import date
 
@@ -27,7 +26,23 @@ class FederalSenateDataset:
             self.__translate_file(csv_path)
 
     def clean(self):
-        reimbursements = FederalSenateReimbursements(self.path)
+        reimbursement_path = os.path.join(self.path, 'federal-senate-reimbursements.xz')
+
+        filenames = ['federal-senate-{}.xz'.format(year) for year in range(self.FIRST_YEAR, self.NEXT_YEAR)]
+        dataset = pd.DataFrame()
+
+        for filename in filenames:
+            file_path = os.path.join(self.path, filename)
+            data = pd.read_csv(file_path, encoding = "utf-8")
+            dataset = pd.concat([dataset, data])
+
+        dataset['date'] = pd.to_datetime(dataset['date'], errors='coerce')
+        dataset['cnpj_cpf'] = dataset['cnpj_cpf'].str.replace(r'\D', '')
+
+        dataset.to_csv(reimbursement_path, compression='xz', index=False,
+                    encoding='utf-8')
+
+        return reimbursement_path
 
     def __translate_file(self, csv_path):
         output_file_path = csv_path.replace('.csv', '.xz')
