@@ -35,18 +35,19 @@ Clone the repo and use it within your virtualenv.
   $ git clone https://github.com/datasciencebr/serenata-toolbox.git
   $ python setup.py develop
 
-
 Usage
 -----
 
-If you plan to upload data to a S3 server you should copy `config.ini.example` as `config.ini` and edit it with your own credentials.
+Copy `config.ini.example` as `config.ini` and edit it with your own credentials. If you don't plan to upload anything to S3 please don't bother about keys and secrets in this file.
+
+Example:
 
 .. code:: python
 
   $ python3
-  >>> from serenata_toolbox import xml2csv
-  >>> xml2csv.output('Spam and eggs')
-  2016-12-01 18:14:26 Spam and eggs
+  >>> from serenata_toolbox.datasets import Dataset
+  >>> dataset = Dataset('/tmp/serenata-data')
+  >>> tuple(dataset.local.all)
 
 Documentation (WIP)
 -------------------
