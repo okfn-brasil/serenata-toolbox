@@ -16,18 +16,25 @@ Serenata de Amor Toolbox
 `pip <https://pip.pypa.io/en/stable/>`_  installable package to support `Serenata de Amor <https://github.com/datasciencebr/serenata-de-amor>`_
 and `Rosie <https://github.com/datasciencebr/rosie>`_ development.
 
+Serenata_toolbox is compatible with Python 3+
 
 Installation
 ------------
 
-As this is a work in progress, clone the repo and use it within your virtualenv.
+::
+
+    $ pip install git+https://github.com/datasciencebr/serenata-toolbox.git#egg=serenata-toolbox 
+
+Development
+------------
+
+Clone the repo and use it within your virtualenv.
 
 ::
 
   $ git clone https://github.com/datasciencebr/serenata-toolbox.git
   $ python setup.py develop
 
-serenata_toolbox is compatible with Python 3+
 
 Usage
 -----
