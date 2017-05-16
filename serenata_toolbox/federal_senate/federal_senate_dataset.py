@@ -10,19 +10,19 @@ class FederalSenateDataset:
     FIRST_YEAR = 2008
     NEXT_YEAR = date.today().year + 1
 
-    YEAR_RANGE = range(self.FIRST_YEAR, self.NEXT_YEAR)
+    YEAR_RANGE = range(FIRST_YEAR, NEXT_YEAR)
 
     def __init__(self, path):
         self.path = path
 
     def fetch(self):
-        for year in YEAR_RANGE:
+        for year in self.YEAR_RANGE:
             url = self.URL.format(year)
             file_path = os.path.join(self.path, 'federal-senate-{}.csv'.format(year))
             urlretrieve(url, file_path)
 
     def translate(self):
-        filenames = ['federal-senate-{}.csv'.format(year) for year in YEAR_RANGE]
+        filenames = ['federal-senate-{}.csv'.format(year) for year in self.YEAR_RANGE]
         for filename in filenames:
             csv_path = os.path.join(self.path, filename)
             self.__translate_file(csv_path)
@@ -30,7 +30,7 @@ class FederalSenateDataset:
     def clean(self):
         reimbursement_path = os.path.join(self.path, 'federal-senate-reimbursements.xz')
 
-        filenames = ['federal-senate-{}.xz'.format(year) for year in YEAR_RANGE]
+        filenames = ['federal-senate-{}.xz'.format(year) for year in self.YEAR_RANGE]
         dataset = pd.DataFrame()
 
         for filename in filenames:
