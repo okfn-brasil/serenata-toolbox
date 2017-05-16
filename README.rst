@@ -10,16 +10,10 @@
    :target: https://landscape.io/github/datasciencebr/serenata-toolbox/master
    :alt: Code Health
 
-.. image:: https://img.shields.io/pypi/v/serenata_toolbox.svg
-   :target: https://pypi.python.org/pypi/serenata_toolbox/
-   :alt: Latest PyPI version
-
-
-
 Serenata de Amor Toolbox
 ========================
 
-`PyPI <https://pypi.python.org/>`_  package to support `Serenata de Amor <https://github.com/datasciencebr/serenata-de-amor>`_
+`pip <https://pip.pypa.io/en/stable/>`_  installable package to support `Serenata de Amor <https://github.com/datasciencebr/serenata-de-amor>`_
 and `Rosie <https://github.com/datasciencebr/rosie>`_ development.
 
 
