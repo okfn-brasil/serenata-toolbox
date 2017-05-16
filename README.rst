@@ -35,6 +35,12 @@ Clone the repo and use it within your virtualenv.
   $ git clone https://github.com/datasciencebr/serenata-toolbox.git
   $ python setup.py develop
 
+We use `Elm's philosophy <https://github.com/elm-lang/elm-package#version-rules>`_ for version bumping:
+
+* MICRO: the API is the same, no risk of breaking code
+* MINOR: values have been added, existing values are unchanged
+* MAJOR: existing values have been changed or removed
+
 Usage
 -----
 
