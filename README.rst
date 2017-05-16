@@ -48,15 +48,10 @@ If you plan to upload data to a S3 server you should copy `config.ini.example` a
   >>> xml2csv.output('Spam and eggs')
   2016-12-01 18:14:26 Spam and eggs
 
-Full Documentation
-------------------
+Documentation (WIP)
+-------------------
 
-https://serenata_toolbox.readthedocs.io
-
-Build documentation locally
----------------------------
-
-You will need sphinx installed in your machine
+The `full documentation <https://serenata_toolbox.readthedocs.io>`_ is still a work in progress. If you wanna give us a hand you will need `Sphinx <http://www.sphinx-doc.org/>`_:
 
 ::
 
