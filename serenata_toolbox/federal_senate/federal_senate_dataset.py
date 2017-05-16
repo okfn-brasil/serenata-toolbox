@@ -41,8 +41,7 @@ class FederalSenateDataset:
         dataset['date'] = pd.to_datetime(dataset['date'], errors='coerce')
         dataset['cnpj_cpf'] = dataset['cnpj_cpf'].str.replace(r'\D', '')
 
-        dataset.to_csv(reimbursement_path, compression='xz', index=False,
-                    encoding='utf-8')
+        dataset.to_csv(reimbursement_path, compression='xz', index=False, encoding='utf-8')
 
         return reimbursement_path
 
@@ -91,13 +90,11 @@ class FederalSenateDataset:
                 'Private Security Services'
         }
 
-        categories = [categories[cat]
-                      for cat in data['expense_type'].cat.categories]
-        data['expense_type'].cat.rename_categories(categories,
-                                                           inplace=True)
+        categories = [categories[cat] for cat in data['expense_type'].cat.categories]
 
-        data.to_csv(output_file_path, compression='xz', index=False,
-                    encoding='utf-8')
+        data['expense_type'].cat.rename_categories(categories, inplace=True)
+
+        data.to_csv(output_file_path, compression='xz', index=False, encoding='utf-8')
 
         return output_file_path
 
