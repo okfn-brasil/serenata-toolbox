@@ -76,8 +76,3 @@ Source Code
 Feel free to fork, evaluate and contribute to this project.
 
 Source: https://github.com/datasciencebr/serenata-toolbox/
-
-License
--------
-
-MIT licensed.
