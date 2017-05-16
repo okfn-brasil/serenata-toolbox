@@ -10,10 +10,6 @@
    :target: https://landscape.io/github/datasciencebr/serenata-toolbox/master
    :alt: Code Health
 
-.. image:: https://img.shields.io/pypi/v/serenata_toolbox.svg
-   :target: https://pypi.python.org/pypi/serenata_toolbox/
-   :alt: Latest PyPI version
-
 .. image:: https://coveralls.io/repos/github/datasciencebr/serenata-toolbox/badge.svg?branch=master
    :target: https://coveralls.io/github/datasciencebr/serenata-toolbox?branch=master
    :alt: Coveralls
@@ -21,43 +17,52 @@
 Serenata de Amor Toolbox
 ========================
 
-`PyPI <https://pypi.python.org/>`_  package to support `Serenata de Amor <https://github.com/datasciencebr/serenata-de-amor>`_
+`pip <https://pip.pypa.io/en/stable/>`_  installable package to support `Serenata de Amor <https://github.com/datasciencebr/serenata-de-amor>`_
 and `Rosie <https://github.com/datasciencebr/rosie>`_ development.
 
+Serenata_toolbox is compatible with Python 3+
 
 Installation
 ------------
 
-As this is a work in progress, clone the repo and use it within your virtualenv.
+::
+
+    $ pip install git+https://github.com/datasciencebr/serenata-toolbox.git#egg=serenata-toolbox 
+
+Development
+------------
+
+Clone the repo and use it within your virtualenv.
 
 ::
 
   $ git clone https://github.com/datasciencebr/serenata-toolbox.git
   $ python setup.py develop
 
-serenata_toolbox is compatible with Python 3+
+We use `Elm's philosophy <https://github.com/elm-lang/elm-package#version-rules>`_ for version bumping:
+
+* MICRO: the API is the same, no risk of breaking code
+* MINOR: values have been added, existing values are unchanged
+* MAJOR: existing values have been changed or removed
 
 Usage
 -----
 
-If you plan to upload data to a S3 server you should copy `config.ini.example` as `config.ini` and edit it with your own credentials.
+Copy `config.ini.example` as `config.ini` and edit it with your own credentials. If you don't plan to upload anything to S3 please don't bother about keys and secrets in this file.
+
+Example:
 
 .. code:: python
 
   $ python3
-  >>> from serenata_toolbox import xml2csv
-  >>> xml2csv.output('Spam and eggs')
-  2016-12-01 18:14:26 Spam and eggs
+  >>> from serenata_toolbox.datasets import Dataset
+  >>> dataset = Dataset('/tmp/serenata-data')
+  >>> tuple(dataset.local.all)
 
-Full Documentation
-------------------
+Documentation (WIP)
+-------------------
 
-https://serenata_toolbox.readthedocs.io
-
-Build documentation locally
----------------------------
-
-You will need sphinx installed in your machine
+The `full documentation <https://serenata_toolbox.readthedocs.io>`_ is still a work in progress. If you wanna give us a hand you will need `Sphinx <http://www.sphinx-doc.org/>`_:
 
 ::
 
@@ -77,8 +82,3 @@ Source Code
 Feel free to fork, evaluate and contribute to this project.
 
 Source: https://github.com/datasciencebr/serenata-toolbox/
-
-License
--------
-
-MIT licensed.
