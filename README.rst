@@ -14,7 +14,9 @@
    :target: https://pypi.python.org/pypi/serenata_toolbox/
    :alt: Latest PyPI version
 
-
+.. image:: https://coveralls.io/repos/github/datasciencebr/serenata-toolbox/badge.svg?branch=master
+   :target: https://coveralls.io/github/datasciencebr/serenata-toolbox?branch=master
+   :alt: Coveralls
 
 Serenata de Amor Toolbox
 ========================
