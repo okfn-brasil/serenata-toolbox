@@ -70,7 +70,7 @@ We have `plenty of them <https://github.com/datasciencebr/serenata-de-amor/blob/
 Example 2: Using shortcuts
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-If thelast example doesn't look that simple, there are some fancy shortcuts available:
+If the last example doesn't look that simple, there are some fancy shortcuts available:
 
 .. code:: python
 
