@@ -1,9 +1,9 @@
 import os.path
 from urllib.request import urlretrieve
-import numpy as np
 import pandas as pd
 
 from datetime import date
+
 
 class FederalSenateDataset:
     URL = 'http://www.senado.gov.br/transparencia/LAI/verba/{}.csv'
@@ -35,7 +35,7 @@ class FederalSenateDataset:
 
         for filename in filenames:
             file_path = os.path.join(self.path, filename)
-            data = pd.read_csv(file_path, encoding = "utf-8")
+            data = pd.read_csv(file_path, encoding="utf-8")
             dataset = pd.concat([dataset, data])
 
         dataset['date'] = pd.to_datetime(dataset['date'], errors='coerce')
@@ -50,7 +50,7 @@ class FederalSenateDataset:
 
         data = pd.read_csv(csv_path,
                            sep=';',
-                           encoding = "ISO-8859-1",
+                           encoding="ISO-8859-1",
                            skiprows=1)
 
         data.columns = map(str.lower, data.columns)
@@ -97,4 +97,3 @@ class FederalSenateDataset:
         data.to_csv(output_file_path, compression='xz', index=False, encoding='utf-8')
 
         return output_file_path
-

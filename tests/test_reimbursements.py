@@ -1,4 +1,4 @@
-from unittest import TestCase, main
+from unittest import TestCase
 from serenata_toolbox.chamber_of_deputies.reimbursements import Reimbursements
 import numpy as np
 from numpy.testing import assert_array_equal
