@@ -33,5 +33,5 @@ setup(
         'serenata_toolbox.datasets'
     ],
     url=REPO_URL,
-    version='9.1.0'
+    version='10.0.0'
 )
