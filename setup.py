@@ -27,7 +27,11 @@ setup(
     license='MIT',
     long_description='Check `Serenata Toolbox at GitHub <{}>`_.'.format(REPO_URL),
     name='serenata-toolbox',
-    packages=['serenata_toolbox.chamber_of_deputies', 'serenata_toolbox.datasets'],
+    packages=[
+        'serenata_toolbox.federal_senate',
+        'serenata_toolbox.chamber_of_deputies',
+        'serenata_toolbox.datasets'
+    ],
     url=REPO_URL,
-    version='9.1.0'
+    version='10.0.0'
 )
