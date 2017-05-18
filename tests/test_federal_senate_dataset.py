@@ -53,7 +53,7 @@ class TestFederalSenateDataset(TestCase):
 
         self.assertEqual(translated_files, self.expected_files)
 
-    def dataset_cleanup(self):
+    def test_dataset_cleanup(self):
         self.subject = FederalSenateDataset('tests/fixtures/xz/')
 
         reimbursement_path = self.subject.clean()

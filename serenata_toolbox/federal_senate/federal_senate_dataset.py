@@ -38,9 +38,27 @@ class FederalSenateDataset:
         return filenames
 
     def clean(self):
-        reimbursement_path = os.path.join(self.path, 'federal-senate-reimbursements.xz')
-
         filenames = ['federal-senate-{}.xz'.format(year) for year in self._YEAR_RANGE]
+
+        merged_dataset = self.merge_files(filenames)
+
+        cleaned_merged_dataset = self.cleanup_dataset(merged_dataset)
+
+        reimbursement_path = os.path.join(self.path, 'federal-senate-reimbursements.xz')
+        cleaned_merged_dataset.to_csv(reimbursement_path,
+                                      compression='xz',
+                                      index=False,
+                                      encoding='utf-8')
+
+        return reimbursement_path
+
+    def cleanup_dataset(self, dataset):
+        dataset['date'] = pd.to_datetime(dataset['date'], errors='coerce')
+        dataset['cnpj_cpf'] = dataset['cnpj_cpf'].str.replace(r'\D', '')
+
+        return dataset
+
+    def merge_files(self, filenames):
         dataset = pd.DataFrame()
 
         for filename in filenames:
@@ -48,12 +66,7 @@ class FederalSenateDataset:
             data = pd.read_csv(file_path, encoding="utf-8")
             dataset = pd.concat([dataset, data])
 
-        dataset['date'] = pd.to_datetime(dataset['date'], errors='coerce')
-        dataset['cnpj_cpf'] = dataset['cnpj_cpf'].str.replace(r'\D', '')
-
-        dataset.to_csv(reimbursement_path, compression='xz', index=False, encoding='utf-8')
-
-        return reimbursement_path
+        return dataset
 
     def __translate_file(self, csv_path):
         output_file_path = csv_path.replace('.csv', '.xz')
