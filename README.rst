@@ -10,6 +10,10 @@
    :target: https://landscape.io/github/datasciencebr/serenata-toolbox/master
    :alt: Code Health
 
+.. image:: https://coveralls.io/repos/github/datasciencebr/serenata-toolbox/badge.svg?branch=master
+   :target: https://coveralls.io/github/datasciencebr/serenata-toolbox?branch=master
+   :alt: Coveralls
+
 Serenata de Amor Toolbox
 ========================
 
