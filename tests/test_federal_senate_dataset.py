@@ -7,12 +7,17 @@ from serenata_toolbox.federal_senate.federal_senate_dataset import FederalSenate
 
 
 class TestFederalSenateDataset(TestCase):
-    def setUp(self):
+    @patch("serenata_toolbox.federal_senate.federal_senate_dataset.urlretrieve")
+    def test_fetch_files_from_S3(self, mockedUrlRetrieve):
         self.path = gettempdir()
-        print(self.path)
         self.subject = FederalSenateDataset(self.path)
 
-    @patch("serenata_toolbox.federal_senate.federal_senate_dataset.urlretrieve")
-    def test_mocking_fetch(self, mockedUrlRetrieve):
         self.subject.fetch()
         self.assertTrue(mockedUrlRetrieve.called)
+
+    def test_translate(self):
+        self.subject = FederalSenateDataset('tests/fixtures/csv/')
+
+        self.subject.translate()
+
+        self.assertTrue(True) # What should be asserted here?
