@@ -15,9 +15,19 @@ class TestFederalSenateDataset(TestCase):
         self.subject.fetch()
         self.assertTrue(mockedUrlRetrieve.called)
 
-    def test_translate(self):
+    def test_dataset_translation(self):
         self.subject = FederalSenateDataset('tests/fixtures/csv/')
 
         self.subject.translate()
 
         self.assertTrue(True) # What should be asserted here?
+
+    def test_dataset_cleanup(self):
+        self.subject = FederalSenateDataset('tests/fixtures/xz/')
+
+        reimbursement_path = self.subject.clean()
+
+        self.assertEqual(
+            reimbursement_path,
+            'tests/fixtures/xz/federal-senate-reimbursements.xz'
+        )
