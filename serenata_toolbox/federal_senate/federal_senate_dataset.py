@@ -2,35 +2,45 @@ import os.path
 from urllib.request import urlretrieve
 import pandas as pd
 
-from datetime import date
-
 
 class FederalSenateDataset:
     URL = 'http://www.senado.gov.br/transparencia/LAI/verba/{}.csv'
-    FIRST_YEAR = 2008
-    NEXT_YEAR = date.today().year + 1
 
-    YEAR_RANGE = range(FIRST_YEAR, NEXT_YEAR)
-
-    def __init__(self, path):
+    def __init__(self, path, _first_year=2008, _last_year=2018):
         self.path = path
+        self._first_year = _first_year
+        self._last_year = _last_year
+        self._YEAR_RANGE = range(_first_year, _last_year)
 
     def fetch(self):
-        for year in self.YEAR_RANGE:
+        retrieved_files = []
+        not_found_files = []
+
+        for year in self._YEAR_RANGE:
             url = self.URL.format(year)
             file_path = os.path.join(self.path, 'federal-senate-{}.csv'.format(year))
-            urlretrieve(url, file_path)
+            try:
+                local_filename, headers = urlretrieve(url, file_path)
+                retrieved_files.append(file_path)
+            except Exception as exception:
+                print("Not found file: {0} \n{1}".format(file_path, exception))
+                not_found_files.append(file_path)
+
+        return (retrieved_files, not_found_files)
 
     def translate(self):
-        filenames = ['federal-senate-{}.csv'.format(year) for year in self.YEAR_RANGE]
+        filenames = ['federal-senate-{}.csv'.format(year) for year in self._YEAR_RANGE]
+
         for filename in filenames:
             csv_path = os.path.join(self.path, filename)
             self.__translate_file(csv_path)
 
+        return filenames
+
     def clean(self):
         reimbursement_path = os.path.join(self.path, 'federal-senate-reimbursements.xz')
 
-        filenames = ['federal-senate-{}.xz'.format(year) for year in self.YEAR_RANGE]
+        filenames = ['federal-senate-{}.xz'.format(year) for year in self._YEAR_RANGE]
         dataset = pd.DataFrame()
 
         for filename in filenames:
