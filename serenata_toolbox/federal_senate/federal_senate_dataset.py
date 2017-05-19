@@ -24,7 +24,7 @@ class FederalSenateDataset:
             url = self.URL.format(year)
             file_path = os.path.join(self.path, 'federal-senate-{}.csv'.format(year))
             try:
-                local_filename, headers = urlretrieve(url, file_path)
+                urlretrieve(url, file_path)
                 retrieved_files.append(file_path)
             except Exception as exception:
                 print("Not found file: {0} \n{1}".format(file_path, exception))

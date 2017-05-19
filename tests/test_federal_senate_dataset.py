@@ -16,7 +16,6 @@ class TestFederalSenateDataset(TestCase):
     def test_fetch_files_from_S3(self, mockedUrlRetrieve):
         self.path = gettempdir()
         self.subject = FederalSenateDataset(self.path)
-        mockedUrlRetrieve.return_value = ([], [])
 
         retrieved_files, not_found_files = self.subject.fetch()
 
