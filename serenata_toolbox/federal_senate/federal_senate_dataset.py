@@ -1,22 +1,26 @@
 import os.path
 from urllib.request import urlretrieve
 import pandas as pd
+import numpy as np
+from datetime import date
 
 
 class FederalSenateDataset:
     URL = 'http://www.senado.gov.br/transparencia/LAI/verba/{}.csv'
 
-    def __init__(self, path, _first_year=2008, _last_year=2018):
+    LAST_YEAR = date.today().year + 1
+
+    def __init__(self, path, first_year=2008, last_year=LAST_YEAR):
         self.path = path
-        self._first_year = _first_year
-        self._last_year = _last_year
-        self._YEAR_RANGE = range(_first_year, _last_year)
+        self.first_year = first_year
+        self.last_year = last_year
+        self.year_range = range(first_year, last_year)
 
     def fetch(self):
         retrieved_files = []
         not_found_files = []
 
-        for year in self._YEAR_RANGE:
+        for year in self.year_range:
             url = self.URL.format(year)
             file_path = os.path.join(self.path, 'federal-senate-{}.csv'.format(year))
             try:
@@ -29,7 +33,7 @@ class FederalSenateDataset:
         return (retrieved_files, not_found_files)
 
     def translate(self):
-        filenames = self.filenames_generator('csv')
+        filenames = self.__filenames_generator('csv')
 
         for filename in filenames:
             csv_path = os.path.join(self.path, filename)
@@ -38,11 +42,11 @@ class FederalSenateDataset:
         return filenames
 
     def clean(self):
-        filenames = self.filenames_generator('xz')
+        filenames = self.__filenames_generator('xz')
 
-        merged_dataset = self.merge_files(filenames)
+        merged_dataset = self.__merge_files(filenames)
 
-        cleaned_merged_dataset = self.cleanup_dataset(merged_dataset)
+        cleaned_merged_dataset = self.__cleanup_dataset(merged_dataset)
 
         reimbursement_path = os.path.join(self.path, 'federal-senate-reimbursements.xz')
         cleaned_merged_dataset.to_csv(reimbursement_path,
@@ -52,16 +56,16 @@ class FederalSenateDataset:
 
         return reimbursement_path
 
-    def filenames_generator(self, extension):
-        return ['federal-senate-{0}.{1}'.format(year, extension) for year in self._YEAR_RANGE]
+    def __filenames_generator(self, extension):
+        return ['federal-senate-{0}.{1}'.format(year, extension) for year in self.year_range]
 
-    def cleanup_dataset(self, dataset):
+    def __cleanup_dataset(self, dataset):
         dataset['date'] = pd.to_datetime(dataset['date'], errors='coerce')
         dataset['cnpj_cpf'] = dataset['cnpj_cpf'].str.replace(r'\D', '')
 
         return dataset
 
-    def merge_files(self, filenames):
+    def __merge_files(self, filenames):
         dataset = pd.DataFrame()
 
         for filename in filenames:
@@ -76,6 +80,7 @@ class FederalSenateDataset:
 
         data = pd.read_csv(csv_path,
                            sep=';',
+                           dtype={'cnpj_cpf': np.str},
                            encoding="ISO-8859-1",
                            skiprows=1)
 
