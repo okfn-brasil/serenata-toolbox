@@ -42,9 +42,24 @@ class TestFederalSenateDataset(TestCase):
 
         expected_files = ['federal-senate-2008.csv']
 
-        translated_files = self.subject.translate()
+        translated_files, not_found_files = self.subject.translate()
 
-        self.assertEqual(translated_files, expected_files)
+        for translated_file, expected_file in zip(
+                translated_files, expected_files):
+
+            self.assertIn(expected_file, translated_file)
+
+    def test_dataset_translation_failing_to_find_file(self):
+        self.subject = FederalSenateDataset('tests/fixtures/csv/', 2007, 2008)
+
+        expected_files = ['federal-senate-2007.csv']
+
+        translated_files, not_found_files = self.subject.translate()
+
+        for not_found_files, expected_file in zip(
+                not_found_files, expected_files):
+
+            self.assertIn(expected_file, not_found_files)
 
     def test_dataset_cleanup(self):
         self.subject = FederalSenateDataset('tests/fixtures/xz/', 2008, 2010)

@@ -27,19 +27,26 @@ class FederalSenateDataset:
                 urlretrieve(url, file_path)
                 retrieved_files.append(file_path)
             except Exception as exception:
-                print("Not found file: {0} \n{1}".format(file_path, exception))
+                print("While fetching Seranata Toolbox not found file: {0} \n{1}".format(file_path, exception))
                 not_found_files.append(file_path)
 
         return (retrieved_files, not_found_files)
 
     def translate(self):
         filenames = self.__filenames_generator('csv')
+        not_found_files = []
+        translated_files = []
 
         for filename in filenames:
             csv_path = os.path.join(self.path, filename)
-            self.__translate_file(csv_path)
+            try:
+                self.__translate_file(csv_path)
+                translated_files.append(csv_path)
+            except Exception as exception:
+                print("While translating Seranata Toolbox not found file: {0} \n{1}".format(csv_path, exception))
+                not_found_files.append(csv_path)
 
-        return filenames
+        return (translated_files, not_found_files)
 
     def clean(self):
         filenames = self.__filenames_generator('xz')
