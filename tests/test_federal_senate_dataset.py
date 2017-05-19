@@ -10,15 +10,7 @@ class TestFederalSenateDataset(TestCase):
     @classmethod
     def setUpClass(cls):
         cls.expected_files = ['federal-senate-2008.csv',
-                              'federal-senate-2009.csv',
-                              'federal-senate-2010.csv',
-                              'federal-senate-2011.csv',
-                              'federal-senate-2012.csv',
-                              'federal-senate-2013.csv',
-                              'federal-senate-2014.csv',
-                              'federal-senate-2015.csv',
-                              'federal-senate-2016.csv',
-                              'federal-senate-2017.csv']
+                              'federal-senate-2009.csv']
 
     @patch("serenata_toolbox.federal_senate.federal_senate_dataset.urlretrieve")
     def test_fetch_files_from_S3(self, mockedUrlRetrieve):
@@ -47,14 +39,16 @@ class TestFederalSenateDataset(TestCase):
             self.assertIn('federal-senate-2007.csv', not_found_file)
 
     def test_dataset_translation(self):
-        self.subject = FederalSenateDataset('tests/fixtures/csv/')
+        self.subject = FederalSenateDataset('tests/fixtures/csv/', 2008, 2009)
+
+        expected_files = ['federal-senate-2008.csv']
 
         translated_files = self.subject.translate()
 
-        self.assertEqual(translated_files, self.expected_files)
+        self.assertEqual(translated_files, expected_files)
 
     def test_dataset_cleanup(self):
-        self.subject = FederalSenateDataset('tests/fixtures/xz/')
+        self.subject = FederalSenateDataset('tests/fixtures/xz/', 2008, 2010)
 
         reimbursement_path = self.subject.clean()
 

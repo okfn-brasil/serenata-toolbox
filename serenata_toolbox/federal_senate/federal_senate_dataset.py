@@ -29,7 +29,7 @@ class FederalSenateDataset:
         return (retrieved_files, not_found_files)
 
     def translate(self):
-        filenames = ['federal-senate-{}.csv'.format(year) for year in self._YEAR_RANGE]
+        filenames = self.filenames_generator('csv')
 
         for filename in filenames:
             csv_path = os.path.join(self.path, filename)
@@ -38,7 +38,7 @@ class FederalSenateDataset:
         return filenames
 
     def clean(self):
-        filenames = ['federal-senate-{}.xz'.format(year) for year in self._YEAR_RANGE]
+        filenames = self.filenames_generator('xz')
 
         merged_dataset = self.merge_files(filenames)
 
@@ -51,6 +51,9 @@ class FederalSenateDataset:
                                       encoding='utf-8')
 
         return reimbursement_path
+
+    def filenames_generator(self, extension):
+        return ['federal-senate-{0}.{1}'.format(year, extension) for year in self._YEAR_RANGE]
 
     def cleanup_dataset(self, dataset):
         dataset['date'] = pd.to_datetime(dataset['date'], errors='coerce')
