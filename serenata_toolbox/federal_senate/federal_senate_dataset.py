@@ -33,14 +33,14 @@ class FederalSenateDataset:
         return (retrieved_files, not_found_files)
 
     def translate(self):
-        filenames = self.__filenames_generator('csv')
+        filenames = self._filenames_generator('csv')
         not_found_files = []
         translated_files = []
 
         for filename in filenames:
             csv_path = os.path.join(self.path, filename)
             try:
-                self.__translate_file(csv_path)
+                self._translate_file(csv_path)
                 translated_files.append(csv_path)
             except Exception as exception:
                 print("While translating Seranata Toolbox not found file: {0} \n{1}".format(csv_path, exception))
@@ -49,11 +49,11 @@ class FederalSenateDataset:
         return (translated_files, not_found_files)
 
     def clean(self):
-        filenames = self.__filenames_generator('xz')
+        filenames = self._filenames_generator('xz')
 
-        merged_dataset = self.__merge_files(filenames)
+        merged_dataset = self._merge_files(filenames)
 
-        cleaned_merged_dataset = self.__cleanup_dataset(merged_dataset)
+        cleaned_merged_dataset = self._cleanup_dataset(merged_dataset)
 
         reimbursement_path = os.path.join(self.path, 'federal-senate-reimbursements.xz')
         cleaned_merged_dataset.to_csv(reimbursement_path,
@@ -63,16 +63,16 @@ class FederalSenateDataset:
 
         return reimbursement_path
 
-    def __filenames_generator(self, extension):
+    def _filenames_generator(self, extension):
         return ['federal-senate-{0}.{1}'.format(year, extension) for year in self.year_range]
 
-    def __cleanup_dataset(self, dataset):
+    def _cleanup_dataset(self, dataset):
         dataset['date'] = pd.to_datetime(dataset['date'], errors='coerce')
         dataset['cnpj_cpf'] = dataset['cnpj_cpf'].str.replace(r'\D', '')
 
         return dataset
 
-    def __merge_files(self, filenames):
+    def _merge_files(self, filenames):
         dataset = pd.DataFrame()
 
         for filename in filenames:
@@ -82,14 +82,10 @@ class FederalSenateDataset:
 
         return dataset
 
-    def __translate_file(self, csv_path):
+    def _translate_file(self, csv_path):
         output_file_path = csv_path.replace('.csv', '.xz')
 
-        data = pd.read_csv(csv_path,
-                           sep=';',
-                           dtype={'cnpj_cpf': np.str},
-                           encoding="ISO-8859-1",
-                           skiprows=1)
+        data = pd.read_csv(file_path,sep=';',encoding="ISO-8859-1",skiprows=1)
 
         data.columns = map(str.lower, data.columns)
 
