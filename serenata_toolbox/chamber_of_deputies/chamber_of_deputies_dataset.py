@@ -1,4 +1,5 @@
 import os.path
+import csv
 from datetime import date
 from urllib.request import urlretrieve
 from zipfile import ZipFile
@@ -53,10 +54,9 @@ class ChamberOfDeputiesDataset:
                            .replace('Ano-', 'reimbursements-')
 
         data = pd.read_csv(csv_path,
-                           error_bad_lines=False, #some old reimbursements are messed up
-                           warn_bad_lines=False,
                            encoding='utf-8',
                            delimiter=";",
+                           quoting=csv.QUOTE_NONE,
                            dtype={'ideDocumento': np.str,
                                   'idecadastro': np.str,
                                   'nuCarteiraParlamentar': np.str,
