@@ -61,8 +61,15 @@ class Reimbursements:
         print('Dropping rows without document_value or reimbursement_number…')
         subset = ('document_value', 'reimbursement_number')
         receipts = receipts.dropna(subset=subset)
+
         groupby_keys = ('year', 'applicant_id', 'document_id')
         receipts = receipts.dropna(subset=subset + groupby_keys)
+
+        receipts = receipts[receipts['document_value'] != 0]
+        receipts = receipts[receipts['reimbursement_number'] != '0']
+        receipts = receipts[receipts['year'] != 0]
+        receipts = receipts[receipts['applicant_id'] != '0']
+        receipts = receipts[receipts['document_id'] != '0']
 
         print('Grouping dataset by applicant_id, document_id and year…')
         grouped = receipts.groupby(groupby_keys)
