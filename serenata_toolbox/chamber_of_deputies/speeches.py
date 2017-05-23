@@ -1,6 +1,4 @@
-import os
 import pandas as pd
-import numpy as np
 import xml.etree.ElementTree as ET
 import urllib
 
