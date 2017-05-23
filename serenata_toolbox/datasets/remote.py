@@ -13,6 +13,7 @@ class RemoteDatasets:
 
     def __init__(self):
         self.credentials = None
+        self.client = None
 
         if not self.config_exists:
             print('Could not find {} file.'.format(self.CONFIG))
@@ -63,14 +64,9 @@ class RemoteDatasets:
 
     @property
     def s3(self):
-        if hasattr(self, 'client'):
-            return self.client
-
-        if self.credentials:
+        if not self.client and self.credentials:
             self.client = boto3.client('s3', **self.credentials)
-            return self.s3
-
-        return None
+        return self.client
 
     @property
     def all(self):
