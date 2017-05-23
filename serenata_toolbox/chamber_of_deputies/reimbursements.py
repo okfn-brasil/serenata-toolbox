@@ -1,7 +1,7 @@
 import os
 import pandas as pd
 import numpy as np
-
+from datetime import date
 
 class Reimbursements:
 
@@ -12,6 +12,8 @@ class Reimbursements:
         'encoding': 'utf-8',
         'index': False
     }
+
+    YEARS = [n for n in range(2009, date.today().year+1)]
 
     def __init__(self, path):
         self.path = path
@@ -41,7 +43,7 @@ class Reimbursements:
     @property
     def receipts(self):
         print('Merging all datasets…')
-        datasets = ('current-year.xz', 'last-year.xz', 'previous-years.xz')
+        datasets = ["reimbursements-{}.xz".format(n) for n in self.YEARS]
         data = (self.read_csv(name) for name in datasets)
         return pd.concat(data)
 
@@ -59,8 +61,15 @@ class Reimbursements:
         print('Dropping rows without document_value or reimbursement_number…')
         subset = ('document_value', 'reimbursement_number')
         receipts = receipts.dropna(subset=subset)
+
         groupby_keys = ('year', 'applicant_id', 'document_id')
         receipts = receipts.dropna(subset=subset + groupby_keys)
+
+        receipts = receipts[receipts['document_value'] != 0]
+        receipts = receipts[receipts['reimbursement_number'] != '0']
+        receipts = receipts[receipts['year'] != 0]
+        receipts = receipts[receipts['applicant_id'] != '0']
+        receipts = receipts[receipts['document_id'] != '0']
 
         print('Grouping dataset by applicant_id, document_id and year…')
         grouped = receipts.groupby(groupby_keys)
