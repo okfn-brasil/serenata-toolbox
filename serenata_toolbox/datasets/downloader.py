@@ -37,7 +37,6 @@ class Downloader:
         '2017-02-15-receipts-texts.xz',
         '2017-03-15-reimbursements.xz',
         '2017-03-20-purchase-suppliers.xz',
-        '2017-04-27-companies-no-geolocation.xz',
         '2017-05-10-tse-candidates.xz',
         '2017-05-21-companies-no-geolocation.xz'
     )
