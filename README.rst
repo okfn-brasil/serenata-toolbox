@@ -10,6 +10,10 @@
    :target: https://landscape.io/github/datasciencebr/serenata-toolbox/master
    :alt: Code Health
 
+.. image:: https://coveralls.io/repos/github/datasciencebr/serenata-toolbox/badge.svg?branch=master
+   :target: https://coveralls.io/github/datasciencebr/serenata-toolbox?branch=master
+   :alt: Coveralls
+
 Serenata de Amor Toolbox
 ========================
 
@@ -81,7 +85,7 @@ If the last example doesn't look that simple, there are some fancy shortcuts ava
 Example 3: Generating datasets
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-If you ever wonder how did we generated these datasets, this toolbox can help you too (at least with the more used ones — the other are generates `in our main repo <https://github.com/datasciencebr/serenata-de-amor/blob/master/CONTRIBUTING.md#the-toolbox-and-our-the-source-files-src>`_):
+If you ever wonder how did we generated these datasets, this toolbox can help you too (at least with the more used ones — the other ones are generated `in our main repo <https://github.com/datasciencebr/serenata-de-amor/blob/master/CONTRIBUTING.md#the-toolbox-and-our-the-source-files-src>`_):
 
 .. code:: python
 
