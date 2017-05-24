@@ -1,4 +1,2 @@
 [run]
   source = serenata_toolbox
-  omit =
-      */virtualenv/*
