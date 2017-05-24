@@ -67,7 +67,7 @@ We have `plenty of them <https://github.com/datasciencebr/serenata-de-amor/blob/
   # now let's download one of them
   datasets.downloader.download('2016-12-06-reibursements.xz')  # yay, you've just downloaded this dataset to /tmp/serenata-data/
 
-  # You can also get themostrecent version of all datasets:
+  # You can also get the most recent version of all datasets:
   latest = list(dataset.downloader.LATEST)
   datasets.downloader.download(latest)
 
