@@ -1,9 +1,8 @@
 from tempfile import gettempdir
 from unittest import TestCase
 from unittest.mock import patch
-from unittest import skip
 import pandas as pd
-
+import os
 
 from serenata_toolbox.federal_senate.federal_senate_dataset import FederalSenateDataset
 
@@ -40,7 +39,7 @@ class TestFederalSenateDataset(TestCase):
             self.assertIn('federal-senate-2007.csv', not_found_file)
 
     def test_dataset_translation(self):
-        self.subject = FederalSenateDataset('tests/fixtures/csv/', 2008, 2009)
+        self.subject = FederalSenateDataset(os.path.join('tests/fixtures/csv/'), 2008, 2009)
 
         expected_files = ['federal-senate-2008.csv']
 
@@ -52,7 +51,7 @@ class TestFederalSenateDataset(TestCase):
             self.assertIn(expected_file, translated_file)
 
     def test_if_translation_happened_as_expected(self):
-        self.subject = FederalSenateDataset('tests/fixtures/csv/', 2008, 2009)
+        self.subject = FederalSenateDataset(os.path.join('tests/fixtures/csv/'), 2008, 2009)
         file_path = self.subject.path + 'federal-senate-2008.csv'
         federal_senate_2008 = pd.read_csv(file_path,
                                           sep=';',
@@ -71,7 +70,7 @@ class TestFederalSenateDataset(TestCase):
                              'expects \'year\' as column in this dataset')
 
     def test_dataset_translation_failing_to_find_file(self):
-        self.subject = FederalSenateDataset('tests/fixtures/csv/', 2007, 2008)
+        self.subject = FederalSenateDataset(os.path.join('tests/fixtures/csv/'), 2007, 2008)
 
         expected_files = ['federal-senate-2007.csv']
 
@@ -83,7 +82,7 @@ class TestFederalSenateDataset(TestCase):
             self.assertIn(expected_file, not_found_files)
 
     def test_dataset_cleanup(self):
-        self.subject = FederalSenateDataset('tests/fixtures/xz/', 2009, 2010)
+        self.subject = FederalSenateDataset(os.path.join('tests/fixtures/xz/'), 2009, 2010)
 
         reimbursement_path = self.subject.clean()
 

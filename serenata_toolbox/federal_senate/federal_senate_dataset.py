@@ -1,7 +1,6 @@
 import os.path
 from urllib.request import urlretrieve
 import pandas as pd
-import numpy as np
 from datetime import date
 
 
