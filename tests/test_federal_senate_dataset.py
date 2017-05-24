@@ -88,5 +88,5 @@ class TestFederalSenateDataset(TestCase):
 
         self.assertEqual(
             reimbursement_path,
-            'tests/fixtures/xz/federal-senate-reimbursements.xz'
+            os.path.join('tests/fixtures/xz/federal-senate-reimbursements.xz')
         )
