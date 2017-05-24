@@ -14,7 +14,7 @@ class TestFederalSenateDataset(TestCase):
         cls.expected_files = ['federal-senate-2008.csv',
                               'federal-senate-2009.csv']
 
-    @patch("serenata_toolbox.federal_senate.federal_senate_dataset.urlretrieve")
+    @patch('serenata_toolbox.federal_senate.federal_senate_dataset.urlretrieve')
     def test_fetch_files_from_S3(self, mockedUrlRetrieve):
         self.path = gettempdir()
         self.subject = FederalSenateDataset(self.path)
@@ -56,7 +56,7 @@ class TestFederalSenateDataset(TestCase):
         file_path = self.subject.path + 'federal-senate-2008.csv'
         federal_senate_2008 = pd.read_csv(file_path,
                                           sep=';',
-                                          encoding="ISO-8859-1",
+                                          encoding='ISO-8859-1',
                                           skiprows=1)
         self.assertIsNotNone(federal_senate_2008['ANO'],
                              'expects \'ANO\' as column in this dataset')
@@ -65,7 +65,7 @@ class TestFederalSenateDataset(TestCase):
 
         translated_file_path = self.subject.path + 'federal-senate-2008.xz'
         translated_federal_senate_2008 = pd.read_csv(translated_file_path,
-                                                     encoding="utf-8")
+                                                     encoding='utf-8')
 
         self.assertIsNotNone(translated_federal_senate_2008['year'],
                              'expects \'year\' as column in this dataset')
