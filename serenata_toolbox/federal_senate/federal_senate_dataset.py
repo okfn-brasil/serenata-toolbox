@@ -85,7 +85,7 @@ class FederalSenateDataset:
     def _translate_file(self, csv_path):
         output_file_path = csv_path.replace('.csv', '.xz')
 
-        data = pd.read_csv(file_path,sep=';',encoding="ISO-8859-1",skiprows=1)
+        data = pd.read_csv(csv_path, sep=';', encoding="ISO-8859-1", skiprows=1)
 
         data.columns = map(str.lower, data.columns)
 
