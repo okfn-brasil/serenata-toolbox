@@ -25,15 +25,16 @@ class FederalSenateDataset:
             file_path = os.path.join(self.path, 'federal-senate-{}.csv'.format(year))
             try:
                 urlretrieve(url, file_path)
-                retrieved_files.append(file_path)
             except Exception as exception:
-                print('While fetching Seranata Toolbox not found file: {0} \n{1}'.format(file_path, exception))
+                print('While fetching Seranata Toolbox not found file: {} \n{}'.format(file_path, exception))
                 not_found_files.append(file_path)
+            else:
+                retrieved_files.append(file_path)
 
         return (retrieved_files, not_found_files)
 
     def translate(self):
-        filenames = self._filenames_generator('csv')
+        filenames = self._filename_generator('csv')
         not_found_files = []
         translated_files = []
 
@@ -41,15 +42,16 @@ class FederalSenateDataset:
             csv_path = os.path.join(self.path, filename)
             try:
                 self._translate_file(csv_path)
-                translated_files.append(csv_path)
             except Exception as exception:
-                print('While translating Seranata Toolbox not found file: {0} \n{1}'.format(csv_path, exception))
+                print('While translating Seranata Toolbox not found file: {} \n{}'.format(csv_path, exception))
                 not_found_files.append(csv_path)
+            else:
+                translated_files.append(csv_path)
 
         return (translated_files, not_found_files)
 
     def clean(self):
-        filenames = self._filenames_generator('xz')
+        filenames = self._filename_generator('xz')
 
         merged_dataset = self._merge_files(filenames)
 
@@ -63,8 +65,8 @@ class FederalSenateDataset:
 
         return reimbursement_path
 
-    def _filenames_generator(self, extension):
-        return ['federal-senate-{0}.{1}'.format(year, extension) for year in self.year_range]
+    def _filename_generator(self, extension):
+        return ['federal-senate-{}.{}'.format(year, extension) for year in self.year_range]
 
     def _cleanup_dataset(self, dataset):
         dataset['date'] = pd.to_datetime(dataset['date'], errors='coerce')
