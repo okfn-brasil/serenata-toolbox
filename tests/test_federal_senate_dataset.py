@@ -54,11 +54,11 @@ class TestFederalSenateDataset(TestCase):
             self.assertIn(expected_file, translated_file)
 
     def test_if_translation_happened_as_expected(self):
-        self.subject = FederalSenateDataset(os.path.join('tests', 'fixtures' 'csv'),
+        self.subject = FederalSenateDataset(os.path.join('tests', 'fixtures', 'csv'),
                                             2008,
                                             2009)
 
-        file_path = self.subject.path + 'federal-senate-2008.csv'
+        file_path = os.path.join(self.subject.path, 'federal-senate-2008.csv')
         federal_senate_2008 = pd.read_csv(file_path,
                                           sep=';',
                                           encoding='ISO-8859-1',
@@ -68,7 +68,7 @@ class TestFederalSenateDataset(TestCase):
 
         self.subject.translate()
 
-        translated_file_path = self.subject.path + 'federal-senate-2008.xz'
+        translated_file_path = os.path.join(self.subject.path, 'federal-senate-2008.xz')
         translated_federal_senate_2008 = pd.read_csv(translated_file_path,
                                                      encoding='utf-8')
 
@@ -76,7 +76,7 @@ class TestFederalSenateDataset(TestCase):
                              'expects \'year\' as column in this dataset')
 
     def test_dataset_translation_failing_to_find_file(self):
-        self.subject = FederalSenateDataset(os.path.join('tests', 'fixtures' 'csv'), 2007, 2008)
+        self.subject = FederalSenateDataset(os.path.join('tests', 'fixtures', 'csv'), 2007, 2008)
 
         expected_files = ['federal-senate-2007.csv']
 
@@ -88,11 +88,11 @@ class TestFederalSenateDataset(TestCase):
             self.assertIn(expected_file, not_found_files)
 
     def test_dataset_cleanup(self):
-        self.subject = FederalSenateDataset(os.path.join('tests', 'fixtures' 'xz'), 2009, 2010)
+        self.subject = FederalSenateDataset(os.path.join('tests', 'fixtures', 'xz'), 2009, 2010)
 
         reimbursement_path = self.subject.clean()
 
         self.assertEqual(
             reimbursement_path,
-            os.path.join('tests', 'fixtures' 'xz', 'federal-senate-reimbursements.xz')
+            os.path.join('tests', 'fixtures', 'xz', 'federal-senate-reimbursements.xz')
         )
