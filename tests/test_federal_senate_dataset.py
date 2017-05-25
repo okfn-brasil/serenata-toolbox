@@ -4,8 +4,8 @@ from unittest import TestCase
 from unittest.mock import patch
 
 import pandas as pd
-from serenata_toolbox.federal_senate.federal_senate_dataset import \
-    FederalSenateDataset
+
+from serenata_toolbox.federal_senate.federal_senate_dataset import FederalSenateDataset
 
 
 class TestFederalSenateDataset(TestCase):
@@ -76,7 +76,9 @@ class TestFederalSenateDataset(TestCase):
                              'expects \'year\' as column in this dataset')
 
     def test_dataset_translation_failing_to_find_file(self):
-        self.subject = FederalSenateDataset(os.path.join('tests', 'fixtures', 'csv'), 2007, 2008)
+        self.subject = FederalSenateDataset(os.path.join('tests', 'fixtures', 'csv'),
+                                            2007,
+                                            2008)
 
         expected_files = ['federal-senate-2007.csv']
 
@@ -88,7 +90,9 @@ class TestFederalSenateDataset(TestCase):
             self.assertIn(expected_file, not_found_files)
 
     def test_dataset_cleanup(self):
-        self.subject = FederalSenateDataset(os.path.join('tests', 'fixtures', 'xz'), 2009, 2010)
+        self.subject = FederalSenateDataset(os.path.join('tests', 'fixtures', 'xz'),
+                                            2009,
+                                            2010)
 
         reimbursement_path = self.subject.clean()
 

@@ -2,8 +2,7 @@ import os
 from tempfile import gettempdir
 from unittest import TestCase, skipIf
 
-from serenata_toolbox.federal_senate.federal_senate_dataset \
-    import FederalSenateDataset
+from serenata_toolbox.federal_senate.federal_senate_dataset import FederalSenateDataset
 
 
 class TestJourneyFederalSenateDataset(TestCase):

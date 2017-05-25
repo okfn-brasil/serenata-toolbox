@@ -1,8 +1,10 @@
 from unittest import TestCase
-from serenata_toolbox.chamber_of_deputies.reimbursements import Reimbursements
+
 import numpy as np
-from numpy.testing import assert_array_equal
 import pandas as pd
+from numpy.testing import assert_array_equal
+
+from serenata_toolbox.chamber_of_deputies.reimbursements import Reimbursements
 
 
 class TestReimbursements(TestCase):
