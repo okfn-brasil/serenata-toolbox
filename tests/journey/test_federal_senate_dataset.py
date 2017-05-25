@@ -1,9 +1,9 @@
 import os
 from tempfile import gettempdir
-from unittest import main, skipIf, TestCase
+from unittest import TestCase, skipIf
 
-
-from serenata_toolbox.federal_senate.federal_senate_dataset import FederalSenateDataset
+from serenata_toolbox.federal_senate.federal_senate_dataset \
+    import FederalSenateDataset
 
 
 class TestJourneyFederalSenateDataset(TestCase):
@@ -23,7 +23,7 @@ class TestJourneyFederalSenateDataset(TestCase):
 
         # translate_creates_english_versions_for_every_csv
         self.subject.translate()
-        federal_senate_xz_files = ['federal-senate-{}.xz'.format(year) for year in range(self.subject.FIRST_YEAR, self.subject.NEXT_YEAR)]
+        federal_senate_xz_files = ['federal-senate-{}.xz'.format(year) for year in self.subject.year_range]
         for federal_senate_xz_file in federal_senate_xz_files:
             file_path = os.path.join(self.path, federal_senate_xz_file)
             self.assertTrue(os.path.exists(file_path), 'translate_creates_english_versions_for_every_csv')
@@ -32,6 +32,3 @@ class TestJourneyFederalSenateDataset(TestCase):
         self.subject.clean()
         file_path = os.path.join(self.path, 'federal-senate-reimbursements.xz')
         self.assertTrue(os.path.exists(file_path), 'clean_creates_a_reimbursements_file')
-
-if __name__ == '__main__':
-    main()
