@@ -22,7 +22,7 @@ class TestFederalSenateDataset(TestCase):
         retrieved_files, not_found_files = self.subject.fetch()
 
         self.assertTrue(mocked_url_etrieve.called)
-        self.assertEqual(mocked_url_etrieve.call_count, 10)
+        self.assertEqual(mocked_url_etrieve.call_count, len(self.subject.year_range))
         for retrieved_file, expected_file in zip(
                 retrieved_files, self.expected_files):
 
