@@ -13,9 +13,11 @@ setup(
         'Topic :: Utilities',
     ],
     description='Toolbox for Serenata de Amor project',
+    zip_safe=False,
     install_requires=[
         'aiofiles',
         'aiohttp',
+        'boto3',
         'beautifulsoup4>=4.4',
         'lxml>=3.6',
         'pandas>=0.18',
@@ -25,7 +27,11 @@ setup(
     license='MIT',
     long_description='Check `Serenata Toolbox at GitHub <{}>`_.'.format(REPO_URL),
     name='serenata-toolbox',
-    packages=['serenata_toolbox'],
+    packages=[
+        'serenata_toolbox.federal_senate',
+        'serenata_toolbox.chamber_of_deputies',
+        'serenata_toolbox.datasets'
+    ],
     url=REPO_URL,
-    version='7.5.1'
+    version='10.0.4'
 )
