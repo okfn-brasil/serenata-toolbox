@@ -1,5 +1,11 @@
 from datetime import datetime
 
+CSV_PARAMS = {
+    'compression': 'xz',
+    'encoding': 'utf-8',
+    'index': False
+}
+
 # Utilities for extracting data from XML files
 
 def xml_extract_text(node, xpath):
@@ -26,7 +32,7 @@ def xml_extract_datetime(node, xpath):
     """
     return datetime.strptime(xml_extract_text(node, xpath), "%d/%m/%Y %H:%M:%S")
 
-# Utilities for dealing with Datasets
+# Utilities for dealing with Dataframes
 
 def translate_column(df, column, translations):
     """
@@ -40,3 +46,7 @@ def translate_column(df, column, translations):
 
     df[column].cat.rename_categories(translations,
                                      inplace=True)
+def save(df, data_dir, name):
+    today = datetime.strftime(datetime.now(), '%Y-%m-%d')
+    file_path = os.path.join(data_dir, '{}-{}.xz'.format(today, name))
+    df.to_csv(file_path, **CSV_PARAMS)
