@@ -1,3 +1,5 @@
+import os
+
 from datetime import datetime
 
 CSV_PARAMS = {
@@ -46,7 +48,7 @@ def translate_column(df, column, translations):
 
     df[column].cat.rename_categories(translations,
                                      inplace=True)
-def save(df, data_dir, name):
+def save_to_csv(df, data_dir, name):
     today = datetime.strftime(datetime.now(), '%Y-%m-%d')
     file_path = os.path.join(data_dir, '{}-{}.xz'.format(today, name))
     df.to_csv(file_path, **CSV_PARAMS)

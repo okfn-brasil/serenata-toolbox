@@ -4,12 +4,12 @@ import time
 
 import pandas as pd
 
-from serenata_toolbox import datasets
-from serenata_toolbox.cleanup import (
-    xml_extract_text,
-    xml_extract_datetime,
+from serenata_toolbox.datasets.helpers import (
+    save_to_csv,
+    translate_column,
     xml_extract_date,
-    translate_column
+    xml_extract_datetime,
+    xml_extract_text,
 )
 
 class Presences:
@@ -157,7 +157,7 @@ def fetch_presences(data_dir, deputies, date_start, date_end):
     """
     presences = Presences()
     df = presences.fetch(deputies, date_start, date_end)
-    datasets.save(df, data_dir, "presences")
+    save_to_csv(df, data_dir, "presences")
 
     print("Presence records:", len(df))
     print("Records of deputies present on a session:", len(df[df.presence == 'Present']))

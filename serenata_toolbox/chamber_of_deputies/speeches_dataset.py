@@ -1,17 +1,18 @@
-import pandas as pd
 import xml.etree.ElementTree as ET
 import urllib
 
 from datetime import datetime
 
-from serenata_toolbox import datasets
-from serenata_toolbox.cleanup import (
-    xml_extract_text,
+import pandas as pd
+
+from serenata_toolbox.datasets.helpers import (
+    save_to_csv,
+    xml_extract_date,
     xml_extract_datetime,
-    xml_extract_date
+    xml_extract_text,
 )
 
-class Speeches:
+class SpeechesDataset:
 
     URL = (
         'http://www.camara.leg.br/SitCamaraWS/SessoesReunioes.asmx/ListarDiscursosPlenario'
@@ -19,12 +20,6 @@ class Speeches:
         '&dataFim={dataFim}'
         '&codigoSessao=&parteNomeParlamentar=&siglaPartido=&siglaUF='
     )
-
-    CSV_PARAMS = {
-        'compression': 'xz',
-        'encoding': 'utf-8',
-        'index': False
-    }
 
     def fetch(self, range_start, range_end):
         """
@@ -36,6 +31,7 @@ class Speeches:
         """
         range = {'dataIni': range_start, 'dataFim': range_end}
         url = self.URL.format(**range)
+        print(url)
         xml = urllib.request.urlopen(url)
 
         tree = ET.ElementTree(file=xml)
@@ -69,7 +65,18 @@ class Speeches:
                     speech_speaker_name  = xml_extract_text(speech, 'orador/nome')
                     speech_speaker_party = xml_extract_text(speech, 'orador/partido')
                     speech_speaker_state = xml_extract_text(speech, 'orador/uf')
-                    speech_started_at    = xml_extract_datetime(speech, 'horaInicioDiscurso')
+
+                    try:
+                        speech_started_at = xml_extract_datetime(speech, 'horaInicioDiscurso')
+                    except ValueError as ve:
+                        print("WARNING: Error parsing speech start time for {} - {}/{} on {}\n{}".format(
+                                speech_speaker_name,
+                                speech_speaker_party,
+                                speech_speaker_state,
+                                session_date,
+                                ve))
+                        continue
+
                     speech_room_num      = xml_extract_text(speech, 'numeroQuarto')
                     speech_insertion_num = xml_extract_text(speech, 'numeroInsercao')
 
@@ -94,7 +101,7 @@ def fetch_speeches(data_dir, range_start, range_end):
     :param range_start: (str) date in the format dd/mm/yyyy
     :param range_end: (str) date in the format dd/mm/yyyy
     """
-    speeches = Speeches()
+    speeches = SpeechesDataset()
     df = speeches.fetch(range_start, range_end)
-    datasets.save(df, data_dir, "speeches")
+    save_to_csv(df, data_dir, "speeches")
     return df

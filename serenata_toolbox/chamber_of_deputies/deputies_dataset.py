@@ -3,13 +3,13 @@ import xml.etree.ElementTree as ET
 
 import pandas as pd
 
-from serenata_toolbox import datasets
-from serenata_toolbox.cleanup import (
+from serenata_toolbox.datasets.helpers import (
+    save_to_csv,
+    translate_column,
     xml_extract_text,
-    translate_column
 )
 
-class Deputies:
+class DeputiesDataset:
 
     URL = 'http://www.camara.leg.br/SitCamaraWS/deputados.asmx/ObterDeputados'
 
@@ -72,9 +72,9 @@ def fetch_deputies(data_dir):
     """
     :param data_dir: (str) directory in which the output file will be saved
     """
-    deputies = Deputies()
+    deputies = DeputiesDataset()
     df = deputies.fetch()
-    datasets.save(df, data_dir, "deputies")
+    save_to_csv(df, data_dir, "deputies")
 
     holders = df.condition == 'Holder'
     substitutes = df.condition == 'Substitute'
