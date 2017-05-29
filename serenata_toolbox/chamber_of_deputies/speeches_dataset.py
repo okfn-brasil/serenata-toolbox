@@ -31,7 +31,6 @@ class SpeechesDataset:
         """
         range = {'dataIni': range_start, 'dataFim': range_end}
         url = self.URL.format(**range)
-        print(url)
         xml = urllib.request.urlopen(url)
 
         tree = ET.ElementTree(file=xml)
