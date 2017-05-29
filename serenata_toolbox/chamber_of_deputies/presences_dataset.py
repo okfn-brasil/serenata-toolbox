@@ -1,5 +1,6 @@
 import urllib
 import xml.etree.ElementTree as ET
+import socket
 import time
 
 import pandas as pd
@@ -74,7 +75,7 @@ class Presences:
                 if err.code == 500:
                     print("SKIP")
                     return None
-                time.sleep(2)
+                time.sleep(1)
                 attempts -= 1
                 if attempts > 0:
                     print("Trying again", attempts)
