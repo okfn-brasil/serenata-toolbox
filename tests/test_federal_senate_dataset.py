@@ -98,7 +98,13 @@ class TestFederalSenateDataset(TestCase):
 
         reimbursement_path = self.subject.clean()
 
+        expected_path = os.path.join('tests',
+                                     'fixtures',
+                                     'xz',
+                                     'federal-senate-reimbursements.xz')
         self.assertEqual(
             reimbursement_path,
-            os.path.join('tests', 'fixtures', 'xz', 'federal-senate-reimbursements.xz')
+            expected_path
         )
+
+        os.remove(expected_path)
