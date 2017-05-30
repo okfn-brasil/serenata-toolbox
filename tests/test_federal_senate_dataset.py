@@ -75,6 +75,8 @@ class TestFederalSenateDataset(TestCase):
         self.assertIsNotNone(translated_federal_senate_2008['year'],
                              'expects \'year\' as column in this dataset')
 
+        os.remove(os.path.join(self.subject.path, 'federal-senate-2008.xz'))
+
     def test_dataset_translation_failing_to_find_file(self):
         self.subject = FederalSenateDataset(os.path.join('tests', 'fixtures', 'csv'),
                                             2007,
