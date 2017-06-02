@@ -82,3 +82,6 @@ class TestDatasetsHelpersDataframes(TestCase):
             encoding='utf-8',
             index=False
         )
+
+if __name__ == '__main__':
+    main()

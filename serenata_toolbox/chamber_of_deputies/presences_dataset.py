@@ -1,3 +1,4 @@
+import os
 import urllib
 import xml.etree.ElementTree as ET
 import socket
@@ -13,7 +14,7 @@ from serenata_toolbox.datasets.helpers import (
     xml_extract_text,
 )
 
-class Presences:
+class PresencesDataset:
 
     URL = (
         'http://www.camara.leg.br/SitCamaraWS/sessoesreunioes.asmx/ListarPresencasParlamentar'
@@ -28,7 +29,8 @@ class Presences:
         :param date_start: (str) date in the format dd/mm/yyyy
         :param date_end: (str) date in the format dd/mm/yyyy
         """
-        print("Fetching data for {} deputies from {} -> {}".format(len(deputies), start_date, end_date))
+        if os.environ.get('DEBUG') == '1':
+            print("Fetching data for {} deputies from {} -> {}".format(len(deputies), start_date, end_date))
 
         records = self.__all_presences(deputies, start_date, end_date)
 
@@ -49,7 +51,8 @@ class Presences:
     def __all_presences(self, deputies, start_date, end_date):
         error_count = 0
         for i, deputy in deputies.iterrows():
-            print(i, deputy.congressperson_name, deputy.congressperson_document)
+            if os.environ.get('DEBUG') == '1':
+                print(i, deputy.congressperson_name, deputy.congressperson_document)
             url = self.URL.format(start_date, end_date, deputy.congressperson_document)
             xml = self.__try_fetch_xml(10, url)
 
@@ -60,9 +63,12 @@ class Presences:
                 for presence in self.__parse_deputy_presences(root):
                     yield presence
 
-            time.sleep(2)
+            # Let's not slow down our integration tests
+            if os.environ.get('RUN_INTEGRATION_TESTS') != '1':
+                time.sleep(2)
 
-        print("\nErrored fetching", error_count, "deputy presences")
+        if os.environ.get('DEBUG') == '1':
+            print("\nErrored fetching", error_count, "deputy presences")
 
     def __try_fetch_xml(self, attempts, url):
         while attempts > 0:
@@ -156,7 +162,7 @@ def fetch_presences(data_dir, deputies, date_start, date_end):
     :param date_start: (str) a date in the format dd/mm/yyyy
     :param date_end: (str) a date in the format dd/mm/yyyy
     """
-    presences = Presences()
+    presences = PresencesDataset()
     df = presences.fetch(deputies, date_start, date_end)
     save_to_csv(df, data_dir, "presences")
 

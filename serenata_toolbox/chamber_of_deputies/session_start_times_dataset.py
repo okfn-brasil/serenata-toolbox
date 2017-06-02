@@ -1,3 +1,4 @@
+import os
 import urllib
 import xml.etree.ElementTree as ET
 
@@ -33,7 +34,8 @@ class SessionStartTimesDataset:
 
     def __all_start_times(self, pivot, session_dates):
         for date in session_dates:
-            print(date.strftime("%d/%m/%Y"))
+            if os.environ.get('DEBUG') == '1':
+                print(date.strftime("%d/%m/%Y"))
             file = urllib.request.urlopen(self.URL.format(date.strftime("%d/%m/%Y"), pivot))
             t = ET.ElementTree(file=file)
             for session in t.getroot().findall('.//sessaoDia'):

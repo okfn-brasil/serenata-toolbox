@@ -45,9 +45,8 @@ def translate_column(df, column, translations):
     df[column] = df[column].astype('category')
     translations = [translations[cat]
                    for cat in df[column].cat.categories]
+    df[column].cat.rename_categories(translations, inplace=True)
 
-    df[column].cat.rename_categories(translations,
-                                     inplace=True)
 def save_to_csv(df, data_dir, name):
     today = datetime.strftime(datetime.now(), '%Y-%m-%d')
     file_path = os.path.join(data_dir, '{}-{}.xz'.format(today, name))
