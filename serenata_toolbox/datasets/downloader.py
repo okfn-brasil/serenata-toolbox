@@ -39,6 +39,7 @@ class Downloader:
         '2017-03-20-purchase-suppliers.xz',
         '2017-05-10-tse-candidates.xz',
         '2017-05-21-companies-no-geolocation.xz',
+        '2017-05-22-brazilian-cities.csv',
         '2017-05-23-congressperson-details.xz'
     )
 
