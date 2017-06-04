@@ -1,7 +1,7 @@
 language: python
 cache:
   directories:
-    - $HOME/virtualenv/python3.5.3/lib/python3.5/site-package
+    - $HOME/virtualenv/python3.5.3/
 env:
   - TEST_SUITE=unit
   - TEST_SUITE=journey
