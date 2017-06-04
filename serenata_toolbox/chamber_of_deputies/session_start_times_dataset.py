@@ -11,6 +11,7 @@ from serenata_toolbox.datasets.helpers import (
     xml_extract_text,
 )
 
+
 class SessionStartTimesDataset:
     URL = (
         'http://www.camara.leg.br/SitCamaraWS/sessoesreunioes.asmx/ListarPresencasDia'
@@ -44,6 +45,7 @@ class SessionStartTimesDataset:
                     xml_extract_text(session, 'descricao'),
                     xml_extract_datetime(session, 'inicio')
                 )
+
 
 def fetch_session_start_times(data_dir, pivot, session_dates):
     """

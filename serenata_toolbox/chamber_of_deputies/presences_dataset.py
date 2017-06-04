@@ -14,6 +14,7 @@ from serenata_toolbox.datasets.helpers import (
     xml_extract_text,
 )
 
+
 class PresencesDataset:
 
     URL = (
@@ -62,7 +63,7 @@ class PresencesDataset:
             url = self.URL.format(start_date, end_date, deputy.congressperson_document)
             xml = self.__try_fetch_xml(10, url)
 
-            if xml == None:
+            if xml is None:
                 error_count += 1
             else:
                 root = ET.ElementTree(file=xml).getroot()
@@ -99,7 +100,6 @@ class PresencesDataset:
                     print("Trying again", attempts)
                 else:
                     print("FAIL")
-
 
     def __parse_deputy_presences(self, root):
         term = xml_extract_text(root, 'legislatura')

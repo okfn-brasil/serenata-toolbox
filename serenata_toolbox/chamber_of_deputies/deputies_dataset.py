@@ -9,6 +9,7 @@ from serenata_toolbox.datasets.helpers import (
     xml_extract_text,
 )
 
+
 class DeputiesDataset:
 
     URL = 'http://www.camara.leg.br/SitCamaraWS/deputados.asmx/ObterDeputados'
@@ -67,6 +68,7 @@ class DeputiesDataset:
         })
 
         return df
+
 
 def fetch_deputies(data_dir):
     """

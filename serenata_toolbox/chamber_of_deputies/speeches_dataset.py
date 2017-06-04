@@ -12,6 +12,7 @@ from serenata_toolbox.datasets.helpers import (
     xml_extract_text,
 )
 
+
 class SpeechesDataset:
 
     URL = (
@@ -55,13 +56,13 @@ class SpeechesDataset:
         for session in root:
             session_code = xml_extract_text(session, 'codigo')
             session_date = xml_extract_date(session, 'data')
-            session_num  = xml_extract_text(session, 'numero')
+            session_num = xml_extract_text(session, 'numero')
             for phase in session.find('fasesSessao'):
                 phase_code = xml_extract_text(phase, 'codigo')
                 phase_desc = xml_extract_text(phase, 'descricao')
                 for speech in phase.find('discursos'):
-                    speech_speaker_num   = xml_extract_text(speech, 'orador/numero')
-                    speech_speaker_name  = xml_extract_text(speech, 'orador/nome')
+                    speech_speaker_num = xml_extract_text(speech, 'orador/numero')
+                    speech_speaker_name = xml_extract_text(speech, 'orador/nome')
                     speech_speaker_party = xml_extract_text(speech, 'orador/partido')
                     speech_speaker_state = xml_extract_text(speech, 'orador/uf')
 
@@ -69,14 +70,14 @@ class SpeechesDataset:
                         speech_started_at = xml_extract_datetime(speech, 'horaInicioDiscurso')
                     except ValueError as ve:
                         print("WARNING: Error parsing speech start time for {} - {}/{} on {}\n{}".format(
-                                speech_speaker_name,
-                                speech_speaker_party,
-                                speech_speaker_state,
-                                session_date,
-                                ve))
+                            speech_speaker_name,
+                            speech_speaker_party,
+                            speech_speaker_state,
+                            session_date,
+                            ve))
                         continue
 
-                    speech_room_num      = xml_extract_text(speech, 'numeroQuarto')
+                    speech_room_num = xml_extract_text(speech, 'numeroQuarto')
                     speech_insertion_num = xml_extract_text(speech, 'numeroInsercao')
 
                     yield [
@@ -93,6 +94,7 @@ class SpeechesDataset:
                         speech_room_num,
                         speech_insertion_num
                     ]
+
 
 def fetch_speeches(data_dir, range_start, range_end):
     """
