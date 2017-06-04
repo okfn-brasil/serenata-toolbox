@@ -15,7 +15,7 @@ class TestPresencesDataset(TestCase):
             'congressperson_name',
             'congressperson_document'
         ])
-        self.subject = PresencesDataset()
+        self.subject = PresencesDataset(sleep_interval=0)
 
     @skipIf(os.environ.get('RUN_INTEGRATION_TESTS') != '1',
             'Skipping integration test')

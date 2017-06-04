@@ -23,6 +23,12 @@ class PresencesDataset:
         '&numMatriculaParlamentar={}'
     )
 
+    """
+    :param sleep_interval: (integer) the amount of seconds to sleep between requests
+    """
+    def __init__(self, sleep_interval=2):
+        self.sleep_interval = sleep_interval
+
     def fetch(self, deputies, start_date, end_date):
         """
         :param deputies: (pandas.DataFrame) a dataframe with deputies data
@@ -63,9 +69,7 @@ class PresencesDataset:
                 for presence in self.__parse_deputy_presences(root):
                     yield presence
 
-            # Let's not slow down our integration tests
-            if os.environ.get('RUN_INTEGRATION_TESTS') != '1':
-                time.sleep(2)
+            time.sleep(self.sleep_interval)
 
         if os.environ.get('DEBUG') == '1':
             print("\nErrored fetching", error_count, "deputy presences")
@@ -81,7 +85,7 @@ class PresencesDataset:
                 if err.code == 500:
                     print("SKIP")
                     return None
-                time.sleep(1)
+                time.sleep(self.sleep_interval / 2)
                 attempts -= 1
                 if attempts > 0:
                     print("Trying again", attempts)
@@ -89,7 +93,7 @@ class PresencesDataset:
                     print("FAIL")
             except socket.error as socketerror:
                 print("Socket error:", socketerror)
-                time.sleep(20)
+                time.sleep(self.sleep_interval * 10)
                 attempts -= 1
                 if attempts > 0:
                     print("Trying again", attempts)
