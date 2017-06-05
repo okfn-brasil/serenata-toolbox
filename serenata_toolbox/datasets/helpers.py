@@ -17,7 +17,7 @@ def xml_extract_text(node, xpath):
     :param xpath: the path to fetch the child node that has the wanted text
     """
     text = node.find(xpath).text
-    if text is None:
+    if text is not None:
         text = text.strip()
     return text
 
