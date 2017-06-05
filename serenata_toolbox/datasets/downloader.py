@@ -26,12 +26,8 @@ class Downloader:
         '2016-12-02-foursquare-companies.xz',
         '2016-12-15-speeches.xz',
         '2016-12-20-impeded-non-profit-entities.xz',
-        '2016-12-21-deputies.xz',
         '2016-12-21-inident-and-suspended-companies.xz',
         '2016-12-21-national-register-punished-companies.xz',
-        '2016-12-21-presences.xz',
-        '2016-12-21-sessions.xz',
-        '2016-12-21-speeches.xz',
         '2016-12-22-agreements.xz',
         '2016-12-22-amendments.xz',
         '2017-02-15-receipts-texts.xz',
@@ -39,7 +35,12 @@ class Downloader:
         '2017-03-20-purchase-suppliers.xz',
         '2017-05-10-tse-candidates.xz',
         '2017-05-21-companies-no-geolocation.xz',
-        '2017-05-23-congressperson-details.xz'
+        '2017-05-22-brazilian-cities.csv',
+        '2017-05-23-congressperson-details.xz',
+        '2017-05-29-deputies.xz',
+        '2017-05-29-presences.xz',
+        '2017-05-29-sessions.xz',
+        '2017-05-29-speeches.xz'
     )
 
     def __init__(self, target, **kwargs):
