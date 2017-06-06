@@ -10,8 +10,6 @@ class TestJourneyFederalSenateDataset(TestCase):
         self.path = gettempdir()
         self.subject = FederalSenateDataset(self.path)
 
-    @skipIf(os.environ.get('RUN_INTEGRATION_TESTS') != '1',
-            'Skipping integration test')
     def test_journey_federal_senate_dataset(self):
         # fetch_saves_raw_files
         self.subject.fetch()

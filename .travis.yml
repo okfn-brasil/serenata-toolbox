@@ -1,7 +1,13 @@
 language: python
+cache:
+  directories:
+    - $HOME/virtualenv/python3.5.3/
+env:
+  - TEST_SUITE=unit
+  - TEST_SUITE=journey
 python: 3.5
 install:
   - python setup.py develop
   - pip install coveralls
-script: coverage run -m unittest discover tests
+script: coverage run -m unittest discover tests/$TEST_SUITE
 after_success: coveralls

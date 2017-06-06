@@ -21,8 +21,6 @@ class TestChamberOfDeputiesDataset(TestCase):
         rmtree(self.path, ignore_errors=True)
 
 
-    @skipIf(os.environ.get('RUN_INTEGRATION_TESTS') != '1',
-            'Skipping integration test')
     def test_fetch_translate_clean_integration(self):
         self.subject.fetch()
         files = ["Ano-{}.csv".format(n) for n in self.years]
