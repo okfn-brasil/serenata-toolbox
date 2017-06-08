@@ -27,23 +27,7 @@ Installation
 
 ::
 
-    $ pip install git+https://github.com/datasciencebr/serenata-toolbox.git#egg=serenata-toolbox 
-
-Development
-------------
-
-Clone the repo and use it within your virtualenv.
-
-::
-
-  $ git clone https://github.com/datasciencebr/serenata-toolbox.git
-  $ python setup.py develop
-
-We use `Elm's philosophy <https://github.com/elm-lang/elm-package#version-rules>`_ for version bumping:
-
-* MICRO: the API is the same, no risk of breaking code
-* MINOR: values have been added, existing values are unchanged
-* MAJOR: existing values have been changed or removed
+    $ pip install git+https://github.com/datasciencebr/serenata-toolbox.git#egg=serenata-toolbox
 
 Usage
 -----
@@ -60,14 +44,14 @@ We have `plenty of them <https://github.com/datasciencebr/serenata-de-amor/blob/
   from serenata_toolbox.datasets import Datasets
   datasets = Datasets('/tmp/serenata-data/')
 
-  # now lets see what datasets are available
-  for dataset in datasets.remote.all:
+  # now lets see what are the latest datasets available
+  for dataset in datasets.downloader.LATEST:
       print(dataset)  # and you'll see a long list of datasets!
 
-  # now let's download one of them
+  # and let's download one of them
   datasets.downloader.download('2016-12-06-reibursements.xz')  # yay, you've just downloaded this dataset to /tmp/serenata-data/
 
-  # You can also get the most recent version of all datasets:
+  # you can also get the most recent version of all datasets:
   latest = list(dataset.downloader.LATEST)
   datasets.downloader.download(latest)
 
@@ -111,17 +95,54 @@ The `full documentation <https://serenata_toolbox.readthedocs.io>`_ is still a w
 
   $ cd docs
   $ make clean;make rst;rm source/modules.rst;make html
-  
-Run Unit Test suite
--------------------
+
+Contributing
+------------
+
+Within your `virtualenv <https://virtualenv.pypa.io/en/stable/>`_:
+
+::
+
+  $ git clone https://github.com/datasciencebr/serenata-toolbox.git
+  $ python setup.py develop
+
+Always add tests to your contribution — if you want to test it locally before opening the PR:
 
 ::
 
   $ python -m unittest discover tests
 
-Source Code
------------
+When the tests are passing, also check for coverage of the modules you edited or added — if you want to check it before opening the PR:
 
-Feel free to fork, evaluate and contribute to this project.
+::
 
-Source: https://github.com/datasciencebr/serenata-toolbox/
+  $ pip install coverage
+  $ coverage run -m unittest discover tests
+  $ coverage html
+  $ open htmlcov/index.html
+
+Follow `PEP8 <https://www.python.org/dev/peps/pep-0008/>`_ and best practices implemented by `Landscape <https://landscape.io>`_ in the `veryhigh` strictness level — if you want to check them locally before opening the PR:
+
+::
+
+  $ pip install prospector
+  $ prospector -s veryhigh serenata_toolbox
+
+If this report includes issues related to `import` section of your files, `isort <https://github.com/timothycrosley/isort>`_ can help you:
+
+::
+
+  $ pip install isort
+  $ isort **/*.py --diff
+
+Always suggest a version bump. We use `Elm's philosophy <https://github.com/elm-lang/elm-package#version-rules>`_ for version bumping:
+
+* MICRO: the API is the same, no risk of breaking code
+* MINOR: values have been added, existing values are unchanged
+* MAJOR: existing values have been changed or removed
+
+And finally take *The Zen of Python* into account:
+
+::
+
+  $ python -m this
