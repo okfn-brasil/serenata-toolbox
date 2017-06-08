@@ -5,7 +5,7 @@ from unittest.mock import patch
 
 import pandas as pd
 
-from serenata_toolbox.federal_senate.federal_senate_dataset import FederalSenateDataset
+from serenata_toolbox.federal_senate.dataset import Dataset
 
 
 class TestFederalSenateDataset(TestCase):
@@ -14,10 +14,10 @@ class TestFederalSenateDataset(TestCase):
         cls.expected_files = ['federal-senate-2008.csv',
                               'federal-senate-2009.csv']
 
-    @patch('serenata_toolbox.federal_senate.federal_senate_dataset.urlretrieve')
+    @patch('serenata_toolbox.federal_senate.dataset.urlretrieve')
     def test_fetch_files_from_S3(self, mocked_url_etrieve):
         self.path = gettempdir()
-        self.subject = FederalSenateDataset(self.path)
+        self.subject = Dataset(self.path)
 
         retrieved_files, not_found_files = self.subject.fetch()
 
@@ -30,7 +30,7 @@ class TestFederalSenateDataset(TestCase):
 
     def test_fetch_not_found_files_from_S3(self):
         self.path = gettempdir()
-        self.subject = FederalSenateDataset(self.path, 2007, 2008)
+        self.subject = Dataset(self.path, 2007, 2008)
 
         retrieved_files, not_found_files = self.subject.fetch()
 
@@ -40,7 +40,7 @@ class TestFederalSenateDataset(TestCase):
             self.assertIn('federal-senate-2007.csv', not_found_file)
 
     def test_dataset_translation(self):
-        self.subject = FederalSenateDataset(os.path.join('tests', 'fixtures', 'csv'),
+        self.subject = Dataset(os.path.join('tests', 'fixtures', 'csv'),
                                             2008,
                                             2009)
 
@@ -54,7 +54,7 @@ class TestFederalSenateDataset(TestCase):
             self.assertIn(expected_file, translated_file)
 
     def test_if_translation_happened_as_expected(self):
-        self.subject = FederalSenateDataset(os.path.join('tests', 'fixtures', 'csv'),
+        self.subject = Dataset(os.path.join('tests', 'fixtures', 'csv'),
                                             2008,
                                             2009)
 
@@ -78,7 +78,7 @@ class TestFederalSenateDataset(TestCase):
         os.remove(os.path.join(self.subject.path, 'federal-senate-2008.xz'))
 
     def test_dataset_translation_failing_to_find_file(self):
-        self.subject = FederalSenateDataset(os.path.join('tests', 'fixtures', 'csv'),
+        self.subject = Dataset(os.path.join('tests', 'fixtures', 'csv'),
                                             2007,
                                             2008)
 
@@ -92,7 +92,7 @@ class TestFederalSenateDataset(TestCase):
             self.assertIn(expected_file, not_found_files)
 
     def test_dataset_cleanup(self):
-        self.subject = FederalSenateDataset(os.path.join('tests', 'fixtures', 'xz'),
+        self.subject = Dataset(os.path.join('tests', 'fixtures', 'xz'),
                                             2009,
                                             2010)
 

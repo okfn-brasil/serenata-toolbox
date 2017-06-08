@@ -5,7 +5,7 @@ from urllib.request import urlretrieve
 import pandas as pd
 
 
-class FederalSenateDataset:
+class Dataset:
     URL = 'http://www.senado.gov.br/transparencia/LAI/verba/{}.csv'
 
     LAST_YEAR = date.today().year + 1

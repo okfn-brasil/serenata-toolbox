@@ -2,13 +2,13 @@ import os
 from tempfile import gettempdir
 from unittest import TestCase, skipIf
 
-from serenata_toolbox.federal_senate.federal_senate_dataset import FederalSenateDataset
+from serenata_toolbox.federal_senate.dataset import Dataset
 
 
 class TestJourneyFederalSenateDataset(TestCase):
     def setUp(self):
         self.path = gettempdir()
-        self.subject = FederalSenateDataset(self.path)
+        self.subject = Dataset(self.path)
 
     def test_journey_federal_senate_dataset(self):
         # fetch_saves_raw_files
