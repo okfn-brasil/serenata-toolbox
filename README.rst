@@ -44,14 +44,14 @@ We have `plenty of them <https://github.com/datasciencebr/serenata-de-amor/blob/
   from serenata_toolbox.datasets import Datasets
   datasets = Datasets('/tmp/serenata-data/')
 
-  # now lets see what datasets are available
-  for dataset in datasets.remote.all:
+  # now lets see what are the latest datasets available
+  for dataset in datasets.downloader.LATEST:
       print(dataset)  # and you'll see a long list of datasets!
 
-  # now let's download one of them
+  # and let's download one of them
   datasets.downloader.download('2016-12-06-reibursements.xz')  # yay, you've just downloaded this dataset to /tmp/serenata-data/
 
-  # You can also get the most recent version of all datasets:
+  # you can also get the most recent version of all datasets:
   latest = list(dataset.downloader.LATEST)
   datasets.downloader.download(latest)
 
