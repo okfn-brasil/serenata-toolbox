@@ -74,14 +74,14 @@ If you ever wonder how did we generated these datasets, this toolbox can help yo
 .. code:: python
 
     from serenata_toolbox.federal_senate.dataset import Dataset
-    from serenata_toolbox.chamber_of_deputies.chamber_of_deputies_dataset import ChamberOfDeputiesDataset
+    from serenata_toolbox.chamber_of_deputies.dataset import Dataset
 
     senate = Dataset('/tmp/serenata-data/')
     senate.fetch()
     senate.translate()
     senate.clean()
 
-    chamber = ChamberOfDeputiesDataset('/tmp/serenata-data/')
+    chamber = Dataset('/tmp/serenata-data/')
     chamber.fetch()
     chamber.translate()
     chamber.clean()

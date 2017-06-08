@@ -7,7 +7,7 @@ import numpy as np
 import pandas as pd
 from .reimbursements import Reimbursements
 
-class ChamberOfDeputiesDataset:
+class Dataset:
 
     YEARS = [n for n in range(2009, date.today().year+1)]
 
