@@ -62,16 +62,11 @@ class Dataset:
                                   'nuCarteiraParlamentar': np.str,
                                   'codLegislatura': np.str,
                                   'txtCNPJCPF': np.str,
-                                  'numRessarcimento': np.str,
-                                  'vlrDocumento': np.float,
-                                  'vlrGlosa': np.float,
-                                  'vlrLiquido': np.float,
-                                  'vlrRestituicao': np.float},
-                           converters={
-                               'vlrDocumento': lambda x: float(x.replace(',','.')),
-                               'vlrGlosa': lambda x: float(x.replace(',','.')),
-                               'vlrLiquido': lambda x: float(x.replace(',','.')),
-                               'vlrRestituicao': lambda x: float(x.replace(',','.'))})
+                                  'numRessarcimento': np.str},
+                           converters={'vlrDocumento': self.__parse_float,
+                                       'vlrGlosa': self.__parse_float,
+                                       'vlrLiquido': self.__parse_float,
+                                       'vlrRestituicao': self.__parse_float})
 
         data.rename(columns={
             'ideDocumento': 'document_id',
@@ -137,3 +132,6 @@ class Dataset:
                     encoding='utf-8')
 
         return output_file_path
+
+    def __parse_float(string):
+        return float(string.replace(',', '.'))
