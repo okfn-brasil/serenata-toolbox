@@ -133,5 +133,5 @@ class Dataset:
 
         return output_file_path
 
-    def __parse_float(string):
+    def __parse_float(self, string):
         return float(string.replace(',', '.'))
