@@ -1,5 +1,5 @@
 import os
-from unittest import main, skipIf, TestCase
+from unittest import main, TestCase
 
 import numpy as np
 
@@ -9,8 +9,6 @@ class TestSpeechesDataset(TestCase):
     def setUp(self):
         self.subject = SpeechesDataset()
 
-    @skipIf(os.environ.get('RUN_INTEGRATION_TESTS') != '1',
-            'Skipping integration test')
     def test_fetch(self):
         df = self.subject.fetch('03/02/2015', '03/02/2015')
         actualColumns = df.columns
