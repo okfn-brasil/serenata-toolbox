@@ -42,6 +42,7 @@ class Downloader:
         '2017-05-29-sessions.xz',
         '2017-05-29-speeches.xz',
         '2017-06-11-congresspeople-social-accounts.xz',
+        '2017-06-17-official-missions.xz',
     )
 
     def __init__(self, target, **kwargs):

@@ -9,8 +9,6 @@ class TestDeputiesDataset(TestCase):
     def setUp(self):
         self.subject = DeputiesDataset()
 
-    @skipIf(os.environ.get('RUN_INTEGRATION_TESTS') != '1',
-            'Skipping integration test')
     def test_fetch(self):
         df = self.subject.fetch()
         actualColumns = df.columns

@@ -1,6 +1,6 @@
 import os
 from tempfile import gettempdir
-from unittest import TestCase, skipIf
+from unittest import TestCase
 
 from serenata_toolbox.federal_senate.dataset import Dataset
 
