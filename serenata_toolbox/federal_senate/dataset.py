@@ -1,7 +1,7 @@
 import os.path
-import urllib
 from datetime import date
 from urllib.request import urlretrieve
+from urllib.error import (HTTPError, URLError)
 
 import pandas as pd
 
@@ -24,14 +24,14 @@ class Dataset:
             file_path = os.path.join(self.path, 'federal-senate-{}.csv'.format(year))
             try:
                 urlretrieve(url, file_path)
-            except urllib.error.URLError as url_error_exception:
+            except HTTPError as http_error_exception:
+                print('We failed to reach the server')
+                print('Error code  ', http_error_exception.reason)
+                print('While fetching Seranata Toolbox not found file: {} \n{}'.format(file_path, http_error_exception))
+                raise http_error_exception
+            except URLError as url_error_exception:
                 print('The server couldn\'t fulfill the request.')
                 print('Reason: ', url_error_exception.reason)
-                print('While fetching Seranata Toolbox not found file: {} \n{}'.format(file_path, url_error_exception))
-                raise url_error_exception
-            except urllib.error.HTTPError as http_erro_exception:
-                print('We failed to reach the server')
-                print('Reason:  ', url_error_exception.reason)
                 print('While fetching Seranata Toolbox not found file: {} \n{}'.format(file_path, url_error_exception))
                 raise url_error_exception
             else:
