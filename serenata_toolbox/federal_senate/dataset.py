@@ -1,7 +1,7 @@
 import os.path
 from datetime import date
+from urllib.error import HTTPError, URLError
 from urllib.request import urlretrieve
-from urllib.error import (HTTPError, URLError)
 
 import pandas as pd
 
