@@ -1,4 +1,5 @@
 import os
+import urllib
 from tempfile import gettempdir
 from unittest import TestCase
 from unittest.mock import patch
@@ -15,7 +16,7 @@ class TestFederalSenateDataset(TestCase):
                               'federal-senate-2009.csv']
 
     @patch('serenata_toolbox.federal_senate.dataset.urlretrieve')
-    def test_fetch_files_from_S3(self, mocked_url_etrieve):
+    def test_fetch_files_from_S3(self, mocked_url_retrieve):
         self.path = gettempdir()
         self.subject = Dataset(self.path)
 
@@ -28,16 +29,27 @@ class TestFederalSenateDataset(TestCase):
 
             self.assertIn(expected_file, retrieved_file)
 
-    def test_fetch_not_found_files_from_S3(self):
+    @patch('serenata_toolbox.federal_senate.dataset.urlretrieve')
+    def test_fetch_raises_HTTPError(self, mocked_url_retrieve):
+        mocked_url_retrieve.side_effect = urllib.error.HTTPError(None, None, None, None, None)
         self.path = gettempdir()
         self.subject = Dataset(self.path, [2007])
 
-        retrieved_files, not_found_files = self.subject.fetch()
+        with self.assertRaises(urllib.error.HTTPError) as context:
+            self.subject.fetch()
 
-        for not_found_file, expected_file in zip(
-                not_found_files, self.expected_files):
+        self.assertTrue(isinstance(context.exception, urllib.error.HTTPError))
 
-            self.assertIn('federal-senate-2007.csv', not_found_file)
+    @patch('serenata_toolbox.federal_senate.dataset.urlretrieve')
+    def test_fetch_raises_URLError(self, mocked_url_retrieve):
+        mocked_url_retrieve.side_effect = urllib.error.URLError('tests reason')
+        self.path = gettempdir()
+        self.subject = Dataset(self.path, 2007, 2008)
+
+        with self.assertRaises(urllib.error.URLError) as context:
+            self.subject.fetch()
+
+        self.assertTrue(isinstance(context.exception, urllib.error.URLError))
 
     def test_dataset_translation(self):
         self.subject = Dataset(os.path.join('tests', 'fixtures', 'csv'),
@@ -79,14 +91,10 @@ class TestFederalSenateDataset(TestCase):
         self.subject = Dataset(os.path.join('tests', 'fixtures', 'csv'),
                                [2007])
 
-        expected_files = ['federal-senate-2007.csv']
+        with self.assertRaises(FileNotFoundError) as context:
+            self.subject.translate()
 
-        translated_files, not_found_files = self.subject.translate()
-
-        for not_found_files, expected_file in zip(
-                not_found_files, expected_files):
-
-            self.assertIn(expected_file, not_found_files)
+        self.assertTrue(isinstance(context.exception, FileNotFoundError))
 
     def test_dataset_cleanup(self):
         self.subject = Dataset(os.path.join('tests', 'fixtures', 'xz'),
