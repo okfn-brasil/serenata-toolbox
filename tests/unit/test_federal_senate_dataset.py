@@ -74,7 +74,7 @@ class TestFederalSenateDataset(TestCase):
                                           encoding='ISO-8859-1',
                                           skiprows=1)
         self.assertIsNotNone(federal_senate_2008['ANO'],
-                             'expects \'ANO\' as column in this dataset')
+                             "expects 'ANO' as column in this dataset")
 
         subject.translate()
 
@@ -83,7 +83,7 @@ class TestFederalSenateDataset(TestCase):
                                                      encoding='utf-8')
 
         self.assertIsNotNone(translated_federal_senate_2008['year'],
-                             'expects \'year\' as column in this dataset')
+                             "expects 'year' as column in this dataset")
 
         os.remove(os.path.join(subject.path, 'federal-senate-2008.xz'))
 
