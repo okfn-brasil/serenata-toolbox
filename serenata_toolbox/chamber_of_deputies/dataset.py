@@ -14,7 +14,7 @@ class Dataset:
 
     def __init__(self, path, years=AVAILABLE_YEARS):
         self.path = path
-        self.years = years
+        self.years = years if isinstance(years, list) else [years]
 
     def fetch(self):
         base_url = "http://www.camara.leg.br/cotas/Ano-{}.csv.zip"
