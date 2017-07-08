@@ -7,18 +7,19 @@ import numpy as np
 import pandas as pd
 from .reimbursements import Reimbursements
 
+
 class Dataset:
 
-    YEARS = [n for n in range(2009, date.today().year+1)]
+    AVAILABLE_YEARS = [year for year in range(2009, date.today().year + 1)]
 
-    def __init__(self, path):
+    def __init__(self, path, years=AVAILABLE_YEARS):
         self.path = path
-
+        self.years = years if isinstance(years, list) else [years]
 
     def fetch(self):
         base_url = "http://www.camara.leg.br/cotas/Ano-{}.csv.zip"
 
-        for year in self.YEARS:
+        for year in self.years:
             zip_file_path = os.path.join(self.path, "Ano-{}.zip".format(year))
             url = base_url.format(year)
             urlretrieve(url, zip_file_path)
@@ -30,28 +31,24 @@ class Dataset:
         urlretrieve('http://www2.camara.leg.br/transparencia/cota-para-exercicio-da-atividade-parlamentar/explicacoes-sobre-o-formato-dos-arquivos-xml',
                     os.path.join(self.path, 'datasets-format.html'))
 
-
     def convert_to_csv(self):
         # deprecated but still here so we don't break poor Rosie (for now)
         pass
 
-
     def translate(self):
-        for year in self.YEARS:
+        for year in self.years:
             csv_path = os.path.join(self.path, 'Ano-{}.csv'.format(year))
             self.__translate_file(csv_path)
-
 
     def clean(self):
         reimbursements = Reimbursements(self.path)
         dataset = reimbursements.group(reimbursements.receipts)
         reimbursements.write_reimbursement_file(dataset)
 
-
     def __translate_file(self, csv_path):
         output_file_path = csv_path \
-                           .replace('.csv', '.xz') \
-                           .replace('Ano-', 'reimbursements-')
+            .replace('.csv', '.xz') \
+            .replace('Ano-', 'reimbursements-')
 
         data = pd.read_csv(csv_path,
                            encoding='utf-8',
@@ -126,7 +123,7 @@ class Dataset:
         )
 
         for code, name in subquotas:
-            data.loc[data['subquota_number']==code, ['subquota_description']] = name
+            data.loc[data['subquota_number'] == code, ['subquota_description']] = name
 
         data.to_csv(output_file_path, compression='xz', index=False,
                     encoding='utf-8')

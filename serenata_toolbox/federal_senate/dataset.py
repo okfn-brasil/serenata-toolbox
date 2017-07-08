@@ -8,19 +8,17 @@ import pandas as pd
 class Dataset:
     URL = 'http://www.senado.gov.br/transparencia/LAI/verba/{}.csv'
 
-    LAST_YEAR = date.today().year + 1
+    AVAILABLE_YEARS = [year for year in range(2008, date.today().year + 1)]
 
-    def __init__(self, path, first_year=2008, last_year=LAST_YEAR):
+    def __init__(self, path, years=AVAILABLE_YEARS):
         self.path = path
-        self.first_year = first_year
-        self.last_year = last_year
-        self.year_range = range(first_year, last_year)
+        self.years = years if isinstance(years, list) else [years]
 
     def fetch(self):
         retrieved_files = []
         not_found_files = []
 
-        for year in self.year_range:
+        for year in self.years:
             url = self.URL.format(year)
             file_path = os.path.join(self.path, 'federal-senate-{}.csv'.format(year))
             try:
@@ -66,7 +64,7 @@ class Dataset:
         return reimbursement_path
 
     def _filename_generator(self, extension):
-        return ['federal-senate-{}.{}'.format(year, extension) for year in self.year_range]
+        return ['federal-senate-{}.{}'.format(year, extension) for year in self.years]
 
     def _cleanup_dataset(self, dataset):
         dataset['date'] = pd.to_datetime(dataset['date'], errors='coerce')

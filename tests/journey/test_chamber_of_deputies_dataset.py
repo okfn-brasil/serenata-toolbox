@@ -14,7 +14,7 @@ class TestChamberOfDeputiesDataset(TestCase):
         self.path = mkdtemp(prefix='serenata-')
         print(self.path)
         self.subject = Dataset(self.path)
-        self.years = [n for n in range(2009, date.today().year + 1)]
+        self.years = [year for year in range(2009, date.today().year + 1)]
 
 
     def tearDown(self):

@@ -13,7 +13,7 @@ class Reimbursements:
         'index': False
     }
 
-    YEARS = [n for n in range(2009, date.today().year+1)]
+    YEARS = [year for year in range(2009, date.today().year+1)]
 
     def __init__(self, path):
         self.path = path
