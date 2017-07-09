@@ -3,6 +3,9 @@ import pandas as pd
 import numpy as np
 from datetime import date
 
+AVAILABLE_YEARS = [year for year in range(2009, date.today().year + 1)]
+
+
 class Reimbursements:
 
     FILE_BASE_NAME = 'reimbursements.xz'
@@ -13,10 +16,9 @@ class Reimbursements:
         'index': False
     }
 
-    YEARS = [year for year in range(2009, date.today().year+1)]
-
-    def __init__(self, path):
+    def __init__(self, path, years=AVAILABLE_YEARS):
         self.path = path
+        self.years = years if isinstance(years, list) else [years]
 
     def read_csv(self, name):
         filepath = os.path.join(self.path, name)
@@ -43,7 +45,7 @@ class Reimbursements:
     @property
     def receipts(self):
         print('Merging all datasets…')
-        datasets = ["reimbursements-{}.xz".format(n) for n in self.YEARS]
+        datasets = ["reimbursements-{}.xz".format(n) for n in self.years]
         data = (self.read_csv(name) for name in datasets)
         return pd.concat(data)
 

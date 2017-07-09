@@ -5,13 +5,10 @@ from urllib.request import urlretrieve
 from zipfile import ZipFile
 import numpy as np
 import pandas as pd
-from .reimbursements import Reimbursements
+from .reimbursements import AVAILABLE_YEARS, Reimbursements
 
 
 class Dataset:
-
-    AVAILABLE_YEARS = [year for year in range(2009, date.today().year + 1)]
-
     def __init__(self, path, years=AVAILABLE_YEARS):
         self.path = path
         self.years = years if isinstance(years, list) else [years]
@@ -41,7 +38,7 @@ class Dataset:
             self.__translate_file(csv_path)
 
     def clean(self):
-        reimbursements = Reimbursements(self.path)
+        reimbursements = Reimbursements(self.path, years=self.years)
         dataset = reimbursements.group(reimbursements.receipts)
         reimbursements.write_reimbursement_file(dataset)
 
