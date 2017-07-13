@@ -18,12 +18,12 @@ class TestFederalSenateDataset(TestCase):
     @patch('serenata_toolbox.federal_senate.dataset.urlretrieve')
     def test_fetch_files_from_S3(self, mocked_url_retrieve):
         path = gettempdir()
-        subject = Dataset(path)
+        self.subject = Dataset(path)
 
-        retrieved_files, _ = subject.fetch()
+        retrieved_files, _ = self.subject.fetch()
 
-        self.assertTrue(mocked_url_etrieve.called)
-        self.assertEqual(mocked_url_etrieve.call_count, len(self.subject.years))
+        self.assertTrue(mocked_url_retrieve.called)
+        self.assertEqual(mocked_url_retrieve.call_count, len(self.subject.years))
         for retrieved_file, expected_file in zip(
                 retrieved_files, self.expected_files):
 
@@ -36,7 +36,7 @@ class TestFederalSenateDataset(TestCase):
         self.subject = Dataset(self.path, [2007])
 
         with self.assertRaises(urllib.error.HTTPError) as context:
-            subject.fetch()
+            self.subject.fetch()
 
         self.assertTrue(isinstance(context.exception, urllib.error.HTTPError))
 
@@ -44,7 +44,7 @@ class TestFederalSenateDataset(TestCase):
     def test_fetch_raises_URLError(self, mocked_url_retrieve):
         mocked_url_retrieve.side_effect = urllib.error.URLError('tests reason')
         path = gettempdir()
-        subject = Dataset(path, 2007, 2008)
+        subject = Dataset(path, [2007])
 
         with self.assertRaises(urllib.error.URLError) as context:
             subject.fetch()
@@ -57,7 +57,7 @@ class TestFederalSenateDataset(TestCase):
 
         expected_files = ['federal-senate-2008.csv']
 
-        translated_files, _ = subject.translate()
+        translated_files, _ = self.subject.translate()
 
         for translated_file, expected_file in zip(
                 translated_files, expected_files):
@@ -68,7 +68,7 @@ class TestFederalSenateDataset(TestCase):
         self.subject = Dataset(os.path.join('tests', 'fixtures', 'csv'),
                                [2008])
 
-        file_path = os.path.join(subject.path, 'federal-senate-2008.csv')
+        file_path = os.path.join(self.subject.path, 'federal-senate-2008.csv')
         federal_senate_2008 = pd.read_csv(file_path,
                                           sep=';',
                                           encoding='ISO-8859-1',
@@ -76,23 +76,23 @@ class TestFederalSenateDataset(TestCase):
         self.assertIsNotNone(federal_senate_2008['ANO'],
                              "expects 'ANO' as column in this dataset")
 
-        subject.translate()
+        self.subject.translate()
 
-        translated_file_path = os.path.join(subject.path, 'federal-senate-2008.xz')
+        translated_file_path = os.path.join(self.subject.path, 'federal-senate-2008.xz')
         translated_federal_senate_2008 = pd.read_csv(translated_file_path,
                                                      encoding='utf-8')
 
         self.assertIsNotNone(translated_federal_senate_2008['year'],
                              "expects 'year' as column in this dataset")
 
-        os.remove(os.path.join(subject.path, 'federal-senate-2008.xz'))
+        os.remove(os.path.join(self.subject.path, 'federal-senate-2008.xz'))
 
     def test_dataset_translation_failing_to_find_file(self):
         self.subject = Dataset(os.path.join('tests', 'fixtures', 'csv'),
                                [2007])
 
         with self.assertRaises(FileNotFoundError) as context:
-            subject.translate()
+            self.subject.translate()
 
         self.assertTrue(isinstance(context.exception, FileNotFoundError))
 
@@ -100,7 +100,7 @@ class TestFederalSenateDataset(TestCase):
         self.subject = Dataset(os.path.join('tests', 'fixtures', 'xz'),
                                [2009])
 
-        reimbursement_path = subject.clean()
+        reimbursement_path = self.subject.clean()
 
         expected_path = os.path.join('tests',
                                      'fixtures',
