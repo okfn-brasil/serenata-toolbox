@@ -37,19 +37,19 @@ Copy `config.ini.example` as `config.ini` and edit it with your own credentials.
 Example 1: How do I download the datasets?
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-We have `plenty of them <https://github.com/datasciencebr/serenata-de-amor/blob/master/CONTRIBUTING.md#datasets-data>`_ ready for you to download from our servers. And this toolbox helps you get them. Let's say you want your datasets at `/tmp/serenata-data/`:
+We have `plenty of them <https://github.com/datasciencebr/serenata-de-amor/blob/master/CONTRIBUTING.md#datasets-data>`_ ready for you to download from our servers. And this toolbox helps you get them. Let's say you want your datasets at `data/`:
 
 .. code:: python
 
   from serenata_toolbox.datasets import Datasets
-  datasets = Datasets('/tmp/serenata-data/')
+  datasets = Datasets('data/')
 
   # now lets see what are the latest datasets available
   for dataset in datasets.downloader.LATEST:
       print(dataset)  # and you'll see a long list of datasets!
 
   # and let's download one of them
-  datasets.downloader.download('2016-12-06-reibursements.xz')  # yay, you've just downloaded this dataset to /tmp/serenata-data/
+  datasets.downloader.download('2016-12-06-reibursements.xz')  # yay, you've just downloaded this dataset to data/
 
   # you can also get the most recent version of all datasets:
   latest = list(dataset.downloader.LATEST)
@@ -63,8 +63,8 @@ If the last example doesn't look that simple, there are some fancy shortcuts ava
 .. code:: python
 
   from serenata_toolbox.datasets import fetch, fetch_latest_backup
-  fetch('2016-12-06-reibursements.xz', '/tmp/serenata-data')
-  fetch_latest_backup( '/tmp/serenata-data')  # yep, we've just did exactly the same thing
+  fetch('2016-12-06-reibursements.xz', 'data/')
+  fetch_latest_backup( 'data/')  # yep, we've just did exactly the same thing
 
 Example 3: Generating datasets
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -76,12 +76,12 @@ If you ever wonder how did we generated these datasets, this toolbox can help yo
     from serenata_toolbox.federal_senate.dataset import Dataset
     from serenata_toolbox.chamber_of_deputies.dataset import Dataset
 
-    senate = Dataset('/tmp/serenata-data/')
+    senate = Dataset('data/')
     senate.fetch()
     senate.translate()
     senate.clean()
 
-    chamber = Dataset('/tmp/serenata-data/')
+    chamber = Dataset('data/')
     chamber.fetch()
     chamber.translate()
     chamber.clean()
