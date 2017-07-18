@@ -1,4 +1,5 @@
 import os
+import urllib
 from tempfile import gettempdir
 from unittest import TestCase
 from unittest.mock import patch
@@ -15,29 +16,40 @@ class TestFederalSenateDataset(TestCase):
                               'federal-senate-2009.csv']
 
     @patch('serenata_toolbox.federal_senate.dataset.urlretrieve')
-    def test_fetch_files_from_S3(self, mocked_url_etrieve):
-        self.path = gettempdir()
-        self.subject = Dataset(self.path)
+    def test_fetch_files_from_S3(self, mocked_url_retrieve):
+        path = gettempdir()
+        self.subject = Dataset(path)
 
-        retrieved_files, not_found_files = self.subject.fetch()
+        retrieved_files, _ = self.subject.fetch()
 
-        self.assertTrue(mocked_url_etrieve.called)
-        self.assertEqual(mocked_url_etrieve.call_count, len(self.subject.years))
+        self.assertTrue(mocked_url_retrieve.called)
+        self.assertEqual(mocked_url_retrieve.call_count, len(self.subject.years))
         for retrieved_file, expected_file in zip(
                 retrieved_files, self.expected_files):
 
             self.assertIn(expected_file, retrieved_file)
 
-    def test_fetch_not_found_files_from_S3(self):
+    @patch('serenata_toolbox.federal_senate.dataset.urlretrieve')
+    def test_fetch_raises_HTTPError(self, mocked_url_retrieve):
+        mocked_url_retrieve.side_effect = urllib.error.HTTPError(None, None, None, None, None)
         self.path = gettempdir()
         self.subject = Dataset(self.path, [2007])
 
-        retrieved_files, not_found_files = self.subject.fetch()
+        with self.assertRaises(urllib.error.HTTPError) as context:
+            self.subject.fetch()
 
-        for not_found_file, expected_file in zip(
-                not_found_files, self.expected_files):
+        self.assertTrue(isinstance(context.exception, urllib.error.HTTPError))
 
-            self.assertIn('federal-senate-2007.csv', not_found_file)
+    @patch('serenata_toolbox.federal_senate.dataset.urlretrieve')
+    def test_fetch_raises_URLError(self, mocked_url_retrieve):
+        mocked_url_retrieve.side_effect = urllib.error.URLError('tests reason')
+        path = gettempdir()
+        subject = Dataset(path, [2007])
+
+        with self.assertRaises(urllib.error.URLError) as context:
+            subject.fetch()
+
+        self.assertTrue(isinstance(context.exception, urllib.error.URLError))
 
     def test_dataset_translation(self):
         self.subject = Dataset(os.path.join('tests', 'fixtures', 'csv'),
@@ -45,7 +57,7 @@ class TestFederalSenateDataset(TestCase):
 
         expected_files = ['federal-senate-2008.csv']
 
-        translated_files, not_found_files = self.subject.translate()
+        translated_files, _ = self.subject.translate()
 
         for translated_file, expected_file in zip(
                 translated_files, expected_files):
@@ -62,7 +74,7 @@ class TestFederalSenateDataset(TestCase):
                                           encoding='ISO-8859-1',
                                           skiprows=1)
         self.assertIsNotNone(federal_senate_2008['ANO'],
-                             'expects \'ANO\' as column in this dataset')
+                             "expects 'ANO' as column in this dataset")
 
         self.subject.translate()
 
@@ -71,7 +83,7 @@ class TestFederalSenateDataset(TestCase):
                                                      encoding='utf-8')
 
         self.assertIsNotNone(translated_federal_senate_2008['year'],
-                             'expects \'year\' as column in this dataset')
+                             "expects 'year' as column in this dataset")
 
         os.remove(os.path.join(self.subject.path, 'federal-senate-2008.xz'))
 
@@ -79,14 +91,10 @@ class TestFederalSenateDataset(TestCase):
         self.subject = Dataset(os.path.join('tests', 'fixtures', 'csv'),
                                [2007])
 
-        expected_files = ['federal-senate-2007.csv']
+        with self.assertRaises(FileNotFoundError) as context:
+            self.subject.translate()
 
-        translated_files, not_found_files = self.subject.translate()
-
-        for not_found_files, expected_file in zip(
-                not_found_files, expected_files):
-
-            self.assertIn(expected_file, not_found_files)
+        self.assertTrue(isinstance(context.exception, FileNotFoundError))
 
     def test_dataset_cleanup(self):
         self.subject = Dataset(os.path.join('tests', 'fixtures', 'xz'),

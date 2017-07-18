@@ -1,5 +1,6 @@
 import os.path
 from datetime import date
+from urllib.error import HTTPError, URLError
 from urllib.request import urlretrieve
 
 import pandas as pd
@@ -23,9 +24,16 @@ class Dataset:
             file_path = os.path.join(self.path, 'federal-senate-{}.csv'.format(year))
             try:
                 urlretrieve(url, file_path)
-            except Exception as exception:
-                print('While fetching Seranata Toolbox not found file: {} \n{}'.format(file_path, exception))
-                not_found_files.append(file_path)
+            except HTTPError as http_error_exception:
+                print('We failed to reach the server')
+                print('Error code ', http_error_exception.reason)
+                print("While fetching, Seranata Toolbox didn't find file: {} \n{}".format(file_path, http_error_exception))
+                raise http_error_exception
+            except URLError as url_error_exception:
+                print("The server couldn\'t fulfill the request.")
+                print('Reason: ', url_error_exception.reason)
+                print("While fetching, Seranata Toolbox didn't find file: {} \n{}".format(file_path, url_error_exception))
+                raise url_error_exception
             else:
                 retrieved_files.append(file_path)
 
@@ -40,9 +48,9 @@ class Dataset:
             csv_path = os.path.join(self.path, filename)
             try:
                 self._translate_file(csv_path)
-            except Exception as exception:
-                print('While translating Seranata Toolbox not found file: {} \n{}'.format(csv_path, exception))
-                not_found_files.append(csv_path)
+            except FileNotFoundError as file_not_found_error:
+                print("While translating, Seranata Toolbox didn't find file: {} \n{}".format(csv_path, file_not_found_error))
+                raise file_not_found_error
             else:
                 translated_files.append(csv_path)
 
