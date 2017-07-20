@@ -33,7 +33,6 @@ class Downloader:
         '2017-02-15-receipts-texts.xz',
         '2017-03-15-reimbursements.xz',
         '2017-03-20-purchase-suppliers.xz',
-        '2017-05-10-tse-candidates.xz',
         '2017-05-21-companies-no-geolocation.xz',
         '2017-05-22-brazilian-cities.csv',
         '2017-05-23-congressperson-details.xz',
@@ -43,6 +42,7 @@ class Downloader:
         '2017-05-29-speeches.xz',
         '2017-06-11-congresspeople-social-accounts.xz',
         '2017-06-17-official-missions.xz',
+        '2017-07-20-tse-candidates.xz',
     )
 
     def __init__(self, target, **kwargs):
