@@ -26,14 +26,14 @@ class SessionStartTimesDataset:
         :param session_dates: (list) datetime objects to fetch the start times for
         """
 
-        records = self.__all_start_times(pivot, session_dates)
+        records = self._all_start_times(pivot, session_dates)
         return pd.DataFrame(records, columns=(
             'date',
             'session',
             'started_at'
         ))
 
-    def __all_start_times(self, pivot, session_dates):
+    def _all_start_times(self, pivot, session_dates):
         for date in session_dates:
             if os.environ.get('DEBUG') == '1':
                 print(date.strftime("%d/%m/%Y"))
