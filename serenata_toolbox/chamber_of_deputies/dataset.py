@@ -35,14 +35,14 @@ class Dataset:
     def translate(self):
         for year in self.years:
             csv_path = os.path.join(self.path, 'Ano-{}.csv'.format(year))
-            self.__translate_file(csv_path)
+            self._translate_file(csv_path)
 
     def clean(self):
         reimbursements = Reimbursements(self.path, years=self.years)
         dataset = reimbursements.group(reimbursements.receipts)
         reimbursements.write_reimbursement_file(dataset)
 
-    def __translate_file(self, csv_path):
+    def _translate_file(self, csv_path):
         output_file_path = csv_path \
             .replace('.csv', '.xz') \
             .replace('Ano-', 'reimbursements-')
