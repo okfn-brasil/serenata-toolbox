@@ -61,7 +61,7 @@ class PresencesDataset:
             if os.environ.get('DEBUG') == '1':
                 print(i, deputy.congressperson_name, deputy.congressperson_document)
             url = self.URL.format(start_date, end_date, deputy.congressperson_document)
-            xml = self.__try_fetch_xml(10, url)
+            xml = self._try_fetch_xml(10, url)
 
             if xml is None:
                 error_count += 1
@@ -75,7 +75,7 @@ class PresencesDataset:
         if os.environ.get('DEBUG') == '1':
             print("\nErrored fetching", error_count, "deputy presences")
 
-    def __try_fetch_xml(self, attempts, url):
+    def _try_fetch_xml(self, attempts, url):
         while attempts > 0:
             try:
                 return urllib.request.urlopen(url, data=None, timeout=10)
