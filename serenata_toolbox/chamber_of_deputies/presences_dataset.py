@@ -39,7 +39,7 @@ class PresencesDataset:
         if os.environ.get('DEBUG') == '1':
             print("Fetching data for {} deputies from {} -> {}".format(len(deputies), start_date, end_date))
 
-        records = self.__all_presences(deputies, start_date, end_date)
+        records = self._all_presences(deputies, start_date, end_date)
 
         df = pd.DataFrame(records, columns=(
             'term',
@@ -55,7 +55,7 @@ class PresencesDataset:
         ))
         return self.__translate(df)
 
-    def __all_presences(self, deputies, start_date, end_date):
+    def _all_presences(self, deputies, start_date, end_date):
         error_count = 0
         for i, deputy in deputies.iterrows():
             if os.environ.get('DEBUG') == '1':
