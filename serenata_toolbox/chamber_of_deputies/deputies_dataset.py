@@ -37,7 +37,7 @@ class DeputiesDataset:
             'phone_number',
             'email'
         ))
-        return self.__translate(df)
+        return self._translate(df)
 
     def _parse_deputies(self, root):
         for deputy in root:
@@ -56,7 +56,7 @@ class DeputiesDataset:
                 xml_extract_text(deputy, 'email'),
             )
 
-    def __translate(self, df):
+    def _translate(self, df):
         translate_column(df, 'gender', {
             'masculino': 'male',
             'feminino': 'female',
