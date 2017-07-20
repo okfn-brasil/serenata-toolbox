@@ -53,7 +53,7 @@ class PresencesDataset:
             'session',
             'presence'
         ))
-        return self.__translate(df)
+        return self._translate(df)
 
     def _all_presences(self, deputies, start_date, end_date):
         error_count = 0
@@ -127,7 +127,7 @@ class PresencesDataset:
                     xml_extract_text(session, 'frequencia')
                 )
 
-    def __translate(self, df):
+    def _translate(self, df):
         translate_column(df, 'presence', {
             'Presença': 'Present',
             'Ausência': 'Absent',
