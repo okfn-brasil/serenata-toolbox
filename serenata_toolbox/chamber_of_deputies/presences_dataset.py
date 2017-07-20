@@ -67,7 +67,7 @@ class PresencesDataset:
                 error_count += 1
             else:
                 root = ET.ElementTree(file=xml).getroot()
-                for presence in self.__parse_deputy_presences(root):
+                for presence in self._parse_deputy_presences(root):
                     yield presence
 
             time.sleep(self.sleep_interval)
@@ -101,7 +101,7 @@ class PresencesDataset:
                 else:
                     print("FAIL")
 
-    def __parse_deputy_presences(self, root):
+    def _parse_deputy_presences(self, root):
         term = xml_extract_text(root, 'legislatura')
         congressperson_document = xml_extract_text(root, 'carteiraParlamentar')
         # Please note that this name contains the party and state
