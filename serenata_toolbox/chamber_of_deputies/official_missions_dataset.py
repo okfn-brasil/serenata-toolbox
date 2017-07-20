@@ -36,7 +36,7 @@ class OfficialMissionsDataset:
         for r in self._generate_ranges(start_date, end_date):
             if os.environ.get('DEBUG') == '1':
                 print(r)
-            for record in self.__fetch_missions_for_range(r[0], r[1]):
+            for record in self._fetch_missions_for_range(r[0], r[1]):
                 records.append(record)
 
         df = pd.DataFrame(records, columns=[
@@ -79,7 +79,7 @@ class OfficialMissionsDataset:
             )
             range_start += timedelta(days=30)
 
-    def __fetch_missions_for_range(self, range_start, range_end):
+    def _fetch_missions_for_range(self, range_start, range_end):
         url = self.URL.format(range_start, range_end)
         data = urllib.request.urlopen(url)
         soup = BeautifulSoup(data, 'html.parser')
