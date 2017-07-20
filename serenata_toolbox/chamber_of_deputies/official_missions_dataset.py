@@ -33,7 +33,7 @@ class OfficialMissionsDataset:
         """
 
         records = []
-        for r in self.__generate_ranges(start_date, end_date):
+        for r in self._generate_ranges(start_date, end_date):
             if os.environ.get('DEBUG') == '1':
                 print(r)
             for record in self.__fetch_missions_for_range(r[0], r[1]):
@@ -63,7 +63,7 @@ class OfficialMissionsDataset:
 
         return df.drop_duplicates()
 
-    def __generate_ranges(self, start_date, end_date):
+    def _generate_ranges(self, start_date, end_date):
         """
         Generate a list of 2 month ranges for the range requested with an
         intersection between months. This is necessary because we can't search
