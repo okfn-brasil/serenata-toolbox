@@ -21,7 +21,7 @@ class DeputiesDataset:
         xml = urllib.request.urlopen(self.URL)
 
         tree = ET.ElementTree(file=xml)
-        records = self.__parse_deputies(tree.getroot())
+        records = self._parse_deputies(tree.getroot())
 
         df = pd.DataFrame(records, columns=(
             'congressperson_id',
@@ -37,9 +37,9 @@ class DeputiesDataset:
             'phone_number',
             'email'
         ))
-        return self.__translate(df)
+        return self._translate(df)
 
-    def __parse_deputies(self, root):
+    def _parse_deputies(self, root):
         for deputy in root:
             yield (
                 xml_extract_text(deputy, 'ideCadastro'),
@@ -56,7 +56,7 @@ class DeputiesDataset:
                 xml_extract_text(deputy, 'email'),
             )
 
-    def __translate(self, df):
+    def _translate(self, df):
         translate_column(df, 'gender', {
             'masculino': 'male',
             'feminino': 'female',

@@ -39,7 +39,7 @@ class PresencesDataset:
         if os.environ.get('DEBUG') == '1':
             print("Fetching data for {} deputies from {} -> {}".format(len(deputies), start_date, end_date))
 
-        records = self.__all_presences(deputies, start_date, end_date)
+        records = self._all_presences(deputies, start_date, end_date)
 
         df = pd.DataFrame(records, columns=(
             'term',
@@ -53,21 +53,21 @@ class PresencesDataset:
             'session',
             'presence'
         ))
-        return self.__translate(df)
+        return self._translate(df)
 
-    def __all_presences(self, deputies, start_date, end_date):
+    def _all_presences(self, deputies, start_date, end_date):
         error_count = 0
         for i, deputy in deputies.iterrows():
             if os.environ.get('DEBUG') == '1':
                 print(i, deputy.congressperson_name, deputy.congressperson_document)
             url = self.URL.format(start_date, end_date, deputy.congressperson_document)
-            xml = self.__try_fetch_xml(10, url)
+            xml = self._try_fetch_xml(10, url)
 
             if xml is None:
                 error_count += 1
             else:
                 root = ET.ElementTree(file=xml).getroot()
-                for presence in self.__parse_deputy_presences(root):
+                for presence in self._parse_deputy_presences(root):
                     yield presence
 
             time.sleep(self.sleep_interval)
@@ -75,7 +75,7 @@ class PresencesDataset:
         if os.environ.get('DEBUG') == '1':
             print("\nErrored fetching", error_count, "deputy presences")
 
-    def __try_fetch_xml(self, attempts, url):
+    def _try_fetch_xml(self, attempts, url):
         while attempts > 0:
             try:
                 return urllib.request.urlopen(url, data=None, timeout=10)
@@ -101,7 +101,7 @@ class PresencesDataset:
                 else:
                     print("FAIL")
 
-    def __parse_deputy_presences(self, root):
+    def _parse_deputy_presences(self, root):
         term = xml_extract_text(root, 'legislatura')
         congressperson_document = xml_extract_text(root, 'carteiraParlamentar')
         # Please note that this name contains the party and state
@@ -127,7 +127,7 @@ class PresencesDataset:
                     xml_extract_text(session, 'frequencia')
                 )
 
-    def __translate(self, df):
+    def _translate(self, df):
         translate_column(df, 'presence', {
             'Presença': 'Present',
             'Ausência': 'Absent',
