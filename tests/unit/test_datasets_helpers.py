@@ -90,22 +90,45 @@ class TestDatasetsHelpersDataframes(TestCase):
 class TestDatasetsHelpersConfigLookup(TestCase):
 
     def setUp(self):
-        self.root = os.path.abspath(tempfile.mkdtemp())
-        self.subfolder = os.path.abspath(tempfile.mkdtemp(dir=self.root))
-        self.config_file = os.path.join(self.root, 'config.ini')
+        # good case
+        self.root1 = os.path.abspath(tempfile.mkdtemp())
+        self.subfolder = os.path.abspath(tempfile.mkdtemp(dir=self.root1))
+        self.config_file = os.path.join(self.root1, 'config.ini')
         self.cwd = os.getcwd()
-
         open(self.config_file, 'a').close()
-        os.chdir(self.subfolder)
+
+        # not found case
+        self.root2 = os.path.abspath(tempfile.mkdtemp())
+
+        # not a file case
+        self.root3 = os.path.abspath(tempfile.mkdtemp())
+        self.config_folder = os.path.join(self.root3, 'config.ini')
+        os.makedirs(self.config_folder)
+
 
     def tearDown(self):
         os.chdir(self.cwd)
         os.remove(self.config_file)
         os.rmdir(self.subfolder)
-        os.rmdir(self.root)
+        os.rmdir(self.root1)
+        os.rmdir(self.root2)
+        os.rmdir(self.config_folder)
+        os.rmdir(self.root3)
 
     def test_find_config(self):
+        os.chdir(self.subfolder)
+
         self.assertEqual(helpers.find_config(), self.config_file)
+
+    def test_find_config_not_found(self):
+        os.chdir(self.root2)
+
+        self.assertEqual(helpers.find_config(), 'config.ini')
+
+    def test_find_config_a_file(self):
+        os.chdir(self.root3)
+
+        self.assertEqual(helpers.find_config(), 'config.ini')
 
 
 if __name__ == '__main__':

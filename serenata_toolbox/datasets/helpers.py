@@ -72,7 +72,7 @@ def find_config(name='config.ini'):
         joined = os.path.join(path, name)
 
         # return config file absolute path if exists
-        if os.path.exists(joined):
+        if os.path.exists(joined) and os.path.isfile(joined):
             return os.path.abspath(joined)
 
         path = os.path.join('..', path)
