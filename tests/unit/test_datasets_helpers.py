@@ -1,4 +1,5 @@
 import os
+import tempfile
 from datetime import datetime
 from unittest import main, TestCase
 from unittest.mock import patch
@@ -7,6 +8,7 @@ import pandas as pd
 import numpy as np
 
 from serenata_toolbox.datasets import helpers
+
 
 class TestDatasetsHelpersXml(TestCase):
 
@@ -51,6 +53,7 @@ class TestDatasetsHelpersXml(TestCase):
 
         self.assertEqual(expected, extracted)
 
+
 class TestDatasetsHelpersDataframes(TestCase):
 
     def test_translate_column(self):
@@ -82,6 +85,28 @@ class TestDatasetsHelpersDataframes(TestCase):
             encoding='utf-8',
             index=False
         )
+
+
+class TestDatasetsHelpersConfigLookup(TestCase):
+
+    def setUp(self):
+        self.root = tempfile.mkdtemp()
+        self.subfolder = tempfile.mkdtemp(dir=self.root)
+        self.config_file = os.path.join(self.root, 'config.ini')
+        self.cwd = os.getcwd()
+
+        open(self.config_file, 'a').close()
+        os.chdir(self.subfolder)
+
+    def tearDown(self):
+        os.chdir(self.cwd)
+        os.remove(self.config_file)
+        os.rmdir(self.subfolder)
+        os.rmdir(self.root)
+
+    def test_find_config(self):
+        self.assertEqual(helpers.find_config(), self.config_file)
+
 
 if __name__ == '__main__':
     main()

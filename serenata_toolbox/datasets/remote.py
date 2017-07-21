@@ -5,6 +5,7 @@ import os
 import boto3
 
 from serenata_toolbox.datasets.contextmanager import status_message
+from serenata_toolbox.datasets.helpers import find_config
 
 
 class RemoteDatasets:
@@ -14,6 +15,7 @@ class RemoteDatasets:
     def __init__(self):
         self.credentials = None
         self.client = None
+        self.config = find_config(self.CONFIG)
 
         if not self.config_exists:
             print('Could not find {} file.'.format(self.CONFIG))
@@ -22,7 +24,7 @@ class RemoteDatasets:
             return
 
         settings = configparser.RawConfigParser()
-        settings.read(self.CONFIG)
+        settings.read(self.config)
         self.settings = partial(settings.get, 'Amazon')
 
         try:
@@ -52,7 +54,7 @@ class RemoteDatasets:
 
     @property
     def config_exists(self):
-        return all((os.path.exists(self.CONFIG), os.path.isfile(self.CONFIG)))
+        return all((os.path.exists(self.config), os.path.isfile(self.config)))
 
     @property
     def bucket(self):
