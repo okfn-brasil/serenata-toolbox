@@ -90,8 +90,8 @@ class TestDatasetsHelpersDataframes(TestCase):
 class TestDatasetsHelpersConfigLookup(TestCase):
 
     def setUp(self):
-        self.root = tempfile.mkdtemp()
-        self.subfolder = tempfile.mkdtemp(dir=self.root)
+        self.root = os.path.abspath(tempfile.mkdtemp())
+        self.subfolder = os.path.abspath(tempfile.mkdtemp(dir=self.root))
         self.config_file = os.path.join(self.root, 'config.ini')
         self.cwd = os.getcwd()
 
