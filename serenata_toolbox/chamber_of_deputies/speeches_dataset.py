@@ -35,7 +35,7 @@ class SpeechesDataset:
         xml = urllib.request.urlopen(url)
 
         tree = ET.ElementTree(file=xml)
-        records = self.__parse_speeches(tree.getroot())
+        records = self._parse_speeches(tree.getroot())
 
         return pd.DataFrame(records, columns=[
             'session_code',
@@ -52,7 +52,7 @@ class SpeechesDataset:
             'speech_insertion_num'
         ])
 
-    def __parse_speeches(self, root):
+    def _parse_speeches(self, root):
         for session in root:
             session_code = xml_extract_text(session, 'codigo')
             session_date = xml_extract_date(session, 'data')
