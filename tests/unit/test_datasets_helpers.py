@@ -91,17 +91,17 @@ class TestDatasetsHelpersConfigLookup(TestCase):
 
     def setUp(self):
         # good case
-        self.root1 = os.path.abspath(tempfile.mkdtemp())
-        self.subfolder = os.path.abspath(tempfile.mkdtemp(dir=self.root1))
+        self.root1 = os.path.realpath(tempfile.mkdtemp())
+        self.subfolder = os.path.relpath(tempfile.mkdtemp(dir=self.root1))
         self.config_file = os.path.join(self.root1, 'config.ini')
         self.cwd = os.getcwd()
         open(self.config_file, 'a').close()
 
         # not found case
-        self.root2 = os.path.abspath(tempfile.mkdtemp())
+        self.root2 = os.path.relpath(tempfile.mkdtemp())
 
         # not a file case
-        self.root3 = os.path.abspath(tempfile.mkdtemp())
+        self.root3 = os.path.relpath(tempfile.mkdtemp())
         self.config_folder = os.path.join(self.root3, 'config.ini')
         os.makedirs(self.config_folder)
 
