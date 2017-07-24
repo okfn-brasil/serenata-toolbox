@@ -56,3 +56,30 @@ def save_to_csv(df, data_dir, name):
     today = datetime.strftime(datetime.now(), '%Y-%m-%d')
     file_path = os.path.join(data_dir, '{}-{}.xz'.format(today, name))
     df.to_csv(file_path, **CSV_PARAMS)
+
+
+# Utility for config file lookup (credits to fabric fabfile lookup)
+
+def find_config(name='config.ini'):
+    """
+    :param name: config file name (defaults to 'config.ini')
+    """
+    # start in cwd and work downwards towards filesystem root
+    path = '.'
+    # Stop before falling off root of filesystem (should be platform
+    # agnostic)
+    while os.path.split(os.path.abspath(path))[1]:
+        joined = os.path.join(path, name)
+
+        # return config file absolute path if exists
+        if os.path.exists(joined) and os.path.isfile(joined):
+            return os.path.abspath(joined)
+
+        path = os.path.join('..', path)
+
+    # if config not found fallback on tests expected behavior
+    # wich is to return the filename to be used at remote
+    # config_exists class property.
+    # a future refactor could be to return None and not use
+    # config exists anymore
+    return name
