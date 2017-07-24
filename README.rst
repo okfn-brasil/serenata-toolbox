@@ -135,7 +135,7 @@ If this report includes issues related to `import` section of your files, `isort
   $ pip install isort
   $ isort **/*.py --diff
 
-Always suggest a version bump. We use `Elm's philosophy <https://github.com/elm-lang/elm-package#version-rules>`_ for version bumping:
+Always suggest a version bump. We use `Semantic Versioning <http://semver.org>`_ – or in `Elm community words <https://github.com/elm-lang/elm-package#version-rules>`_:
 
 * MICRO: the API is the same, no risk of breaking code
 * MINOR: values have been added, existing values are unchanged
