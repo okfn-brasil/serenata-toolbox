@@ -5,6 +5,7 @@ REPO_URL = 'http://github.com/datasciencebr/serenata-toolbox'
 
 setup(
     author='Serenata de Amor',
+    author_email='op.serenatadeamor@gmail.com',
     classifiers=[
         'Development Status :: 4 - Beta',
         'Intended Audience :: Science/Research',
