@@ -27,7 +27,7 @@ Installation
 
 ::
 
-    $ pip install git+https://github.com/datasciencebr/serenata-toolbox.git#egg=serenata-toolbox
+    $ pip install serenata-toolbox
 
 Usage
 -----
