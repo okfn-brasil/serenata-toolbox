@@ -31,7 +31,6 @@ class Downloader:
         '2016-12-22-agreements.xz',
         '2016-12-22-amendments.xz',
         '2017-02-15-receipts-texts.xz',
-        '2017-03-15-reimbursements.xz',
         '2017-03-20-purchase-suppliers.xz',
         '2017-05-21-companies-no-geolocation.xz',
         '2017-05-22-brazilian-cities.csv',
@@ -42,6 +41,7 @@ class Downloader:
         '2017-05-29-speeches.xz',
         '2017-06-11-congresspeople-social-accounts.xz',
         '2017-06-17-official-missions.xz',
+        '2017-07-04-reimbursements.xz',
         '2017-07-20-tse-candidates.xz',
     )
 
