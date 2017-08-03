@@ -22,6 +22,7 @@ class TestChamberOfDeputiesDataset(TestCase):
     def tearDown(self):
         rmtree(self.path, ignore_errors=True)
 
+    TODO uses os.path.join on paths
     @patch('serenata_toolbox.chamber_of_deputies.dataset.urlretrieve')
     def test_fetch_chambers_of_deputies_datasets(self, mocked_urlretrieve):
         copy('tests/fixtures/chamber_of_deputies/Ano-2017.zip', self.path)
@@ -35,6 +36,7 @@ class TestChamberOfDeputiesDataset(TestCase):
             file_path = os.path.join(self.path, name)
             self.assertTrue(os.path.exists(file_path))
 
+    TODO make tests to translate and clean
     # self.subject.translate()
     # for name in ["reimbursements-{}.xz".format(n) for n in self.years]:
     #     file_path = os.path.join(self.path, name)
