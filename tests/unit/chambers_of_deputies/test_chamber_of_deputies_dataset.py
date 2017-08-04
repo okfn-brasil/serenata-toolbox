@@ -22,19 +22,20 @@ class TestChamberOfDeputiesDataset(TestCase):
     def tearDown(self):
         rmtree(self.path, ignore_errors=True)
 
-    # TODO uses os.path.join on paths
     @patch('serenata_toolbox.chamber_of_deputies.dataset.urlretrieve')
     def test_fetch_chambers_of_deputies_datasets(self, mocked_urlretrieve):
-        copy('tests/fixtures/chamber_of_deputies/Ano-2017.zip', self.path)
-        copy('tests/fixtures/chamber_of_deputies/datasets-format.html', self.path)
-        files = ['Ano-2017.csv', 'datasets-format.html']
+        path_to_2017_dataset_zip = os.path.join('tests', 'fixtures', 'chamber_of_deputies', 'Ano-2017.zip')
+        path_to_dataset_format_html = os.path.join('tests', 'fixtures', 'chamber_of_deputies', 'datasets-format.html')
+        copy(path_to_2017_dataset_zip, self.path)
+        copy(path_to_dataset_format_html, self.path)
+        expected_files = ['Ano-2017.zip', 'datasets-format.html']
 
-        self.subject.fetch()
+        retrieved_files = self.subject.fetch()
 
-        self.assertEqual(len(files), 2)
-        for name in files:
-            file_path = os.path.join(self.path, name)
-            self.assertTrue(os.path.exists(file_path))
+        self.assertTrue(mocked_urlretrieve.called)
+        self.assertEqual(mocked_urlretrieve.call_count, len(expected_files))
+        for retrieved_file, expected_file in zip(retrieved_files, expected_files):
+            self.assertIn(expected_file, retrieved_file)
 
     def test_translate_2017_dataset(self):
         copy('tests/fixtures/chamber_of_deputies/Ano-2017.csv', self.path)

@@ -15,18 +15,30 @@ class Dataset:
 
     def fetch(self):
         base_url = "http://www.camara.leg.br/cotas/Ano-{}.csv.zip"
+        retrived_files = []
 
         for year in self.years:
             zip_file_path = os.path.join(self.path, "Ano-{}.zip".format(year))
             url = base_url.format(year)
             urlretrieve(url, zip_file_path)
-            zip_file = ZipFile(zip_file_path, 'r')
-            zip_file.extractall(self.path)
-            zip_file.close()
+            retrived_files.append(zip_file_path)
+
+            self._extract_zip_file(zip_file_path)
             os.remove(zip_file_path)
 
+        DATASETS_FORMAT = 'datasets-format.html'
         urlretrieve('http://www2.camara.leg.br/transparencia/cota-para-exercicio-da-atividade-parlamentar/explicacoes-sobre-o-formato-dos-arquivos-xml',
-                    os.path.join(self.path, 'datasets-format.html'))
+                    os.path.join(self.path, DATASETS_FORMAT))
+        retrived_files.append(DATASETS_FORMAT)
+
+        return retrived_files
+
+    def _extract_zip_file(self, zip_file_path):
+        zip_file = ZipFile(zip_file_path, 'r')
+        zip_file.extractall(self.path)
+        zip_file.close()
+
+        return True
 
     def convert_to_csv(self):
         # deprecated but still here so we don't break poor Rosie (for now)
