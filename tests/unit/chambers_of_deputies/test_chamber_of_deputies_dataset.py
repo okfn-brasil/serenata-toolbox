@@ -22,7 +22,7 @@ class TestChamberOfDeputiesDataset(TestCase):
     def tearDown(self):
         rmtree(self.path, ignore_errors=True)
 
-    TODO uses os.path.join on paths
+    # TODO uses os.path.join on paths
     @patch('serenata_toolbox.chamber_of_deputies.dataset.urlretrieve')
     def test_fetch_chambers_of_deputies_datasets(self, mocked_urlretrieve):
         copy('tests/fixtures/chamber_of_deputies/Ano-2017.zip', self.path)
@@ -36,41 +36,48 @@ class TestChamberOfDeputiesDataset(TestCase):
             file_path = os.path.join(self.path, name)
             self.assertTrue(os.path.exists(file_path))
 
-    TODO make tests to translate and clean
-    # self.subject.translate()
-    # for name in ["reimbursements-{}.xz".format(n) for n in self.years]:
-    #     file_path = os.path.join(self.path, name)
-    #     assert(os.path.exists(file_path))
+    def test_translate_2017_dataset(self):
+        copy('tests/fixtures/chamber_of_deputies/Ano-2017.csv', self.path)
 
-    # self.subject.clean()
-    # file_path = os.path.join(self.path, 'reimbursements.xz')
-    # assert(os.path.exists(file_path))
+        self.subject.translate()
 
-    # # test for subquota translation
-    # dataset = pd.read_csv(file_path, compression='xz')
-    # all_subquotas = ['Maintenance of office supporting parliamentary activity',
-    #                 'Locomotion, meal and lodging',
-    #                 'Fuels and lubricants',
-    #                 'Consultancy, research and technical work',
-    #                 'Publicity of parliamentary activity',
-    #                 'Purchase of office supplies',
-    #                 'Software purchase or renting; Postal services; Subscriptions',
-    #                 'Security service provided by specialized company',
-    #                 'Flight tickets',
-    #                 'Telecommunication',
-    #                 'Postal services',
-    #                 'Publication subscriptions',
-    #                 'Congressperson meal',
-    #                 'Lodging, except for congressperson from Distrito Federal',
-    #                 'Automotive vehicle renting or watercraft charter',
-    #                 'Aircraft renting or charter of aircraft',
-    #                 'Automotive vehicle renting or charter',
-    #                 'Watercraft renting or charter',
-    #                 'Taxi, toll and parking',
-    #                 'Terrestrial, maritime and fluvial tickets',
-    #                 'Participation in course, talk or similar event',
-    #                 'Flight ticket issue']
+        for name in ["reimbursements-{}.xz".format(year) for year in self.years]:
+            file_path = os.path.join(self.path, name)
+            self.assertTrue(os.path.exists(file_path))
 
-    # present_subquotas = pd.unique(dataset['subquota_description'])
-    # for subquota in present_subquotas:
-    #     assert(subquota in all_subquotas)
+    def test_clean_2017_reimbursements(self):
+        copy('tests/fixtures/chamber_of_deputies/reimbursements-2017.xz', self.path)
+        file_path = os.path.join(self.path, 'reimbursements.xz')
+
+        self.subject.clean()
+
+        assert(os.path.exists(file_path))
+
+        # test for subquota translation
+        dataset = pd.read_csv(file_path, compression='xz')
+        all_subquotas = ['Maintenance of office supporting parliamentary activity',
+                        'Locomotion, meal and lodging',
+                        'Fuels and lubricants',
+                        'Consultancy, research and technical work',
+                        'Publicity of parliamentary activity',
+                        'Purchase of office supplies',
+                        'Software purchase or renting; Postal services; Subscriptions',
+                        'Security service provided by specialized company',
+                        'Flight tickets',
+                        'Telecommunication',
+                        'Postal services',
+                        'Publication subscriptions',
+                        'Congressperson meal',
+                        'Lodging, except for congressperson from Distrito Federal',
+                        'Automotive vehicle renting or watercraft charter',
+                        'Aircraft renting or charter of aircraft',
+                        'Automotive vehicle renting or charter',
+                        'Watercraft renting or charter',
+                        'Taxi, toll and parking',
+                        'Terrestrial, maritime and fluvial tickets',
+                        'Participation in course, talk or similar event',
+                        'Flight ticket issue']
+
+        present_subquotas = pd.unique(dataset['subquota_description'])
+        for subquota in present_subquotas:
+            assert(subquota in all_subquotas)
