@@ -17,6 +17,7 @@ class TestChamberOfDeputiesDataset(TestCase):
         print(self.path)
         self.subject = Dataset(self.path, [2017])
         self.years = [2017]
+        self.fixtures_path = os.path.join('tests', 'fixtures', 'chamber_of_deputies')
 
 
     def tearDown(self):
@@ -24,8 +25,8 @@ class TestChamberOfDeputiesDataset(TestCase):
 
     @patch('serenata_toolbox.chamber_of_deputies.dataset.urlretrieve')
     def test_fetch_chambers_of_deputies_datasets(self, mocked_urlretrieve):
-        path_to_2017_dataset_zip = os.path.join('tests', 'fixtures', 'chamber_of_deputies', 'Ano-2017.zip')
-        path_to_dataset_format_html = os.path.join('tests', 'fixtures', 'chamber_of_deputies', 'datasets-format.html')
+        path_to_2017_dataset_zip = os.path.join(self.fixtures_path, 'Ano-2017.zip')
+        path_to_dataset_format_html = os.path.join(self.fixtures_path, 'datasets-format.html')
         copy(path_to_2017_dataset_zip, self.path)
         copy(path_to_dataset_format_html, self.path)
         expected_files = ['Ano-2017.zip', 'datasets-format.html']
@@ -38,7 +39,7 @@ class TestChamberOfDeputiesDataset(TestCase):
             self.assertIn(expected_file, retrieved_file)
 
     def test_translate_2017_dataset(self):
-        copy('tests/fixtures/chamber_of_deputies/Ano-2017.csv', self.path)
+        copy(os.path.join(self.fixtures_path, 'Ano-2017.csv'), self.path)
 
         self.subject.translate()
 
@@ -47,7 +48,7 @@ class TestChamberOfDeputiesDataset(TestCase):
             self.assertTrue(os.path.exists(file_path))
 
     def test_clean_2017_reimbursements(self):
-        copy('tests/fixtures/chamber_of_deputies/reimbursements-2017.xz', self.path)
+        copy(os.path.join(self.fixtures_path, 'reimbursements-2017.xz'), self.path)
         file_path = os.path.join(self.path, 'reimbursements.xz')
 
         self.subject.clean()
