@@ -27,7 +27,7 @@ Installation
 
 ::
 
-    $ pip install serenata-toolbox
+    $ pip install -U serenata-toolbox
 
 Usage
 -----
