@@ -15,13 +15,13 @@ class Dataset:
 
     def fetch(self):
         base_url = "http://www.camara.leg.br/cotas/Ano-{}.csv.zip"
-        retrived_files = []
+        retrieved_files = []
 
         for year in self.years:
             zip_file_path = os.path.join(self.path, "Ano-{}.zip".format(year))
             url = base_url.format(year)
             urlretrieve(url, zip_file_path)
-            retrived_files.append(zip_file_path)
+            retrieved_files.append(zip_file_path)
 
             self._extract_zip_file(zip_file_path)
             os.remove(zip_file_path)
@@ -29,9 +29,9 @@ class Dataset:
         DATASETS_FORMAT = 'datasets-format.html'
         urlretrieve('http://www2.camara.leg.br/transparencia/cota-para-exercicio-da-atividade-parlamentar/explicacoes-sobre-o-formato-dos-arquivos-xml',
                     os.path.join(self.path, DATASETS_FORMAT))
-        retrived_files.append(DATASETS_FORMAT)
+        retrieved_files.append(DATASETS_FORMAT)
 
-        return retrived_files
+        return retrieved_files
 
     def _extract_zip_file(self, zip_file_path):
         zip_file = ZipFile(zip_file_path, 'r')
