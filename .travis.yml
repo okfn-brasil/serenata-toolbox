@@ -11,3 +11,12 @@ install:
   - pip install coveralls
 script: coverage run -m unittest discover tests/$TEST_SUITE
 after_success: coveralls
+
+before_deploy: "echo 'Starting deploy to PyPI...'"
+deploy:
+  provider: pypi
+  user: serenata
+  distributions: "sdist bdist_wheel"
+  on:
+    branch: master
+after_deploy: "echo 'Deployment finished!'"
