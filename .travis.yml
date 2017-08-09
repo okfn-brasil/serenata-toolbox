@@ -16,6 +16,7 @@ before_deploy: "echo 'Starting deploy to PyPI...'"
 deploy:
   provider: pypi
   user: serenata
+  password: $PYPI_PASSWORD
   distributions: "sdist bdist_wheel"
   on:
     branch: master
