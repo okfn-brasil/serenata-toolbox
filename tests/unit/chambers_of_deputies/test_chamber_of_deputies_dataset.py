@@ -1,16 +1,15 @@
-import os
-import glob
 import csv
-import pandas as pd
-import numpy as np
-from datetime import date
+import os
+from shutil import copy, rmtree
 from tempfile import mkdtemp
-from shutil import rmtree
-from unittest import main, TestCase
+from unittest import TestCase
 from unittest.mock import patch
-from shutil import copy
+
+import numpy as np
+import pandas as pd
 
 from serenata_toolbox.chamber_of_deputies.dataset import Dataset
+
 
 class TestChamberOfDeputiesDataset(TestCase):
 
@@ -62,30 +61,31 @@ class TestChamberOfDeputiesDataset(TestCase):
 
         assert(os.path.exists(file_path))
 
-        # test for subquota translation
         dataset = pd.read_csv(file_path, compression='xz')
-        all_subquotas = ['Maintenance of office supporting parliamentary activity',
-                        'Locomotion, meal and lodging',
-                        'Fuels and lubricants',
-                        'Consultancy, research and technical work',
-                        'Publicity of parliamentary activity',
-                        'Purchase of office supplies',
-                        'Software purchase or renting; Postal services; Subscriptions',
-                        'Security service provided by specialized company',
-                        'Flight tickets',
-                        'Telecommunication',
-                        'Postal services',
-                        'Publication subscriptions',
-                        'Congressperson meal',
-                        'Lodging, except for congressperson from Distrito Federal',
-                        'Automotive vehicle renting or watercraft charter',
-                        'Aircraft renting or charter of aircraft',
-                        'Automotive vehicle renting or charter',
-                        'Watercraft renting or charter',
-                        'Taxi, toll and parking',
-                        'Terrestrial, maritime and fluvial tickets',
-                        'Participation in course, talk or similar event',
-                        'Flight ticket issue']
+        all_subquotas = [
+            'Maintenance of office supporting parliamentary activity',
+            'Locomotion, meal and lodging',
+            'Fuels and lubricants',
+            'Consultancy, research and technical work',
+            'Publicity of parliamentary activity',
+            'Purchase of office supplies',
+            'Software purchase or renting; Postal services; Subscriptions',
+            'Security service provided by specialized company',
+            'Flight tickets',
+            'Telecommunication',
+            'Postal services',
+            'Publication subscriptions',
+            'Congressperson meal',
+            'Lodging, except for congressperson from Distrito Federal',
+            'Automotive vehicle renting or watercraft charter',
+            'Aircraft renting or charter of aircraft',
+            'Automotive vehicle renting or charter',
+            'Watercraft renting or charter',
+            'Taxi, toll and parking',
+            'Terrestrial, maritime and fluvial tickets',
+            'Participation in course, talk or similar event',
+            'Flight ticket issue'
+        ]
 
         present_subquotas = pd.unique(dataset['subquota_description'])
         for subquota in present_subquotas:
@@ -131,26 +131,73 @@ class TestChamberOfDeputiesDataset(TestCase):
         return pd.read_csv(filepath, dtype=dtype)
 
     def _assert_that_the_columns_are_as_expected_before_translation(self, data_frame_2017):
-        expected_columns = ['txNomeParlamentar', 'idecadastro', 'nuCarteiraParlamentar',
-             'nuLegislatura', 'sgUF', 'sgPartido', 'codLegislatura', 'numSubCota',
-             'txtDescricao', 'numEspecificacaoSubCota', 'txtDescricaoEspecificacao',
-             'txtFornecedor', 'txtCNPJCPF', 'txtNumero', 'indTipoDocumento',
-             'datEmissao', 'vlrDocumento', 'vlrGlosa', 'vlrLiquido', 'numMes',
-             'numAno', 'numParcela', 'txtPassageiro', 'txtTrecho', 'numLote',
-             'numRessarcimento', 'vlrRestituicao', 'nuDeputadoId', 'ideDocumento']
+        expected_columns = [
+            'txNomeParlamentar',
+            'idecadastro',
+            'nuCarteiraParlamentar',
+            'nuLegislatura',
+            'sgUF',
+            'sgPartido',
+            'codLegislatura',
+            'numSubCota',
+            'txtDescricao',
+            'numEspecificacaoSubCota',
+            'txtDescricaoEspecificacao',
+            'txtFornecedor',
+            'txtCNPJCPF',
+            'txtNumero',
+            'indTipoDocumento',
+            'datEmissao',
+            'vlrDocumento',
+            'vlrGlosa',
+            'vlrLiquido',
+            'numMes',
+            'numAno',
+            'numParcela',
+            'txtPassageiro',
+            'txtTrecho',
+            'numLote',
+            'numRessarcimento',
+            'vlrRestituicao',
+            'nuDeputadoId',
+            'ideDocumento'
+        ]
 
         for column in expected_columns:
             self.assertIn(column, data_frame_2017.columns)
 
     def _assert_that_the_columns_are_as_expected_after_translation(self, reimbursements):
-        expected_columns = ['congressperson_name', 'congressperson_id', 'congressperson_document',
-       'term', 'state', 'party', 'term_id', 'subquota_number',
-       'subquota_description', 'subquota_group_id',
-       'subquota_group_description', 'supplier', 'cnpj_cpf', 'document_number',
-       'document_type', 'issue_date', 'document_value', 'remark_value',
-       'net_value', 'month', 'year', 'installment', 'passenger',
-       'leg_of_the_trip', 'batch_number', 'reimbursement_number',
-       'reimbursement_value', 'applicant_id', 'document_id']
+        expected_columns = [
+            'congressperson_name',
+            'congressperson_id',
+            'congressperson_document',
+            'term',
+            'state',
+            'party',
+            'term_id',
+            'subquota_number',
+            'subquota_description',
+            'subquota_group_id',
+            'subquota_group_description',
+            'supplier',
+            'cnpj_cpf',
+            'document_number',
+            'document_type',
+            'issue_date',
+            'document_value',
+            'remark_value',
+            'net_value',
+            'month',
+            'year',
+            'installment',
+            'passenger',
+            'leg_of_the_trip',
+            'batch_number',
+            'reimbursement_number',
+            'reimbursement_value',
+            'applicant_id',
+            'document_id'
+        ]
 
         for column in expected_columns:
             self.assertIn(column, reimbursements.columns)
