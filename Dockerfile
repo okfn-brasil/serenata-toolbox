@@ -9,6 +9,7 @@ RUN apk add --no-cache \
   gcc \
   libxml2-dev \
   libxslt-dev \
+  make \
   musl-dev \
   && mkdir /usr/include/libxml \
   && ln -s /usr/include/libxml2/libxml/xmlexports.h /usr/include/libxml/xmlexports.h \
