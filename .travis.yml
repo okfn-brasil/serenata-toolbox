@@ -9,7 +9,7 @@ jobs:
       script: coverage run -m unittest discover tests/unit unit
       script: coverage run -m unittest discover tests/journey journey
     - stage: deploy
-      script: "echo It works!"
+      script: "echo 'It works!'"
 install:
   - python setup.py develop
   - pip install coveralls
