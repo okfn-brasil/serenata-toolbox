@@ -8,7 +8,8 @@ jobs:
     - stage: tests
       script: python -m unittest discover tests/unit
       script: python -m unittest discover tests/journey
-
+    - stage: deploy
+      script: "echo It works!"
 install:
   - python setup.py develop
   - pip install coveralls
