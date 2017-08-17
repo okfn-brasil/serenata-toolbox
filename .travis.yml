@@ -14,7 +14,7 @@ jobs:
         provider: pypi
         user: serenata
         password: $PYPI_PASSWORD
-        distributions: "sdist bdist_wheel"
+        script: "sdist bdist_wheel"
         on:
           branch: master
 install:
