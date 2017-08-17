@@ -6,8 +6,8 @@ cache:
 jobs:
   include:
     - stage: tests
-      script: coverage run -m unittest discover tests/unit
-      script: coverage run -m unittest discover tests/journey
+      script: coverage run -m unittest discover tests/unit unit
+      script: coverage run -m unittest discover tests/journey journey
     - stage: deploy
       script: "echo It works!"
 install:
