@@ -10,19 +10,15 @@ jobs:
     - stage: journey
       script: coverage run -m unittest discover tests/journey
     - stage: deploy
-      script: "echo 'It works!'"
+      deploy:
+        provider: pypi
+        user: serenata
+        password: $PYPI_PASSWORD
+        distributions: "sdist bdist_wheel"
+        on:
+          branch: master
 install:
   - python setup.py develop
   - pip install coveralls
 
 after_success: coveralls
-
-before_deploy: "echo 'Starting deploy to PyPI...'"
-deploy:
-  provider: pypi
-  user: serenata
-  password: $PYPI_PASSWORD
-  distributions: "sdist bdist_wheel"
-  on:
-    branch: master
-after_deploy: "echo 'Deployment finished!'"
