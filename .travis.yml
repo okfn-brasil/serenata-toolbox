@@ -5,8 +5,9 @@ cache:
     - $HOME/virtualenv/python3.5.3/
 jobs:
   include:
-    - stage: test
+    - stage: unit
       script: coverage run -m unittest discover tests/unit
+    - stage: journey
       script: coverage run -m unittest discover tests/journey
     - stage: deploy
       script: skip
