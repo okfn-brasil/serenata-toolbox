@@ -1,6 +1,6 @@
 import os
 from unittest import TestCase
-from unittest.mock import call, patch, MagicMock
+from unittest.mock import call, patch
 
 from serenata_toolbox.datasets import Datasets, fetch, fetch_latest_backup
 
@@ -77,3 +77,11 @@ class TestFetch(TestCase):
     def test_fetch_latest_backup(self, datasets):
         fetch_latest_backup('test')
         self.assertTrue(datasets.return_value.downloader.download.called)
+
+    @patch('os.path.exists')
+    @patch('serenata_toolbox.datasets.Datasets')
+    def test_fetch_latest_backup_only_when_missing(self, datasets, os_path_exists):
+        datasets().downloader.LATEST = ('file1', 'file2', 'file3')
+        os_path_exists.side_effect = [False, True, False]
+        fetch_latest_backup('test')
+        datasets.return_value.downloader.download.assert_called_once_with(('file1', 'file3'))
