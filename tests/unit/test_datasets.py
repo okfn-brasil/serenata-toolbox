@@ -74,12 +74,6 @@ class TestFetch(TestCase):
         datasets.return_value.downloader.download.assert_called_once_with('file.xz')
 
     @patch('serenata_toolbox.datasets.Datasets')
-    def test_fetch(self, datasets):
-        fetch('file.xz', 'test')
-        datasets.assert_called_once_with('test')
-        datasets.return_value.downloader.download.assert_called_once_with('file.xz')
-
-    @patch('serenata_toolbox.datasets.Datasets')
     def test_fetch_latest_backup(self, datasets):
         fetch_latest_backup('test')
         self.assertTrue(datasets.return_value.downloader.download.called)
