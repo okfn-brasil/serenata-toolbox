@@ -85,3 +85,11 @@ class TestFetch(TestCase):
         os_path_exists.side_effect = [False, True, False]
         fetch_latest_backup('test')
         datasets.return_value.downloader.download.assert_called_once_with(('file1', 'file3'))
+
+    @patch('os.path.exists')
+    @patch('serenata_toolbox.datasets.Datasets')
+    def test_fetch_latest_backup_with_force_all(self, datasets, os_path_exists):
+        datasets().downloader.LATEST = ('file1', 'file2', 'file3')
+        os_path_exists.side_effect = [False, True, False]
+        fetch_latest_backup('test', force_all=True)
+        datasets.return_value.downloader.download.assert_called_once_with(('file1', 'file2', 'file3'))
