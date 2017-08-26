@@ -80,7 +80,7 @@ def fetch_latest_backup(destination_path):
 
     files = tuple(
         f for f in datasets.downloader.LATEST
-        if not os.path.exists(destination_path, f)
+        if not os.path.exists(os.path.join(destination_path, f))
     )
 
     return datasets.downloader.download(files)
