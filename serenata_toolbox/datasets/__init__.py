@@ -83,4 +83,7 @@ def fetch_latest_backup(destination_path):
         if not os.path.exists(os.path.join(destination_path, f))
     )
 
+    if not files:
+        print('You already have all the latest datasets! Nothing to download.')
+
     return datasets.downloader.download(files)
