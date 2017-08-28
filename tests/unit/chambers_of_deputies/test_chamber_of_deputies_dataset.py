@@ -20,7 +20,6 @@ class TestChamberOfDeputiesDataset(TestCase):
         self.years = [2017]
         self.fixtures_path = os.path.join('tests', 'fixtures', 'chamber_of_deputies')
 
-
     def tearDown(self):
         rmtree(self.path, ignore_errors=True)
 
@@ -51,7 +50,6 @@ class TestChamberOfDeputiesDataset(TestCase):
         reimbursements_2017 = self._read_xz(xz_path)
 
         self._assert_that_the_columns_are_as_expected_after_translation(reimbursements_2017)
-
 
     def test_clean_2017_reimbursements(self):
         copy(os.path.join(self.fixtures_path, 'reimbursements-2017.xz'), self.path)
