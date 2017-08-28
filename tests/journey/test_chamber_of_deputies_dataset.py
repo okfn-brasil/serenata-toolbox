@@ -66,7 +66,5 @@ class TestChamberOfDeputiesDataset(TestCase):
 
         present_subquotas = pd.unique(dataset['subquota_description'])
         for subquota in present_subquotas:
-            assert(subquota in all_subquotas)
-
-if __name__ == '__main__':
-    main()
+            with self.subTest():
+                assert(subquota in all_subquotas)
