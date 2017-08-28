@@ -41,10 +41,6 @@ class Dataset:
 
         return True
 
-    def convert_to_csv(self):
-        # deprecated but still here so we don't break poor Rosie (for now)
-        pass
-
     def translate(self):
         for year in self.years:
             csv_path = os.path.join(self.path, 'Ano-{}.csv'.format(year))
