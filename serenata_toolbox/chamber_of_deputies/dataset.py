@@ -66,10 +66,7 @@ class Dataset:
                                   'codLegislatura': np.str,
                                   'txtCNPJCPF': np.str,
                                   'numRessarcimento': np.str},
-                           converters={'vlrDocumento': self._parse_float,
-                                       'vlrGlosa': self._parse_float,
-                                       'vlrLiquido': self._parse_float,
-                                       'vlrRestituicao': self._parse_float})
+                           )
 
         data.rename(columns={
             'ideDocumento': 'document_id',
@@ -135,6 +132,3 @@ class Dataset:
                     encoding='utf-8')
 
         return output_file_path
-
-    def _parse_float(self, string):
-        return float(string.replace(',', '.'))
