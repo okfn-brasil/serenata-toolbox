@@ -1,10 +1,11 @@
-import os.path
 import csv
-from datetime import date
+import os.path
 from urllib.request import urlretrieve
 from zipfile import ZipFile
+
 import numpy as np
 import pandas as pd
+
 from .reimbursements import AVAILABLE_YEARS, Reimbursements
 
 
