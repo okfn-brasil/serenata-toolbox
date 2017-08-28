@@ -89,7 +89,8 @@ class TestChamberOfDeputiesDataset(TestCase):
 
         present_subquotas = pd.unique(dataset['subquota_description'])
         for subquota in present_subquotas:
-            assert(subquota in all_subquotas)
+            with self.subTest():
+                assert(subquota in all_subquotas)
 
     def _parse_float(self, string):
         return float(string.replace(',', '.'))
