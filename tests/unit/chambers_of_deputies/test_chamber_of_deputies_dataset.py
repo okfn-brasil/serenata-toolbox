@@ -160,7 +160,8 @@ class TestChamberOfDeputiesDataset(TestCase):
         ]
 
         for column in expected_columns:
-            self.assertIn(column, data_frame_2017.columns)
+            with self.subTest():
+                self.assertIn(column, data_frame_2017.columns)
 
     def _assert_that_the_columns_are_as_expected_after_translation(self, reimbursements):
         expected_columns = [
@@ -196,4 +197,5 @@ class TestChamberOfDeputiesDataset(TestCase):
         ]
 
         for column in expected_columns:
-            self.assertIn(column, reimbursements.columns)
+            with self.subTest():
+                self.assertIn(column, reimbursements.columns)
