@@ -92,11 +92,9 @@ class TestChamberOfDeputiesDataset(TestCase):
             with self.subTest():
                 assert(subquota in all_subquotas)
 
-    def _parse_float(self, string):
-        return float(string.replace(',', '.'))
-
     def _read_csv(self, path):
         return pd.read_csv(path,
+                           decimal=',',
                            encoding='utf-8',
                            delimiter=";",
                            quoting=csv.QUOTE_NONE,
@@ -106,10 +104,7 @@ class TestChamberOfDeputiesDataset(TestCase):
                                   'codLegislatura': np.str,
                                   'txtCNPJCPF': np.str,
                                   'numRessarcimento': np.str},
-                           converters={'vlrDocumento': self._parse_float,
-                                       'vlrGlosa': self._parse_float,
-                                       'vlrLiquido': self._parse_float,
-                                       'vlrRestituicao': self._parse_float})
+                           )
 
     def _read_xz(self, filepath):
         dtype = {
