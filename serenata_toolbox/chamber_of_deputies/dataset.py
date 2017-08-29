@@ -13,6 +13,30 @@ class Dataset:
     def __init__(self, path, years=AVAILABLE_YEARS):
         self.path = path
         self.years = years if isinstance(years, list) else [years]
+        self.subquotas = (
+            (1, 'Maintenance of office supporting parliamentary activity'),
+            (2, 'Locomotion, meal and lodging'),
+            (3, 'Fuels and lubricants'),
+            (4, 'Consultancy, research and technical work'),
+            (5, 'Publicity of parliamentary activity'),
+            (6, 'Purchase of office supplies'),
+            (7, 'Software purchase or renting; Postal services; Subscriptions'),
+            (8, 'Security service provided by specialized company'),
+            (9, 'Flight tickets'),
+            (10, 'Telecommunication'),
+            (11, 'Postal services'),
+            (12, 'Publication subscriptions'),
+            (13, 'Congressperson meal'),
+            (14, 'Lodging, except for congressperson from Distrito Federal'),
+            (15, 'Automotive vehicle renting or watercraft charter'),
+            (119, 'Aircraft renting or charter of aircraft'),
+            (120, 'Automotive vehicle renting or charter'),
+            (121, 'Watercraft renting or charter'),
+            (122, 'Taxi, toll and parking'),
+            (123, 'Terrestrial, maritime and fluvial tickets'),
+            (137, 'Participation in course, talk or similar event'),
+            (999, 'Flight ticket issue')
+        )
 
     def fetch(self):
         base_url = "http://www.camara.leg.br/cotas/Ano-{}.csv.zip"
@@ -100,32 +124,7 @@ class Dataset:
             'nuDeputadoId': 'applicant_id',
         }, inplace=True)
 
-        subquotas = (
-            (1, 'Maintenance of office supporting parliamentary activity'),
-            (2, 'Locomotion, meal and lodging'),
-            (3, 'Fuels and lubricants'),
-            (4, 'Consultancy, research and technical work'),
-            (5, 'Publicity of parliamentary activity'),
-            (6, 'Purchase of office supplies'),
-            (7, 'Software purchase or renting; Postal services; Subscriptions'),
-            (8, 'Security service provided by specialized company'),
-            (9, 'Flight tickets'),
-            (10, 'Telecommunication'),
-            (11, 'Postal services'),
-            (12, 'Publication subscriptions'),
-            (13, 'Congressperson meal'),
-            (14, 'Lodging, except for congressperson from Distrito Federal'),
-            (15, 'Automotive vehicle renting or watercraft charter'),
-            (119, 'Aircraft renting or charter of aircraft'),
-            (120, 'Automotive vehicle renting or charter'),
-            (121, 'Watercraft renting or charter'),
-            (122, 'Taxi, toll and parking'),
-            (123, 'Terrestrial, maritime and fluvial tickets'),
-            (137, 'Participation in course, talk or similar event'),
-            (999, 'Flight ticket issue')
-        )
-
-        for code, name in subquotas:
+        for code, name in self.subquotas:
             data.loc[data['subquota_number'] == code, ['subquota_description']] = name
 
         data.to_csv(output_file_path, compression='xz', index=False,
