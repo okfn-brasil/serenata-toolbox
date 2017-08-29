@@ -8,7 +8,7 @@ from serenata_toolbox.datasets.remote import RemoteDatasets
 class Datasets:
     """
     This is a wrapper for three different classes that together handle the
-    datasets (locally and remotelly).
+    datasets (locally and remotely).
 
     Datasets class takes one argument: the path to the local directory of the
     dataset files (e.g. data/ or /tmp/serenata-data). The argument is optional
@@ -74,7 +74,16 @@ def fetch(filename, destination_path):
     datasets = Datasets(destination_path)
     return datasets.downloader.download(filename)
 
+
 def fetch_latest_backup(destination_path):
     datasets = Datasets(destination_path)
-    files = datasets.downloader.LATEST
+
+    files = tuple(
+        f for f in datasets.downloader.LATEST
+        if not os.path.exists(os.path.join(destination_path, f))
+    )
+
+    if not files:
+        print('You already have all the latest datasets! Nothing to download.')
+
     return datasets.downloader.download(files)
