@@ -38,6 +38,38 @@ class Dataset:
             (999, 'Flight ticket issue')
         )
 
+        self.translate_columns = {
+            'ideDocumento': 'document_id',
+            'txNomeParlamentar': 'congressperson_name',
+            'idecadastro': 'congressperson_id',
+            'nuCarteiraParlamentar': 'congressperson_document',
+            'nuLegislatura': 'term',
+            'sgUF': 'state',
+            'sgPartido': 'party',
+            'codLegislatura': 'term_id',
+            'numSubCota': 'subquota_number',
+            'txtDescricao': 'subquota_description',
+            'numEspecificacaoSubCota': 'subquota_group_id',
+            'txtDescricaoEspecificacao': 'subquota_group_description',
+            'txtFornecedor': 'supplier',
+            'txtCNPJCPF': 'cnpj_cpf',
+            'txtNumero': 'document_number',
+            'indTipoDocumento': 'document_type',
+            'datEmissao': 'issue_date',
+            'vlrDocumento': 'document_value',
+            'vlrGlosa': 'remark_value',
+            'vlrLiquido': 'net_value',
+            'numMes': 'month',
+            'numAno': 'year',
+            'numParcela': 'installment',
+            'txtPassageiro': 'passenger',
+            'txtTrecho': 'leg_of_the_trip',
+            'numLote': 'batch_number',
+            'numRessarcimento': 'reimbursement_number',
+            'vlrRestituicao': 'reimbursement_value',
+            'nuDeputadoId': 'applicant_id',
+        }
+
     def fetch(self):
         base_url = "http://www.camara.leg.br/cotas/Ano-{}.csv.zip"
         retrieved_files = []
@@ -92,37 +124,7 @@ class Dataset:
                                   'numRessarcimento': np.str},
                            )
 
-        data.rename(columns={
-            'ideDocumento': 'document_id',
-            'txNomeParlamentar': 'congressperson_name',
-            'idecadastro': 'congressperson_id',
-            'nuCarteiraParlamentar': 'congressperson_document',
-            'nuLegislatura': 'term',
-            'sgUF': 'state',
-            'sgPartido': 'party',
-            'codLegislatura': 'term_id',
-            'numSubCota': 'subquota_number',
-            'txtDescricao': 'subquota_description',
-            'numEspecificacaoSubCota': 'subquota_group_id',
-            'txtDescricaoEspecificacao': 'subquota_group_description',
-            'txtFornecedor': 'supplier',
-            'txtCNPJCPF': 'cnpj_cpf',
-            'txtNumero': 'document_number',
-            'indTipoDocumento': 'document_type',
-            'datEmissao': 'issue_date',
-            'vlrDocumento': 'document_value',
-            'vlrGlosa': 'remark_value',
-            'vlrLiquido': 'net_value',
-            'numMes': 'month',
-            'numAno': 'year',
-            'numParcela': 'installment',
-            'txtPassageiro': 'passenger',
-            'txtTrecho': 'leg_of_the_trip',
-            'numLote': 'batch_number',
-            'numRessarcimento': 'reimbursement_number',
-            'vlrRestituicao': 'reimbursement_value',
-            'nuDeputadoId': 'applicant_id',
-        }, inplace=True)
+        data.rename(columns=self.translate_columns, inplace=True)
 
         for code, name in self.subquotas:
             data.loc[data['subquota_number'] == code, ['subquota_description']] = name

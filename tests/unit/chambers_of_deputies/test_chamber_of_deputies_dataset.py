@@ -102,74 +102,14 @@ class TestChamberOfDeputiesDataset(TestCase):
         return pd.read_csv(filepath, dtype=dtype)
 
     def _assert_that_the_columns_are_as_expected_before_translation(self, data_frame_2017):
-        expected_columns = [
-            'txNomeParlamentar',
-            'idecadastro',
-            'nuCarteiraParlamentar',
-            'nuLegislatura',
-            'sgUF',
-            'sgPartido',
-            'codLegislatura',
-            'numSubCota',
-            'txtDescricao',
-            'numEspecificacaoSubCota',
-            'txtDescricaoEspecificacao',
-            'txtFornecedor',
-            'txtCNPJCPF',
-            'txtNumero',
-            'indTipoDocumento',
-            'datEmissao',
-            'vlrDocumento',
-            'vlrGlosa',
-            'vlrLiquido',
-            'numMes',
-            'numAno',
-            'numParcela',
-            'txtPassageiro',
-            'txtTrecho',
-            'numLote',
-            'numRessarcimento',
-            'vlrRestituicao',
-            'nuDeputadoId',
-            'ideDocumento'
-        ]
+        expected_columns = self.subject.translate_columns.keys()
 
         for column in expected_columns:
             with self.subTest():
                 self.assertIn(column, data_frame_2017.columns)
 
     def _assert_that_the_columns_are_as_expected_after_translation(self, reimbursements):
-        expected_columns = [
-            'congressperson_name',
-            'congressperson_id',
-            'congressperson_document',
-            'term',
-            'state',
-            'party',
-            'term_id',
-            'subquota_number',
-            'subquota_description',
-            'subquota_group_id',
-            'subquota_group_description',
-            'supplier',
-            'cnpj_cpf',
-            'document_number',
-            'document_type',
-            'issue_date',
-            'document_value',
-            'remark_value',
-            'net_value',
-            'month',
-            'year',
-            'installment',
-            'passenger',
-            'leg_of_the_trip',
-            'batch_number',
-            'reimbursement_number',
-            'reimbursement_value',
-            'applicant_id',
-            'document_id'
-        ]
+        expected_columns = expected_columns = self.subject.translate_columns.values()
 
         for column in expected_columns:
             with self.subTest():
