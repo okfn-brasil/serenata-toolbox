@@ -1,23 +1,29 @@
 language: python
+python: 3.5
 cache:
   directories:
     - $HOME/virtualenv/python3.5.3/
-env:
-  - TEST_SUITE=unit
-  - TEST_SUITE=journey
-python: 3.5
+
+jobs:
+  include:
+    - stage: unit
+      script: coverage run -m unittest discover tests/unit
+
+    - stage: journey
+      script: coverage run -m unittest discover tests/journey
+
+    - stage: deploy
+      script: skip
+      deploy:
+        provider: pypi
+        user: serenata
+        password: $PYPI_PASSWORD
+        distributions: "sdist bdist_wheel"
+        on:
+          branch: master
+
 install:
   - python setup.py develop
   - pip install coveralls
-script: coverage run -m unittest discover tests/$TEST_SUITE
-after_success: coveralls
 
-before_deploy: "echo 'Starting deploy to PyPI...'"
-deploy:
-  provider: pypi
-  user: serenata
-  password: $PYPI_PASSWORD
-  distributions: "sdist bdist_wheel"
-  on:
-    branch: master
-after_deploy: "echo 'Deployment finished!'"
+after_success: coveralls
