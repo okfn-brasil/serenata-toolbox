@@ -7,7 +7,7 @@ cache:
 jobs:
   include:
     - stage: unit
-      script: coverage run -m unittest discover tests/unit
+      script: pytest --verbose --durations=10 --cov-report html tests/unit
 
     - stage: journey
       script: travis_wait 40 coverage run -m unittest discover tests/journey
@@ -24,6 +24,6 @@ jobs:
 
 install:
   - python setup.py develop
-  - pip install coveralls
+  - pip install coveralls pytest pytest-cov
 
 after_success: coveralls
