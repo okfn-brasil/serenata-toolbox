@@ -7,10 +7,10 @@ cache:
 jobs:
   include:
     - stage: unit
-      script: pytest --verbose --durations=10 --cov-report html tests/unit
+      script: pytest tests/unit
 
     - stage: journey
-      script: travis_wait 40 pytest --verbose --durations=10 --cov-report html tests/journey
+      script: travis_wait 40 pytest tests/journey
 
     - stage: deploy
       script: skip
