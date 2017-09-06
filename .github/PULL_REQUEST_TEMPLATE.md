@@ -1,3 +1,5 @@
+This is just a template to help you make your point clear with this PR. :)
+
 **What is the purpose of this Pull Request?**
 __Tell here how this can help this project__
 
