@@ -4,7 +4,7 @@ import pandas as pd
 from datetime import date
 from tempfile import mkdtemp
 from shutil import rmtree
-from unittest import main, TestCase
+from unittest import main, TestCase, skip
 
 from serenata_toolbox.chamber_of_deputies.dataset import Dataset
 
@@ -20,7 +20,7 @@ class TestChamberOfDeputiesDataset(TestCase):
     def tearDown(self):
         rmtree(self.path, ignore_errors=True)
 
-
+    @skip('Takes to long to run')
     def test_fetch_translate_clean_integration(self):
         self.subject.fetch()
         files = ["Ano-{}.csv".format(n) for n in self.years]
