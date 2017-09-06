@@ -14,3 +14,5 @@ __Who are the best people to help reviews it?__
 
 **TODO**
 __Here goes the todo list with some missing step to complete it__
+
+Do not forget the version bump, changing it in `setup.py` file! ;)
