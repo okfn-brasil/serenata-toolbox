@@ -1,4 +1,5 @@
 import csv
+import lzma
 import os
 from shutil import copy, rmtree
 from tempfile import mkdtemp
@@ -66,6 +67,15 @@ class TestChamberOfDeputiesDataset(TestCase):
         for subquota in present_subquotas:
             with self.subTest():
                 assert(subquota in all_subquotas)
+
+    def test_translate_csv_with_reimbursement_with_net_value_with_comma(self):
+        csv_with_comma = os.path.join(self.fixtures_path, 'Ano-with-comma.csv')
+        with open(os.path.join(self.fixtures_path, 'reimbursements-with-comma'), 'r') as csv_expected:
+            expected = csv_expected.read()
+        
+        xz_output = Dataset('')._translate_file(csv_with_comma)
+        output = lzma.open(xz_output).read().decode('utf-8')
+        assert(output == expected)
 
     def _read_csv(self, path):
         return pd.read_csv(path,
