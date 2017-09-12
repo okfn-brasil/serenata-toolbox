@@ -4,3 +4,6 @@
 __pycache__/
 config.ini
 htmlcov/
+build/
+dist/
+.*swp
