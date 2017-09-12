@@ -70,7 +70,7 @@ class TestChamberOfDeputiesDataset(TestCase):
 
     def test_translate_csv_with_reimbursement_with_net_value_with_comma(self):
         csv_with_comma = os.path.join(self.fixtures_path, 'Ano-with-comma.csv')
-        with open(os.path.join(self.fixtures_path, 'reimbursements-with-comma'), 'r') as csv_expected:
+        with open(os.path.join(self.fixtures_path, 'reimbursements-with-decimal-point'), 'r') as csv_expected:
             expected = csv_expected.read()
         
         xz_output = Dataset('')._translate_file(csv_with_comma)
