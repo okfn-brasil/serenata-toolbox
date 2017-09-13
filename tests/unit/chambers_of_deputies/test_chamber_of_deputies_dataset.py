@@ -78,7 +78,7 @@ class TestChamberOfDeputiesDataset(TestCase):
         xz_path = Dataset('')._translate_file(csv_with_decimal_comma)
         with lzma.open(xz_path) as xz_file:
             output = xz_file.read().decode('utf-8')
-        assert(output == expected)
+        self.assertEqual(output, expected)
 
     def _read_csv(self, path):
         return pd.read_csv(path,
