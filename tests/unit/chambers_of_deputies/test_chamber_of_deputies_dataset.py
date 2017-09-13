@@ -70,11 +70,14 @@ class TestChamberOfDeputiesDataset(TestCase):
 
     def test_translate_csv_with_reimbursement_with_net_value_with_comma(self):
         csv_with_comma = os.path.join(self.fixtures_path, 'Ano-with-comma.csv')
-        with open(os.path.join(self.fixtures_path, 'reimbursements-with-decimal-point'), 'r') as csv_expected:
+        path_with_decimal_point = os.path.join(self.fixtures_path, 
+             'reimbursements-with-decimal-point.csv')
+        with open(path_with_decimal_point, 'r') as csv_expected:
             expected = csv_expected.read()
         
-        xz_output = Dataset('')._translate_file(csv_with_comma)
-        output = lzma.open(xz_output).read().decode('utf-8')
+        xz_path = Dataset('')._translate_file(csv_with_comma)
+        with lzma.open(xz_path) as xz_file:
+            output = xz_file.read().decode('utf-8')
         assert(output == expected)
 
     def _read_csv(self, path):
