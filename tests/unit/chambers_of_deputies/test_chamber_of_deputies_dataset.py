@@ -68,14 +68,14 @@ class TestChamberOfDeputiesDataset(TestCase):
             with self.subTest():
                 assert(subquota in all_subquotas)
 
-    def test_translate_csv_with_reimbursement_with_net_value_with_comma(self):
-        csv_with_comma = os.path.join(self.fixtures_path, 'Ano-with-comma.csv')
+    def test_translate_csv_with_reimbursement_with_net_value_with_decimal_comma(self):
+        csv_with_decimal_comma = os.path.join(self.fixtures_path, 'Ano-with-decimal-comma.csv')
         path_with_decimal_point = os.path.join(self.fixtures_path, 
              'reimbursements-with-decimal-point.csv')
         with open(path_with_decimal_point, 'r') as csv_expected:
             expected = csv_expected.read()
         
-        xz_path = Dataset('')._translate_file(csv_with_comma)
+        xz_path = Dataset('')._translate_file(csv_with_decimal_comma)
         with lzma.open(xz_path) as xz_file:
             output = xz_file.read().decode('utf-8')
         assert(output == expected)
