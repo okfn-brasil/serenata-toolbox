@@ -20,10 +20,9 @@ class TestChamberOfDeputiesDataset(TestCase):
     def tearDown(self):
         rmtree(self.path, ignore_errors=True)
 
-    @skip('Takes to long to run')
     def test_fetch_translate_clean_integration(self):
         self.subject.fetch()
-        files = ["Ano-{}.csv".format(n) for n in self.years]
+        files = ["Ano-{}.csv".format(n) for n in [2017]]
         files.append('datasets-format.html')
 
         for name in files:
