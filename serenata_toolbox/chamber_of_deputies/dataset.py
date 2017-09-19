@@ -116,6 +116,7 @@ class Dataset:
                            encoding='utf-8',
                            delimiter=";",
                            quoting=csv.QUOTE_NONE,
+                           decimal=",",
                            dtype={'ideDocumento': np.str,
                                   'idecadastro': np.str,
                                   'nuCarteiraParlamentar': np.str,
