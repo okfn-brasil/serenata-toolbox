@@ -83,7 +83,7 @@ class OfficialMissionsDataset:
         soup = BeautifulSoup(data, 'html.parser')
 
         occurences = soup.findAll('tbody', attrs={'class': 'coresAlternadas'})
-        if len(occurences) == 0:
+        if not occurences:
             return
 
         table = occurences[0]
