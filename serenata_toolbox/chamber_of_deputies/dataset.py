@@ -84,9 +84,9 @@ class Dataset:
             os.remove(zip_file_path)
 
         datasets_format = 'datasets-format.html'
-        url = 'http://www2.camara.leg.br/transparencia/\
-            cota-para-exercicio-da-atividade-parlamentar/\
-            explicacoes-sobre-o-formato-dos-arquivos-xml'
+        url = (
+            'http://www2.camara.leg.br/transparencia/cota-para-exercicio-da-atividade-parlamentar/'
+            'explicacoes-sobre-o-formato-dos-arquivos-xml')
         urlretrieve(url, os.path.join(self.path, datasets_format))
         retrieved_files.append(datasets_format)
 

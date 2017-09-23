@@ -127,14 +127,14 @@ class Dataset:
         categories = {
             'Aluguel de imóveis para escritório político, compreendendo despesas concernentes a eles.':
                 'Rent of real estate for political office, comprising expenses concerning them',
-            'Aquisição de material de consumo para uso no escritório político, inclusive aquisição ou locação de \
-                software, despesas postais, aquisição de publicações, locação de móveis e de equipamentos. ':
-                'Acquisition of consumables for use in the political office, including acquisition or leasing of \
-                    software, postal expenses, acquisition of publications, rental of furniture and equipment',
-            'Contratação de consultorias, assessorias, pesquisas, trabalhos técnicos e outros serviços de apoio \
-                ao exercício do mandato parlamentar':
-                'Recruitment of consultancies, advisory services, research, technical work and other services \
-                    in support of the exercise of the parliamentary mandate',
+            ('Aquisição de material de consumo para uso no escritório político, inclusive aquisição ou '
+            'locação de software, despesas postais, aquisição de publicações, locação de móveis e de equipamentos. '):
+                ('Acquisition of consumables for use in the political office, including acquisition or '
+                'leasing of software, postal expenses, acquisition of publications, rental of furniture and equipment'),
+            ('Contratação de consultorias, assessorias, pesquisas, trabalhos técnicos e outros serviços'
+            ' de apoio ao exercício do mandato parlamentar'):
+                ('Recruitment of consultancies, advisory services, research, technical work and other services'
+                ' in support of the exercise of the parliamentary mandate'),
             'Divulgação da atividade parlamentar':
                 'Publicity of parliamentary activity',
             'Locomoção, hospedagem, alimentação, combustíveis e lubrificantes':
