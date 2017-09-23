@@ -1,11 +1,9 @@
 import os
-import re
 import urllib
 
-from datetime import date, timedelta
+from datetime import timedelta
 
 import pandas as pd
-import numpy as np
 
 from bs4 import BeautifulSoup
 

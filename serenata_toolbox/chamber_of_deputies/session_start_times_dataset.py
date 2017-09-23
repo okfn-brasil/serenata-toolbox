@@ -6,7 +6,6 @@ import pandas as pd
 
 from serenata_toolbox.datasets.helpers import (
     save_to_csv,
-    translate_column,
     xml_extract_datetime,
     xml_extract_text,
 )
