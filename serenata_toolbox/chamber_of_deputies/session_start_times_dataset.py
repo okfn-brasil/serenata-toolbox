@@ -37,8 +37,8 @@ class SessionStartTimesDataset:
             if os.environ.get('DEBUG') == '1':
                 print(date.strftime("%d/%m/%Y"))
             file = urllib.request.urlopen(self.URL.format(date.strftime("%d/%m/%Y"), pivot))
-            t = ET.ElementTree(file=file)
-            for session in t.getroot().findall('.//sessaoDia'):
+            tree = ET.ElementTree(file=file)
+            for session in tree.getroot().findall('.//sessaoDia'):
                 yield (
                     date,
                     xml_extract_text(session, 'descricao'),
