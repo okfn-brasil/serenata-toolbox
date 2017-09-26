@@ -83,7 +83,8 @@ class Dataset:
     def _filename_generator(self, extension):
         return ['federal-senate-{}.{}'.format(year, extension) for year in self.years]
 
-    def _cleanup_dataset(self, dataset):
+    @staticmethod
+    def _cleanup_dataset(dataset):
         dataset['date'] = pd.to_datetime(dataset['date'], errors='coerce')
         dataset['cnpj_cpf'] = dataset['cnpj_cpf'].str.replace(r'\D', '')
 
@@ -99,7 +100,8 @@ class Dataset:
 
         return dataset
 
-    def _translate_file(self, csv_path):
+    @staticmethod
+    def _translate_file(csv_path):
         output_file_path = csv_path.replace('.csv', '.xz')
 
         data = pd.read_csv(csv_path,

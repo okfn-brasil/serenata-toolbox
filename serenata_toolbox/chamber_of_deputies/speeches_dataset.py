@@ -50,7 +50,8 @@ class SpeechesDataset:
             'speech_insertion_num'
         ])
 
-    def _parse_speeches(self, root):
+    @staticmethod
+    def _parse_speeches(root):
         for session in root:
             session_code = xml_extract_text(session, 'codigo')
             session_date = xml_extract_date(session, 'data')
