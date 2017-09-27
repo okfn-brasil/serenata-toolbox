@@ -109,7 +109,7 @@ class Dataset:
                            encoding="ISO-8859-1",
                            skiprows=1)
 
-        data.columns = map(str.lower, data.columns)
+        data.columns = [str.lower(column) for column in data.columns]
 
         data.rename(columns={
             'ano': 'year',
