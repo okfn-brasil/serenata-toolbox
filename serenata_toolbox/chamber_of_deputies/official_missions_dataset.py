@@ -61,7 +61,8 @@ class OfficialMissionsDataset:
 
         return df.drop_duplicates()
 
-    def _generate_ranges(self, start_date, end_date):
+    @staticmethod
+    def _generate_ranges(start_date, end_date):
         """
         Generate a list of 2 month ranges for the range requested with an
         intersection between months. This is necessary because we can't search

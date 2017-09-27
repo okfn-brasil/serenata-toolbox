@@ -39,7 +39,8 @@ class DeputiesDataset:
         ))
         return self._translate(df)
 
-    def _parse_deputies(self, root):
+    @staticmethod
+    def _parse_deputies(root):
         for deputy in root:
             yield (
                 xml_extract_text(deputy, 'ideCadastro'),
@@ -56,7 +57,8 @@ class DeputiesDataset:
                 xml_extract_text(deputy, 'email'),
             )
 
-    def _translate(self, df):
+    @staticmethod
+    def _translate(df):
         translate_column(df, 'gender', {
             'masculino': 'male',
             'feminino': 'female',

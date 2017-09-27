@@ -100,7 +100,8 @@ class PresencesDataset:
                 else:
                     print("FAIL")
 
-    def _parse_deputy_presences(self, root):
+    @staticmethod
+    def _parse_deputy_presences(root):
         term = xml_extract_text(root, 'legislatura')
         congressperson_document = xml_extract_text(root, 'carteiraParlamentar')
         # Please note that this name contains the party and state
@@ -126,7 +127,8 @@ class PresencesDataset:
                     xml_extract_text(session, 'frequencia')
                 )
 
-    def _translate(self, df):
+    @staticmethod
+    def _translate(df):
         translate_column(df, 'presence', {
             'Presença': 'Present',
             'Ausência': 'Absent',
