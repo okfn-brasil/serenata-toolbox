@@ -27,12 +27,18 @@ class Dataset:
             except HTTPError as http_error_exception:
                 print('We failed to reach the server')
                 print('Error code ', http_error_exception.reason)
-                print("While fetching, Seranata Toolbox didn't find file: {} \n{}".format(file_path, http_error_exception))
+                print("While fetching, Seranata Toolbox didn't find file: {} \n{}".format(
+                    file_path,
+                    http_error_exception)
+                )
                 raise http_error_exception
             except URLError as url_error_exception:
                 print("The server couldn\'t fulfill the request.")
                 print('Reason: ', url_error_exception.reason)
-                print("While fetching, Seranata Toolbox didn't find file: {} \n{}".format(file_path, url_error_exception))
+                print("While fetching, Seranata Toolbox didn't find file: {} \n{}".format(
+                    file_path,
+                    url_error_exception)
+                )
                 raise url_error_exception
             else:
                 retrieved_files.append(file_path)
@@ -49,7 +55,10 @@ class Dataset:
             try:
                 self._translate_file(csv_path)
             except FileNotFoundError as file_not_found_error:
-                print("While translating, Seranata Toolbox didn't find file: {} \n{}".format(csv_path, file_not_found_error))
+                print("While translating, Seranata Toolbox didn't find file: {} \n{}".format(
+                    csv_path,
+                    file_not_found_error)
+                )
                 raise file_not_found_error
             else:
                 translated_files.append(csv_path)
@@ -120,22 +129,29 @@ class Dataset:
         data['expense_type'] = \
             data['expense_type'].astype('category')
 
-        categories = {
-            'Aluguel de imóveis para escritório político, compreendendo despesas concernentes a eles.':
-                'Rent of real estate for political office, comprising expenses concerning them',
-            'Aquisição de material de consumo para uso no escritório político, inclusive aquisição ou locação de software, despesas postais, aquisição de publicações, locação de móveis e de equipamentos. ':
-                'Acquisition of consumables for use in the political office, including acquisition or leasing of software, postal expenses, acquisition of publications, rental of furniture and equipment',
-            'Contratação de consultorias, assessorias, pesquisas, trabalhos técnicos e outros serviços de apoio ao exercício do mandato parlamentar':
-                'Recruitment of consultancies, advisory services, research, technical work and other services in support of the exercise of the parliamentary mandate',
-            'Divulgação da atividade parlamentar':
-                'Publicity of parliamentary activity',
-            'Locomoção, hospedagem, alimentação, combustíveis e lubrificantes':
-                'Locomotion, lodging, food, fuels and lubricants',
-            'Passagens aéreas, aquáticas e terrestres nacionais':
-                'National air, water and land transport',
-            'Serviços de Segurança Privada':
-                'Private Security Services'
-        }
+        pt_categories = (
+            'Aluguel de imóveis para escritório político, compreendendo despesas concernentes a eles.',
+            ('Aquisição de material de consumo para uso no escritório político, inclusive aquisição ou locação'
+                ' de software, despesas postais, aquisição de publicações, locação de móveis e de equipamentos. '),
+            ('Contratação de consultorias, assessorias, pesquisas, trabalhos técnicos e outros serviços de '
+                'apoio ao exercício do mandato parlamentar'),
+            'Divulgação da atividade parlamentar',
+            'Locomoção, hospedagem, alimentação, combustíveis e lubrificantes',
+            'Passagens aéreas, aquáticas e terrestres nacionais',
+            'Serviços de Segurança Privada'
+        )
+        en_categories = (
+            'Rent of real estate for political office, comprising expenses concerning them',
+            ('Acquisition of consumables for use in the political office, including acquisition or leasing of'
+                ' software, postal expenses, acquisition of publications, rental of furniture and equipment'),
+            ('Recruitment of consultancies, advisory services, research, technical work and other services'
+                ' in support of the exercise of the parliamentary mandate'),
+            'Publicity of parliamentary activity',
+            'Locomotion, lodging, food, fuels and lubricants',
+            'National air, water and land transport',
+            'Private Security Services'
+        )
+        categories = dict(zip(pt_categories, en_categories))
 
         categories = [categories[cat] for cat in data['expense_type'].cat.categories]
 
