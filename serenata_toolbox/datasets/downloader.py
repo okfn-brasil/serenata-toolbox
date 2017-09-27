@@ -57,6 +57,7 @@ class Downloader:
             raise FileNotFoundError(msg.format(self.target))
 
         self.semaphore = asyncio.Semaphore(MAX_REQUESTS)
+        self.progress = 0
         self.total = 0
 
     def download(self, files):
