@@ -1,6 +1,8 @@
 import xml.etree.ElementTree as ET
 import urllib
 
+from datetime import datetime
+
 import pandas as pd
 
 from serenata_toolbox.datasets.helpers import (
@@ -28,8 +30,8 @@ class SpeechesDataset:
         The date range provided should be specified as a string using the
         format supported by the API (%d/%m/%Y)
         """
-        range_dates = {'dataIni': range_start, 'dataFim': range_end}
-        url = self.URL.format(**range_dates)
+        range = {'dataIni': range_start, 'dataFim': range_end}
+        url = self.URL.format(**range)
         xml = urllib.request.urlopen(url)
 
         tree = ET.ElementTree(file=xml)
@@ -50,8 +52,7 @@ class SpeechesDataset:
             'speech_insertion_num'
         ])
 
-    @staticmethod
-    def _parse_speeches(root):
+    def _parse_speeches(self, root):
         for session in root:
             session_code = xml_extract_text(session, 'codigo')
             session_date = xml_extract_date(session, 'data')
@@ -67,13 +68,13 @@ class SpeechesDataset:
 
                     try:
                         speech_started_at = xml_extract_datetime(speech, 'horaInicioDiscurso')
-                    except ValueError as value_error_exception:
+                    except ValueError as ve:
                         print("WARNING: Error parsing speech start time for {} - {}/{} on {}\n{}".format(
                             speech_speaker_name,
                             speech_speaker_party,
                             speech_speaker_state,
                             session_date,
-                            value_error_exception))
+                            ve))
                         continue
 
                     speech_room_num = xml_extract_text(speech, 'numeroQuarto')

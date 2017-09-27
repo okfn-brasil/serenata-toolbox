@@ -1,9 +1,7 @@
 import os
-
-from datetime import date
-
 import pandas as pd
 import numpy as np
+from datetime import date
 
 AVAILABLE_YEARS = [year for year in range(2009, date.today().year + 1)]
 
@@ -128,3 +126,9 @@ class Reimbursements:
         df.to_csv(filepath, **self.CSV_PARAMS)
 
         print('Done.')
+
+
+if __name__ == '__main__':
+    reimbursements = Reimbursements()
+    df = reimbursements.group(reimbursements.receipts)
+    reimbursements.write_reimbursement_file(df)

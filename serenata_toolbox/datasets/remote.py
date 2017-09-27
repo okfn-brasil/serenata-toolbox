@@ -73,7 +73,7 @@ class RemoteDatasets:
     @property
     def all(self):
         if self.s3 and self.bucket:
-            response = self.s3.list_objects(Bucket=self.bucket)
+            response =  self.s3.list_objects(Bucket=self.bucket)
             yield from (obj.get('Key') for obj in response.get('Contents', []))
 
     def upload(self, file_path):

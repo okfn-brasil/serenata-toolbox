@@ -55,8 +55,8 @@ class Downloader:
         if not all((os.path.exists(self.target), os.path.isdir(self.target))):
             msg = '{} does not exist or is not a directory.'
             raise FileNotFoundError(msg.format(self.target))
+
         self.semaphore = asyncio.Semaphore(MAX_REQUESTS)
-        self.progress = 0
         self.total = 0
 
     def download(self, files):

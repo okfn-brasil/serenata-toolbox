@@ -9,6 +9,7 @@ import pandas as pd
 from serenata_toolbox.datasets.helpers import (
     save_to_csv,
     translate_column,
+    xml_extract_date,
     xml_extract_datetime,
     xml_extract_text,
 )
@@ -100,8 +101,7 @@ class PresencesDataset:
                 else:
                     print("FAIL")
 
-    @staticmethod
-    def _parse_deputy_presences(root):
+    def _parse_deputy_presences(self, root):
         term = xml_extract_text(root, 'legislatura')
         congressperson_document = xml_extract_text(root, 'carteiraParlamentar')
         # Please note that this name contains the party and state
@@ -127,8 +127,7 @@ class PresencesDataset:
                     xml_extract_text(session, 'frequencia')
                 )
 
-    @staticmethod
-    def _translate(df):
+    def _translate(self, df):
         translate_column(df, 'presence', {
             'Presença': 'Present',
             'Ausência': 'Absent',

@@ -1,9 +1,11 @@
 import os
+import re
 import urllib
 
-from datetime import timedelta
+from datetime import date, timedelta
 
 import pandas as pd
+import numpy as np
 
 from bs4 import BeautifulSoup
 
@@ -31,10 +33,10 @@ class OfficialMissionsDataset:
         """
 
         records = []
-        for two_months_range in self._generate_ranges(start_date, end_date):
+        for r in self._generate_ranges(start_date, end_date):
             if os.environ.get('DEBUG') == '1':
-                print(two_months_range)
-            for record in self._fetch_missions_for_range(two_months_range[0], two_months_range[1]):
+                print(r)
+            for record in self._fetch_missions_for_range(r[0], r[1]):
                 records.append(record)
 
         df = pd.DataFrame(records, columns=[
@@ -61,8 +63,7 @@ class OfficialMissionsDataset:
 
         return df.drop_duplicates()
 
-    @staticmethod
-    def _generate_ranges(start_date, end_date):
+    def _generate_ranges(self, start_date, end_date):
         """
         Generate a list of 2 month ranges for the range requested with an
         intersection between months. This is necessary because we can't search
@@ -84,7 +85,7 @@ class OfficialMissionsDataset:
         soup = BeautifulSoup(data, 'html.parser')
 
         occurences = soup.findAll('tbody', attrs={'class': 'coresAlternadas'})
-        if not occurences:
+        if len(occurences) == 0:
             return
 
         table = occurences[0]

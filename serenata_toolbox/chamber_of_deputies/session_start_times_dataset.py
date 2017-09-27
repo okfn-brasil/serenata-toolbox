@@ -6,6 +6,7 @@ import pandas as pd
 
 from serenata_toolbox.datasets.helpers import (
     save_to_csv,
+    translate_column,
     xml_extract_datetime,
     xml_extract_text,
 )
@@ -37,8 +38,8 @@ class SessionStartTimesDataset:
             if os.environ.get('DEBUG') == '1':
                 print(date.strftime("%d/%m/%Y"))
             file = urllib.request.urlopen(self.URL.format(date.strftime("%d/%m/%Y"), pivot))
-            tree = ET.ElementTree(file=file)
-            for session in tree.getroot().findall('.//sessaoDia'):
+            t = ET.ElementTree(file=file)
+            for session in t.getroot().findall('.//sessaoDia'):
                 yield (
                     date,
                     xml_extract_text(session, 'descricao'),
