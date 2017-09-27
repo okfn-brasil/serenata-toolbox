@@ -1,7 +1,9 @@
 import os
+
+from datetime import date
+
 import pandas as pd
 import numpy as np
-from datetime import date
 
 AVAILABLE_YEARS = [year for year in range(2009, date.today().year + 1)]
 

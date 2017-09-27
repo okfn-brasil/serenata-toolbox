@@ -1,8 +1,6 @@
 import xml.etree.ElementTree as ET
 import urllib
 
-from datetime import datetime
-
 import pandas as pd
 
 from serenata_toolbox.datasets.helpers import (
