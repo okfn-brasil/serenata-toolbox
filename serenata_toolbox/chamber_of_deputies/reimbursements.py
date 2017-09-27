@@ -128,9 +128,3 @@ class Reimbursements:
         df.to_csv(filepath, **self.CSV_PARAMS)
 
         print('Done.')
-
-
-if __name__ == '__main__':
-    reimbursements = Reimbursements()
-    df = reimbursements.group(reimbursements.receipts)
-    reimbursements.write_reimbursement_file(df)

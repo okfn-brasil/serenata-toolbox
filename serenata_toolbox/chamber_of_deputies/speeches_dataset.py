@@ -28,8 +28,8 @@ class SpeechesDataset:
         The date range provided should be specified as a string using the
         format supported by the API (%d/%m/%Y)
         """
-        range = {'dataIni': range_start, 'dataFim': range_end}
-        url = self.URL.format(**range)
+        range_dates = {'dataIni': range_start, 'dataFim': range_end}
+        url = self.URL.format(**range_dates)
         xml = urllib.request.urlopen(url)
 
         tree = ET.ElementTree(file=xml)
@@ -67,13 +67,13 @@ class SpeechesDataset:
 
                     try:
                         speech_started_at = xml_extract_datetime(speech, 'horaInicioDiscurso')
-                    except ValueError as ve:
+                    except ValueError as value_error_exception:
                         print("WARNING: Error parsing speech start time for {} - {}/{} on {}\n{}".format(
                             speech_speaker_name,
                             speech_speaker_party,
                             speech_speaker_state,
                             session_date,
-                            ve))
+                            value_error_exception))
                         continue
 
                     speech_room_num = xml_extract_text(speech, 'numeroQuarto')
