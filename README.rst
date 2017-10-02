@@ -14,6 +14,9 @@
    :target: https://coveralls.io/github/datasciencebr/serenata-toolbox?branch=master
    :alt: Coveralls
 
+.. image:: https://badge.fury.io/py/serenata-toolbox.svg
+   :alt: PyPI package version
+
 Serenata de Amor Toolbox
 ========================
 
