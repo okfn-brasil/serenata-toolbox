@@ -83,7 +83,7 @@ def fetch_latest_backup(destination_path, force_all=False):
     else:
         files = tuple(
             f for f in datasets.downloader.LATEST
-            if not os.path.exists(os.path.join(destination_path, dataset_file))
+            if not os.path.exists(os.path.join(destination_path, f))
         )
 
     if not files:
