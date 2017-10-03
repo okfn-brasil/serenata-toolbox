@@ -17,6 +17,10 @@
 .. image:: https://badge.fury.io/py/serenata-toolbox.svg
    :alt: PyPI package version
 
+.. image:: https://img.shields.io/badge/donate-apoia.se-EB4A3B.svg
+   :target: https://apoia.se/serenata
+   :alt: Donation Page
+
 Serenata de Amor Toolbox
 ========================
 
