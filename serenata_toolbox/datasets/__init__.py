@@ -75,13 +75,16 @@ def fetch(filename, destination_path):
     return datasets.downloader.download(filename)
 
 
-def fetch_latest_backup(destination_path):
+def fetch_latest_backup(destination_path, force_all=False):
     datasets = Datasets(destination_path)
 
-    files = tuple(
-        dataset_file for dataset_file in datasets.downloader.LATEST
-        if not os.path.exists(os.path.join(destination_path, dataset_file))
-    )
+    if force_all:
+        files = datasets.downloader.LATEST
+    else:
+        files = tuple(
+            f for f in datasets.downloader.LATEST
+            if not os.path.exists(os.path.join(destination_path, f))
+        )
 
     if not files:
         print('You already have all the latest datasets! Nothing to download.')
