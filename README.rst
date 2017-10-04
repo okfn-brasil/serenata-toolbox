@@ -116,16 +116,13 @@ Within your `virtualenv <https://virtualenv.pypa.io/en/stable/>`_:
 Always add tests to your contribution — if you want to test it locally before opening the PR:
 
 ::
-
-  $ python -m unittest discover tests
+  $ pip install pytest pytest-cov
+  $ pytest
 
 When the tests are passing, also check for coverage of the modules you edited or added — if you want to check it before opening the PR:
 
 ::
-
-  $ pip install coverage
-  $ coverage run -m unittest discover tests
-  $ coverage html
+  $ pytest
   $ open htmlcov/index.html
 
 Follow `PEP8 <https://www.python.org/dev/peps/pep-0008/>`_ and best practices implemented by `Landscape <https://landscape.io>`_ in the `veryhigh` strictness level — if you want to check them locally before opening the PR:
