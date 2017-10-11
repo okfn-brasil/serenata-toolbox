@@ -59,7 +59,7 @@ We have `plenty of them <https://github.com/datasciencebr/serenata-de-amor/blob/
   datasets.downloader.download('2016-12-06-reibursements.xz')  # yay, you've just downloaded this dataset to data/
 
   # you can also get the most recent version of all datasets:
-  latest = list(dataset.downloader.LATEST)
+  latest = list(datasets.downloader.LATEST)
   datasets.downloader.download(latest)
 
 Example 2: Using shortcuts
@@ -80,15 +80,15 @@ If you ever wonder how did we generated these datasets, this toolbox can help yo
 
 .. code:: python
 
-    from serenata_toolbox.federal_senate.dataset import Dataset
-    from serenata_toolbox.chamber_of_deputies.dataset import Dataset
+    from serenata_toolbox.federal_senate.dataset import Dataset as SenateDataset
+    from serenata_toolbox.chamber_of_deputies.dataset import Dataset as DeputiesDataset
 
-    senate = Dataset('data/')
+    senate = SenateDataset('data/')
     senate.fetch()
     senate.translate()
     senate.clean()
 
-    chamber = Dataset('data/')
+    chamber = DeputiesDataset('data/')
     chamber.fetch()
     chamber.translate()
     chamber.clean()
