@@ -1,3 +1,4 @@
+import logging
 import os
 import urllib
 import xml.etree.ElementTree as ET
@@ -35,7 +36,7 @@ class SessionStartTimesDataset:
     def _all_start_times(self, pivot, session_dates):
         for date in session_dates:
             if os.environ.get('DEBUG') == '1':
-                print(date.strftime("%d/%m/%Y"))
+                logging.debug(date.strftime("%d/%m/%Y"))
             file = urllib.request.urlopen(self.URL.format(date.strftime("%d/%m/%Y"), pivot))
             tree = ET.ElementTree(file=file)
             for session in tree.getroot().findall('.//sessaoDia'):
@@ -56,7 +57,7 @@ def fetch_session_start_times(data_dir, pivot, session_dates):
     df = session_start_times.fetch(pivot, session_dates)
     save_to_csv(df, data_dir, "session-start-times")
 
-    print("Dates requested:", len(session_dates))
+    logging.info("Dates requested:", len(session_dates))
     found = pd.to_datetime(df['date'], format="%Y-%m-%d %H:%M:%S").dt.date.unique()
-    print("Dates found:", len(found))
+    logging.info("Dates found:", len(found))
     return df

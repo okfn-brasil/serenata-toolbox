@@ -1,3 +1,4 @@
+import logging
 import os
 import urllib
 import xml.etree.ElementTree as ET
@@ -36,7 +37,7 @@ class PresencesDataset:
         :param date_end: (str) date in the format dd/mm/yyyy
         """
         if os.environ.get('DEBUG') == '1':
-            print("Fetching data for {} deputies from {} -> {}".format(len(deputies), start_date, end_date))
+            logging.debug("Fetching data for {} deputies from {} -> {}".format(len(deputies), start_date, end_date))
 
         records = self._all_presences(deputies, start_date, end_date)
 
@@ -58,7 +59,7 @@ class PresencesDataset:
         error_count = 0
         for i, deputy in deputies.iterrows():
             if os.environ.get('DEBUG') == '1':
-                print(i, deputy.congressperson_name, deputy.congressperson_document)
+                logging.debug(i, deputy.congressperson_name, deputy.congressperson_document)
             url = self.URL.format(start_date, end_date, deputy.congressperson_document)
             xml = self._try_fetch_xml(10, url)
 
@@ -72,33 +73,33 @@ class PresencesDataset:
             time.sleep(self.sleep_interval)
 
         if os.environ.get('DEBUG') == '1':
-            print("\nErrored fetching", error_count, "deputy presences")
+            logging.debug("\nErrored fetching", error_count, "deputy presences")
 
     def _try_fetch_xml(self, attempts, url):
         while attempts > 0:
             try:
                 return urllib.request.urlopen(url, data=None, timeout=10)
             except urllib.error.HTTPError as err:
-                print("HTTP Error", err.code, "when loading URL", url)
+                logging.error("HTTP Error", err.code, "when loading URL", url)
                 # 500 seems to be the error code for "no data found for the
                 # params provided"
                 if err.code == 500:
-                    print("SKIP")
+                    logging.error("SKIP")
                     return None
                 time.sleep(self.sleep_interval / 2)
                 attempts -= 1
                 if attempts > 0:
-                    print("Trying again", attempts)
+                    logging.info("Trying again", attempts)
                 else:
-                    print("FAIL")
+                    logging.error("FAIL")
             except socket.error as socketerror:
-                print("Socket error:", socketerror)
+                logging.error("Socket error:", socketerror)
                 time.sleep(self.sleep_interval * 10)
                 attempts -= 1
                 if attempts > 0:
-                    print("Trying again", attempts)
+                    logging.info("Trying again", attempts)
                 else:
-                    print("FAIL")
+                    logging.error("FAIL")
 
     @staticmethod
     def _parse_deputy_presences(root):
@@ -171,8 +172,8 @@ def fetch_presences(data_dir, deputies, date_start, date_end):
     df = presences.fetch(deputies, date_start, date_end)
     save_to_csv(df, data_dir, "presences")
 
-    print("Presence records:", len(df))
-    print("Records of deputies present on a session:", len(df[df.presence == 'Present']))
-    print("Records of deputies absent from a session:", len(df[df.presence == 'Absent']))
+    logging.info("Presence records:", len(df))
+    logging.info("Records of deputies present on a session:", len(df[df.presence == 'Present']))
+    logging.info("Records of deputies absent from a session:", len(df[df.presence == 'Absent']))
 
     return df

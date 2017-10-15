@@ -1,4 +1,5 @@
 import urllib
+import logging
 import xml.etree.ElementTree as ET
 
 import pandas as pd
@@ -82,7 +83,7 @@ def fetch_deputies(data_dir):
 
     holders = df.condition == 'Holder'
     substitutes = df.condition == 'Substitute'
-    print("Total deputies:", len(df))
-    print("Holder deputies:", len(df[holders]))
-    print("Substitute deputies:", len(df[substitutes]))
+    logging.info("Total deputies:", len(df))
+    logging.info("Holder deputies:", len(df[holders]))
+    logging.info("Substitute deputies:", len(df[substitutes]))
     return df
