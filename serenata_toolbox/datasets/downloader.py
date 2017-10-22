@@ -56,6 +56,7 @@ class Downloader:
             msg = '{} does not exist or is not a directory.'
             raise FileNotFoundError(msg.format(self.target))
 
+        self.timeout = kwargs.get('timeout')
         self.semaphore = asyncio.Semaphore(MAX_REQUESTS)
         self.progress = 0
         self.total = 0
@@ -104,7 +105,7 @@ class Downloader:
     async def fetch_file(self, client, filename):
         filepath = os.path.join(self.target, filename)
         with (await self.semaphore):
-            async with client.get(self.url(filename), timeout=None) as resp:
+            async with client.get(self.url(filename), timeout=self.timeout) as resp:
                 contents = await resp.read()
 
             async with aiofiles.open(filepath, 'wb') as fh:
