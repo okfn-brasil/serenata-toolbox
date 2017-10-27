@@ -20,7 +20,8 @@ class TestDatasets(TestCase):
             'data',
             bucket='mybucket',
             user='user',
-            password='password'
+            password='password',
+            timeout=None
         )
 
     @patch('serenata_toolbox.datasets.LocalDatasets')
@@ -36,7 +37,8 @@ class TestDatasets(TestCase):
             'test',
             bucket='mybucket',
             user='user',
-            password='password'
+            password='password',
+            timeout=None
         )
 
     @patch('serenata_toolbox.datasets.LocalDatasets')

@@ -139,9 +139,9 @@ class TestDownloader(TestCase):
     @patch('serenata_toolbox.datasets.downloader.os.path.exists')
     @async_test
     def test_download_timeout(self, exists, isdir):  
+        exists.return_value = True
+        isdir.return_value = True
         with self.assertRaises(TimeoutError):
-            exists.return_value = True
-            isdir.return_value = True
             downloader = Downloader('test', bucket='serenata-de-amor-data', region_name='sa-east-1', timeout=0.001)
             loop = asyncio.get_event_loop()
 

@@ -41,9 +41,10 @@ class Datasets:
     local datasets that are not present in the remote bucket.
 
     :param local_directory: (str) path to local directory of the datasets
+    :param timeout: (float) timeout parameter to ClientSession.get(), None or 0 disables timeout check.
     """
 
-    def __init__(self, local_directory=None):
+    def __init__(self, local_directory=None, timeout=None):
         if not local_directory:
             local_directory = 'data'
 
@@ -52,7 +53,8 @@ class Datasets:
         self.downloader = Downloader(
             local_directory,
             bucket=self.remote.bucket,
-            **self.remote.credentials
+            **self.remote.credentials,
+            timeout=timeout
         )
 
     @property
