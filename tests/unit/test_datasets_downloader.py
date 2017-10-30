@@ -1,14 +1,10 @@
+import asyncio
 import os
 from unittest import TestCase
 from unittest.mock import Mock, patch
 
-import asyncio
-
-import aiohttp
-from aiohttp.test_utils import make_mocked_request
-from aiohttp.web import Response
+from aiohttp import ClientSession
 from aiohttp.client_exceptions import TimeoutError
-
 from serenata_toolbox.datasets.downloader import Downloader
 
 
@@ -94,7 +90,7 @@ class TestDownloader(TestCase):
         loop = asyncio_.get_event_loop.return_value
         self.assertTrue(loop.run_until_complete.called)
         main.assert_called_once_with(loop, ('test.xz',))
-    
+
     @patch.object(Downloader, 'main')
     @patch('serenata_toolbox.datasets.downloader.asyncio')
     @patch('serenata_toolbox.datasets.downloader.os.path.isdir')
@@ -145,5 +141,5 @@ class TestDownloader(TestCase):
             downloader = Downloader('test', bucket='serenata-de-amor-data', region_name='sa-east-1', timeout=0.001)
             loop = asyncio.get_event_loop()
 
-            with aiohttp.ClientSession(loop=loop) as client:
+            with ClientSession(loop=loop) as client:
                 yield from downloader.fetch_file(client, '2016-12-06-reibursements.xz')
