@@ -138,7 +138,8 @@ class TestDownloader(TestCase):
         exists.return_value = True
         isdir.return_value = True
         with self.assertRaises(TimeoutError):
-            downloader = Downloader('test', bucket='serenata-de-amor-data', region_name='sa-east-1', timeout=0.001)
+            downloader = Downloader('test', bucket='serenata-de-amor-data', region_name='a-east-1', timeout=0.001)
+            downloader.url = Mock(return_value="http://www.google.com:81/")
             loop = asyncio.get_event_loop()
 
             with ClientSession(loop=loop) as client:
