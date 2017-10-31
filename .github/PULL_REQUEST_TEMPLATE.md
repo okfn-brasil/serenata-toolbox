@@ -15,4 +15,4 @@ __Who are the best people to help reviews it?__
 **TODO**
 __Here goes the todo list with some missing step to complete it__
 
-Do not forget the version bump, changing it in `setup.py` file! ;)
+Do not forget that we **always** need a version bump. Just edit `setup.py` file or check the bottom of `README.rst` for further explanation ;)
