@@ -35,8 +35,7 @@ class SessionStartTimesDataset:
 
     def _all_start_times(self, pivot, session_dates):
         for date in session_dates:
-            if os.environ.get('DEBUG') == '1':
-                logging.debug(date.strftime("%d/%m/%Y"))
+            logging.debug(date.strftime("%d/%m/%Y"))
             file = urllib.request.urlopen(self.URL.format(date.strftime("%d/%m/%Y"), pivot))
             tree = ET.ElementTree(file=file)
             for session in tree.getroot().findall('.//sessaoDia'):

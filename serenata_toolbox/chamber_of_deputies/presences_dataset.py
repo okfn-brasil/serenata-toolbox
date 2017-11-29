@@ -36,8 +36,7 @@ class PresencesDataset:
         :param date_start: (str) date in the format dd/mm/yyyy
         :param date_end: (str) date in the format dd/mm/yyyy
         """
-        if os.environ.get('DEBUG') == '1':
-            logging.debug("Fetching data for {} deputies from {} -> {}".format(len(deputies), start_date, end_date))
+        logging.debug("Fetching data for {} deputies from {} -> {}".format(len(deputies), start_date, end_date))
 
         records = self._all_presences(deputies, start_date, end_date)
 
@@ -58,8 +57,7 @@ class PresencesDataset:
     def _all_presences(self, deputies, start_date, end_date):
         error_count = 0
         for i, deputy in deputies.iterrows():
-            if os.environ.get('DEBUG') == '1':
-                logging.debug(i, deputy.congressperson_name, deputy.congressperson_document)
+            logging.debug(i, deputy.congressperson_name, deputy.congressperson_document)
             url = self.URL.format(start_date, end_date, deputy.congressperson_document)
             xml = self._try_fetch_xml(10, url)
 
@@ -72,8 +70,7 @@ class PresencesDataset:
 
             time.sleep(self.sleep_interval)
 
-        if os.environ.get('DEBUG') == '1':
-            logging.debug("\nErrored fetching", error_count, "deputy presences")
+        logging.debug("\nErrored fetching", error_count, "deputy presences")
 
     def _try_fetch_xml(self, attempts, url):
         while attempts > 0:
@@ -84,14 +81,14 @@ class PresencesDataset:
                 # 500 seems to be the error code for "no data found for the
                 # params provided"
                 if err.code == 500:
-                    logging.error("SKIP")
+                    logging.info("Skipping [HTTP Status 500] {}".format(url))
                     return None
                 time.sleep(self.sleep_interval / 2)
                 attempts -= 1
                 if attempts > 0:
                     logging.info("Trying again", attempts)
                 else:
-                    logging.error("FAIL")
+                    logging.error("FAIL {}".format(url))
             except socket.error as socketerror:
                 logging.error("Socket error:", socketerror)
                 time.sleep(self.sleep_interval * 10)
@@ -99,7 +96,7 @@ class PresencesDataset:
                 if attempts > 0:
                     logging.info("Trying again", attempts)
                 else:
-                    logging.error("FAIL")
+                    logging.error("FAIL {}".format(url))
 
     @staticmethod
     def _parse_deputy_presences(root):
