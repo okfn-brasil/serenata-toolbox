@@ -3,9 +3,8 @@ import os
 from unittest import TestCase
 from unittest.mock import Mock, patch
 
-from aiohttp.test_utils import make_mocked_request
-from aiohttp.web import Response
-
+from aiohttp import ClientSession
+from aiohttp.client_exceptions import TimeoutError
 from serenata_toolbox.datasets.downloader import Downloader
 
 
@@ -16,11 +15,18 @@ class TestDownloader(TestCase):
     def test_init(self, exists, isdir):
         exists.return_value = True
         isdir.return_value = True
-        downloader = Downloader('test', bucket='bucket', region_name='south')
+        downloader = Downloader('test', bucket='bucket', region_name='south', timeout=1)
         self.assertEqual('bucket', downloader.bucket)
         self.assertEqual('south', downloader.region)
         self.assertEqual(os.path.abspath('test'), downloader.target)
         self.assertEqual(0, downloader.total)
+        self.assertEqual(1, downloader.timeout)
+
+    @patch('serenata_toolbox.datasets.downloader.os.path.isdir')
+    @patch('serenata_toolbox.datasets.downloader.os.path.exists')
+    def test_init_no_timeout(self, exists, isdir):
+        downloader = Downloader('test', bucket='bucket', region_name='south')
+        self.assertEqual(None, downloader.timeout)
 
     @patch('serenata_toolbox.datasets.downloader.os.path.isdir')
     @patch('serenata_toolbox.datasets.downloader.os.path.exists')
@@ -116,3 +122,25 @@ class TestDownloader(TestCase):
         downloader = Downloader('test', bucket='bucket', region_name='south')
         expected = 'https://s3-south.amazonaws.com/bucket/test.xz'
         self.assertEqual(expected, downloader.url('test.xz'))
+
+    def async_test(f):
+        def wrapper(*args, **kwargs):
+            coro = asyncio.coroutine(f)
+            future = coro(*args, **kwargs)
+            loop = asyncio.get_event_loop()
+            loop.run_until_complete(future)
+        return wrapper
+
+    @patch('serenata_toolbox.datasets.downloader.os.path.isdir')
+    @patch('serenata_toolbox.datasets.downloader.os.path.exists')
+    @async_test
+    def test_download_timeout(self, exists, isdir):  
+        exists.return_value = True
+        isdir.return_value = True
+        with self.assertRaises(TimeoutError):
+            downloader = Downloader('test', bucket='serenata-de-amor-data', region_name='a-east-1', timeout=0.001)
+            downloader.url = Mock(return_value="http://www.google.com:81/")
+            loop = asyncio.get_event_loop()
+
+            with ClientSession(loop=loop) as client:
+                yield from downloader.fetch_file(client, '2016-12-06-reibursements.xz')
