@@ -1,3 +1,4 @@
+import logging
 import os
 import urllib
 
@@ -33,7 +34,7 @@ class OfficialMissionsDataset:
         records = []
         for two_months_range in self._generate_ranges(start_date, end_date):
             if os.environ.get('DEBUG') == '1':
-                print(two_months_range)
+                logging.debug(two_months_range)
             for record in self._fetch_missions_for_range(two_months_range[0], two_months_range[1]):
                 records.append(record)
 

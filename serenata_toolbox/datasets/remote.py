@@ -1,3 +1,5 @@
+import logging
+
 import configparser
 from functools import partial
 import os
@@ -18,9 +20,9 @@ class RemoteDatasets:
         self.config = find_config(self.CONFIG)
 
         if not self.config_exists:
-            print('Could not find {} file.'.format(self.CONFIG))
-            print('You need Amazon section in it to interact with S3')
-            print('(Check config.ini.example if you need a reference.)')
+            logging.info('Could not find {} file.'.format(self.CONFIG))
+            logging.info('You need Amazon section in it to interact with S3')
+            logging.info('(Check config.ini.example if you need a reference.)')
             return
 
         settings = configparser.RawConfigParser()
@@ -43,14 +45,14 @@ class RemoteDatasets:
                     'to the region (sa-east-1). Please update your config.ini '
                     'replacing regions like `s3-sa-east-1` by `sa-east-1`.'
                 )
-                print(msg)
+                logging.info(msg)
 
         except configparser.NoSectionError:
             msg = (
                 'You need an Amazon section in {} to interact with S3 '
                 '(Check config.ini.example if you need a reference.)'
             )
-            print(msg.format(self.CONFIG))
+            logging.info(msg.format(self.CONFIG))
 
     @property
     def config_exists(self):

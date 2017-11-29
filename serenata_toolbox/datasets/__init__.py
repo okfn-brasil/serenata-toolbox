@@ -1,4 +1,5 @@
 import os
+import logging
 
 from serenata_toolbox.datasets.downloader import Downloader
 from serenata_toolbox.datasets.local import LocalDatasets
@@ -90,6 +91,6 @@ def fetch_latest_backup(destination_path, force_all=False):
         )
 
     if not files:
-        print('You already have all the latest datasets! Nothing to download.')
+        logging.info('You already have all the latest datasets! Nothing to download.')
 
     return datasets.downloader.download(files)
