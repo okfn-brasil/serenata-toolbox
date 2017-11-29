@@ -1,10 +1,10 @@
-import logging
 import os
 import urllib
 import xml.etree.ElementTree as ET
 
 import pandas as pd
 
+from serenata_toolbox import log
 from serenata_toolbox.datasets.helpers import (
     save_to_csv,
     xml_extract_datetime,
@@ -35,7 +35,7 @@ class SessionStartTimesDataset:
 
     def _all_start_times(self, pivot, session_dates):
         for date in session_dates:
-            logging.debug(date.strftime("%d/%m/%Y"))
+            log.debug(date.strftime("%d/%m/%Y"))
             file = urllib.request.urlopen(self.URL.format(date.strftime("%d/%m/%Y"), pivot))
             tree = ET.ElementTree(file=file)
             for session in tree.getroot().findall('.//sessaoDia'):
@@ -56,7 +56,7 @@ def fetch_session_start_times(data_dir, pivot, session_dates):
     df = session_start_times.fetch(pivot, session_dates)
     save_to_csv(df, data_dir, "session-start-times")
 
-    logging.info("Dates requested:", len(session_dates))
+    log.info("Dates requested:", len(session_dates))
     found = pd.to_datetime(df['date'], format="%Y-%m-%d %H:%M:%S").dt.date.unique()
-    logging.info("Dates found:", len(found))
+    log.info("Dates found:", len(found))
     return df

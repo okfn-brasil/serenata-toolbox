@@ -1,11 +1,10 @@
-import logging
-
+import os
 import configparser
 from functools import partial
-import os
 
 import boto3
 
+from serenata_toolbox import log
 from serenata_toolbox.datasets.contextmanager import status_message
 from serenata_toolbox.datasets.helpers import find_config
 
@@ -20,9 +19,9 @@ class RemoteDatasets:
         self.config = find_config(self.CONFIG)
 
         if not self.config_exists:
-            logging.info('Could not find {} file.'.format(self.CONFIG))
-            logging.info('You need Amazon section in it to interact with S3')
-            logging.info('(Check config.ini.example if you need a reference.)')
+            log.info('Could not find {} file.'.format(self.CONFIG))
+            log.info('You need Amazon section in it to interact with S3')
+            log.info('(Check config.ini.example if you need a reference.)')
             return
 
         settings = configparser.RawConfigParser()
@@ -45,14 +44,14 @@ class RemoteDatasets:
                     'to the region (sa-east-1). Please update your config.ini '
                     'replacing regions like `s3-sa-east-1` by `sa-east-1`.'
                 )
-                logging.info(msg)
+                log.info(msg)
 
         except configparser.NoSectionError:
             msg = (
                 'You need an Amazon section in {} to interact with S3 '
                 '(Check config.ini.example if you need a reference.)'
             )
-            logging.info(msg.format(self.CONFIG))
+            log.info(msg.format(self.CONFIG))
 
     @property
     def config_exists(self):

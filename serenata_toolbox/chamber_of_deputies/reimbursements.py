@@ -1,10 +1,12 @@
-import logging
 import os
 
 from datetime import date
 
 import pandas as pd
 import numpy as np
+
+from serenata_toolbox import log
+
 
 AVAILABLE_YEARS = [year for year in range(2009, date.today().year + 1)]
 
@@ -25,7 +27,7 @@ class Reimbursements:
 
     def read_csv(self, name):
         filepath = os.path.join(self.path, name)
-        logging.info('Loading {}…'.format(name))
+        log.info('Loading {}…'.format(name))
         dtype = {
             'applicant_id': np.str,
             'batch_number': np.str,
@@ -47,7 +49,7 @@ class Reimbursements:
 
     @property
     def receipts(self):
-        logging.info('Merging all datasets…')
+        log.info('Merging all datasets…')
         datasets = ["reimbursements-{}.xz".format(n) for n in self.years]
         data = (self.read_csv(name) for name in datasets)
         return pd.concat(data)
@@ -63,7 +65,7 @@ class Reimbursements:
         return output.reset_index()
 
     def group(self, receipts):
-        logging.info('Dropping rows without document_value or reimbursement_number…')
+        log.info('Dropping rows without document_value or reimbursement_number…')
         subset = ('document_value', 'reimbursement_number')
         receipts = receipts.dropna(subset=subset)
 
@@ -76,10 +78,10 @@ class Reimbursements:
         receipts = receipts[receipts['applicant_id'] != '0']
         receipts = receipts[receipts['document_id'] != '0']
 
-        logging.info('Grouping dataset by applicant_id, document_id and year…')
+        log.info('Grouping dataset by applicant_id, document_id and year…')
         grouped = receipts.groupby(groupby_keys)
 
-        logging.info('Gathering all reimbursement numbers together…')
+        log.info('Gathering all reimbursement numbers together…')
         numbers = self.aggregate(
             grouped,
             'reimbursement_number',
@@ -87,7 +89,7 @@ class Reimbursements:
             lambda x: ', '.join(set(x))
         )
 
-        logging.info('Summing all net values together…')
+        log.info('Summing all net values together…')
         net_total = self.aggregate(
             grouped,
             'net_value',
@@ -95,7 +97,7 @@ class Reimbursements:
             np.sum
         )
 
-        logging.info('Summing all reimbursement values together…')
+        log.info('Summing all reimbursement values together…')
         total = self.aggregate(
             grouped,
             'reimbursement_value',
@@ -103,7 +105,7 @@ class Reimbursements:
             np.sum
         )
 
-        logging.info('Generating the new dataset…')
+        log.info('Generating the new dataset…')
         final = pd.merge(
             pd.merge(pd.merge(total, net_total, on=groupby_keys), numbers, on=groupby_keys),
             receipts,
@@ -121,11 +123,11 @@ class Reimbursements:
         return ', '.join(set(strings))
 
     def write_reimbursement_file(self, receipts):
-        logging.info('Casting changes to a new DataFrame…')
+        log.info('Casting changes to a new DataFrame…')
         df = pd.DataFrame(data=receipts)
 
-        logging.info('Writing it to file…')
+        log.info('Writing it to file…')
         filepath = os.path.join(self.path, self.FILE_BASE_NAME)
         df.to_csv(filepath, **self.CSV_PARAMS)
 
-        logging.info('Done.')
+        log.info('Done.')

@@ -1,9 +1,9 @@
 import urllib
-import logging
 import xml.etree.ElementTree as ET
 
 import pandas as pd
 
+from serenata_toolbox import log
 from serenata_toolbox.datasets.helpers import (
     save_to_csv,
     translate_column,
@@ -83,7 +83,7 @@ def fetch_deputies(data_dir):
 
     holders = df.condition == 'Holder'
     substitutes = df.condition == 'Substitute'
-    logging.info("Total deputies:", len(df))
-    logging.info("Holder deputies:", len(df[holders]))
-    logging.info("Substitute deputies:", len(df[substitutes]))
+    log.info("Total deputies:", len(df))
+    log.info("Holder deputies:", len(df[holders]))
+    log.info("Substitute deputies:", len(df[substitutes]))
     return df

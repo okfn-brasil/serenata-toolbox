@@ -1,9 +1,9 @@
-import logging
-import xml.etree.ElementTree as ET
 import urllib
+import xml.etree.ElementTree as ET
 
 import pandas as pd
 
+from serenata_toolbox import log
 from serenata_toolbox.datasets.helpers import (
     save_to_csv,
     xml_extract_date,
@@ -69,7 +69,7 @@ class SpeechesDataset:
                     try:
                         speech_started_at = xml_extract_datetime(speech, 'horaInicioDiscurso')
                     except ValueError as value_error_exception:
-                        logging.warning("Error parsing speech start time for {} - {}/{} on {}\n{}".format(
+                        log.warning("Error parsing speech start time for {} - {}/{} on {}\n{}".format(
                             speech_speaker_name,
                             speech_speaker_party,
                             speech_speaker_state,

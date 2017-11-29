@@ -1,10 +1,11 @@
-import logging
 import os.path
 from datetime import date
 from urllib.error import HTTPError, URLError
 from urllib.request import urlretrieve
 
 import pandas as pd
+
+from serenata_toolbox import log
 
 
 class Dataset:
@@ -26,17 +27,17 @@ class Dataset:
             try:
                 urlretrieve(url, file_path)
             except HTTPError as http_error_exception:
-                logging.error('We failed to reach the server')
-                logging.error('Error code ', http_error_exception.reason)
-                logging.error("While fetching, Seranata Toolbox didn't find file: {} \n{}".format(
+                log.error('We failed to reach the server')
+                log.error('Error code ', http_error_exception.reason)
+                log.error("While fetching, Seranata Toolbox didn't find file: {} \n{}".format(
                     file_path,
                     http_error_exception)
                 )
                 raise http_error_exception
             except URLError as url_error_exception:
-                logging.error("The server couldn\'t fulfill the request.")
-                logging.error('Reason: ', url_error_exception.reason)
-                logging.error("While fetching, Seranata Toolbox didn't find file: {} \n{}".format(
+                log.error("The server couldn\'t fulfill the request.")
+                log.error('Reason: ', url_error_exception.reason)
+                log.error("While fetching, Seranata Toolbox didn't find file: {} \n{}".format(
                     file_path,
                     url_error_exception)
                 )
@@ -56,7 +57,7 @@ class Dataset:
             try:
                 self._translate_file(csv_path)
             except FileNotFoundError as file_not_found_error:
-                logging.error("While translating, Seranata Toolbox didn't find file: {} \n{}".format(
+                log.error("While translating, Seranata Toolbox didn't find file: {} \n{}".format(
                     csv_path,
                     file_not_found_error)
                 )
