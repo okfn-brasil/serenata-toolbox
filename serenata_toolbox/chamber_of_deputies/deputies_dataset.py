@@ -3,6 +3,7 @@ import xml.etree.ElementTree as ET
 
 import pandas as pd
 
+from serenata_toolbox import log
 from serenata_toolbox.datasets.helpers import (
     save_to_csv,
     translate_column,
@@ -82,7 +83,7 @@ def fetch_deputies(data_dir):
 
     holders = df.condition == 'Holder'
     substitutes = df.condition == 'Substitute'
-    print("Total deputies:", len(df))
-    print("Holder deputies:", len(df[holders]))
-    print("Substitute deputies:", len(df[substitutes]))
+    log.info("Total deputies:", len(df))
+    log.info("Holder deputies:", len(df[holders]))
+    log.info("Substitute deputies:", len(df[substitutes]))
     return df
