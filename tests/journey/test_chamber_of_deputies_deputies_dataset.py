@@ -18,7 +18,7 @@ class TestDeputiesDataset(TestCase):
             'congressperson_document', 'civil_name', 'congressperson_name',
             'picture_url', 'gender', 'state', 'party', 'phone_number', 'email'
         }
-        self.assertTrue((np.array(expectedColumns) == np.array(actualColumns)).all())
+        self.assertTrue(expectedColumns, actualColumns)
 
         expectedGenders = {'male', 'female'}
         actualGenders = set(df.gender.unique())
