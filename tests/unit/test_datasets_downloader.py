@@ -1,10 +1,10 @@
 import asyncio
 import os
+from concurrent.futures import TimeoutError
 from unittest import TestCase
 from unittest.mock import Mock, patch
 
 from aiohttp import ClientSession
-from aiohttp.client_exceptions import TimeoutError
 from serenata_toolbox.datasets.downloader import Downloader
 
 
@@ -134,7 +134,7 @@ class TestDownloader(TestCase):
     @patch('serenata_toolbox.datasets.downloader.os.path.isdir')
     @patch('serenata_toolbox.datasets.downloader.os.path.exists')
     @async_test
-    def test_download_timeout(self, exists, isdir):  
+    def test_download_timeout(self, exists, isdir):
         exists.return_value = True
         isdir.return_value = True
         with self.assertRaises(TimeoutError):
