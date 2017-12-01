@@ -32,7 +32,7 @@ class TestRemote(TestCase):
         self.assertTrue(remote.config_exists)
 
     @patch.object(RemoteDatasets, 'config_exists', new_callable=PropertyMock)
-    @patch('serenata_toolbox.datasets.remote.print')
+    @patch('serenata_toolbox.datasets.remote.log.info')
     def test_init_without_config(self, print_, config_exist):
         config_exist.return_value = False
         remote = RemoteDatasets()
@@ -41,7 +41,7 @@ class TestRemote(TestCase):
         self.assertTrue(print_.called)
 
     @patch.object(RemoteDatasets, 'config_exists', new_callable=PropertyMock)
-    @patch('serenata_toolbox.datasets.remote.print')
+    @patch('serenata_toolbox.datasets.remote.log.info')
     @patch('serenata_toolbox.datasets.remote.boto3')
     @patch('serenata_toolbox.datasets.remote.configparser.RawConfigParser')
     def test_init_with_old_config(self, raw_config_parser, boto3, print_, config_exists):

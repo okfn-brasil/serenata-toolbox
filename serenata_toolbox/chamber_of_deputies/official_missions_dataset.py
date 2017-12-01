@@ -1,4 +1,3 @@
-import os
 import urllib
 
 from datetime import timedelta
@@ -7,6 +6,7 @@ import pandas as pd
 
 from bs4 import BeautifulSoup
 
+from serenata_toolbox import log
 from serenata_toolbox.datasets.helpers import (
     save_to_csv,
     translate_column,
@@ -32,8 +32,7 @@ class OfficialMissionsDataset:
 
         records = []
         for two_months_range in self._generate_ranges(start_date, end_date):
-            if os.environ.get('DEBUG') == '1':
-                print(two_months_range)
+            log.debug(two_months_range)
             for record in self._fetch_missions_for_range(two_months_range[0], two_months_range[1]):
                 records.append(record)
 
