@@ -116,12 +116,14 @@ Within your `virtualenv <https://virtualenv.pypa.io/en/stable/>`_:
 Always add tests to your contribution — if you want to test it locally before opening the PR:
 
 ::
+
   $ pip install pytest pytest-cov
   $ pytest
 
 When the tests are passing, also check for coverage of the modules you edited or added — if you want to check it before opening the PR:
 
 ::
+
   $ pytest
   $ open htmlcov/index.html
 
