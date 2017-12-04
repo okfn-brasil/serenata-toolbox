@@ -43,6 +43,9 @@ class Downloader:
         '2017-06-17-official-missions.xz',
         '2017-07-04-reimbursements.xz',
         '2017-07-20-tse-candidates.xz',
+        '2017-11-30-donations-candidates.xz',
+        '2017-11-30-donations-committees.xz',
+        '2017-11-30-donations-parties.xz',
     )
 
     def __init__(self, target, **kwargs):
