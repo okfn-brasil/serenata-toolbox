@@ -11,22 +11,22 @@ class TestDeputiesDataset(TestCase):
 
     def test_fetch(self):
         df = self.subject.fetch()
-        actualColumns = df.columns
+        actualColumns = set(df.columns)
 
-        expectedColumns = [
+        expectedColumns = {
             'congressperson_id', 'budget_id', 'condition',
             'congressperson_document', 'civil_name', 'congressperson_name',
             'picture_url', 'gender', 'state', 'party', 'phone_number', 'email'
-        ]
-        self.assertTrue((np.array(expectedColumns) == np.array(actualColumns)).all())
+        }
+        self.assertEqual(expectedColumns, actualColumns)
 
-        expectedGenders = ['male', 'female']
-        actualGenders = df.gender.unique()
-        self.assertTrue((np.array(expectedGenders) == np.array(actualGenders)).all())
+        expectedGenders = {'male', 'female'}
+        actualGenders = set(df.gender.unique())
+        self.assertEqual(expectedGenders, actualGenders)
 
-        expectedConditions = ['Holder', 'Substitute']
-        actualConditions = df.condition.unique()
-        self.assertTrue((np.array(expectedConditions) == np.array(actualConditions)).all())
+        expectedConditions = {'Substitute', 'Holder'}
+        actualConditions = set(df.condition.unique())
+        self.assertEqual(expectedConditions, actualConditions)
 
 if __name__ == '__main__':
     main()
