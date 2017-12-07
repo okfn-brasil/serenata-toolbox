@@ -29,10 +29,11 @@ setup(
     long_description='Check `Serenata Toolbox at GitHub <{}>`_.'.format(REPO_URL),
     name='serenata-toolbox',
     packages=[
+        'serenata_toolbox',
         'serenata_toolbox.federal_senate',
         'serenata_toolbox.chamber_of_deputies',
         'serenata_toolbox.datasets'
     ],
     url=REPO_URL,
-    version='12.4.1'
+    version='12.4.2'
 )
