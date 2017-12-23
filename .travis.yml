@@ -23,6 +23,7 @@ jobs:
           branch: master
 
 install:
+  - rm -rf .coverage
   - python setup.py develop
   - pip install coveralls pytest pytest-cov
 
