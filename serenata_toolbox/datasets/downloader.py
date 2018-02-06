@@ -39,13 +39,13 @@ class Downloader:
         '2017-05-29-presences.xz',
         '2017-05-29-sessions.xz',
         '2017-05-29-speeches.xz',
-        '2017-06-11-congresspeople-social-accounts.xz',
         '2017-06-17-official-missions.xz',
         '2017-07-04-reimbursements.xz',
         '2017-07-20-tse-candidates.xz',
         '2017-11-30-donations-candidates.xz',
         '2017-11-30-donations-committees.xz',
         '2017-11-30-donations-parties.xz',
+        '2018-02-05-congresspeople-social-accounts.xz',
     )
 
     def __init__(self, target, **kwargs):
