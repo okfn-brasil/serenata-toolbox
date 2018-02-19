@@ -1,0 +1,4 @@
+{
+  "tests/unit/test_datasets_downloader.py": true,
+  "tests/unit/test_datasets_downloader.py::TestDownloader::test_download_timeout": true
+}
