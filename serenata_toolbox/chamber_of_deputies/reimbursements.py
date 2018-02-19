@@ -14,16 +14,16 @@ def extract_zip(zip_path, destination_path):
     zip_file.close()
 
 
-class ReimbursementsDownloader:
+class Reimbursements:
     """
     Get an updated version of the reimbursements dataset for a given year.
     """
 
-    def __init__(self, year, path=gettempdir()):
+    def __init__(self, year, path=None):
         self.year = year
-        self.path = path
+        self.path = path or gettempdir()
 
-    def execute(self):
+    def __call__(self):
         self.fetch()
         self.clean()
         file_path = os.path.join(
@@ -36,4 +36,4 @@ class ReimbursementsDownloader:
         extract_zip(file_path, self.path)
 
     def clean(self):
-        ReimbursementsCleaner(self.year, self.path).execute()
+        ReimbursementsCleaner(self.year, self.path)()

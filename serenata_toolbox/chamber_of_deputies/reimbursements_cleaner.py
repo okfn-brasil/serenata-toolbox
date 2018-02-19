@@ -109,7 +109,7 @@ class ReimbursementsCleaner:
         self.path = path
         self.data = None
 
-    def execute(self):
+    def __call__(self):
         self.load_source_file()
         self.translate()
         self.aggregate_multiple_payments()

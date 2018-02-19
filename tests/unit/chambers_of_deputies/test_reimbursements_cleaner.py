@@ -49,9 +49,9 @@ class TestReimbursementsCleaner(TestCase):
     @patch.object(ReimbursementsCleaner, 'translate')
     @patch.object(ReimbursementsCleaner, 'aggregate_multiple_payments')
     @patch.object(ReimbursementsCleaner, 'save')
-    def test_execute_run_internal_functions(self, save_mock, aggregate_mock,
-                                            translate_mock, load_source_mock):
-        self.subject.execute()
+    def test_call_run_internal_functions(self, save_mock, aggregate_mock,
+                                         translate_mock, load_source_mock):
+        self.subject()
         load_source_mock.assert_called_with()
         translate_mock.assert_called_with()
         aggregate_mock.assert_called_with()
