@@ -87,9 +87,17 @@ DTYPE = {
     'txtTrecho': np.str,
     'numLote': np.str,
     'numRessarcimento': np.str,
-    'vlrRestituicao': np.float,
     'nuDeputadoId': np.str,
     'ideDocumento': np.str,
+}
+
+
+def parse_float(value):
+    return float(value.replace(',', '.'))
+
+
+CONVERTERS = {
+    'vlrRestituicao': parse_float,
 }
 KEY = 'document_id'
 AGGREGATED_COLS = {
