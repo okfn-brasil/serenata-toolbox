@@ -26,12 +26,11 @@ class Reimbursements:
     def __call__(self):
         self.fetch()
         self.clean()
-        file_path = os.path.join(
-            self.path, 'reimbursements-{}.csv'.format(self.year))
+        file_path = os.path.join(self.path, f'reimbursements-{self.year}.csv')
         return file_path
 
     def fetch(self):
-        file_path = os.path.join(self.path, 'Ano-{}.zip'.format(self.year))
+        file_path = os.path.join(self.path, 'Ano-{self.year}.zip')
         urlretrieve(URL.format(self.year), file_path)
         extract_zip(file_path, self.path)
 

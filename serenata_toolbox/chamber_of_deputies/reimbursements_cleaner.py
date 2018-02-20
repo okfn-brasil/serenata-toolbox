@@ -124,7 +124,7 @@ class ReimbursementsCleaner:
         self.save()
 
     def load_source_file(self):
-        file_path = os.path.join(self.path, 'Ano-{}.csv'.format(self.year))
+        file_path = os.path.join(self.path, f'Ano-{self.year}.csv')
         self.data = pd.read_csv(file_path,
                                 delimiter=';',
                                 quoting=csv.QUOTE_NONE,
@@ -145,8 +145,7 @@ class ReimbursementsCleaner:
         ])
 
     def save(self):
-        file_path = os.path.join(
-            self.path, 'reimbursements-{}.csv'.format(self.year))
+        file_path = os.path.join(self.path, f'reimbursements-{self.year}.csv')
         self.data.to_csv(file_path, index=False)
 
     def _house_payments(self):
