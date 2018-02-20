@@ -142,5 +142,5 @@ class TestDownloader(TestCase):
             downloader.url = Mock(return_value="http://www.google.com:81/")
             loop = asyncio.get_event_loop()
 
-            with ClientSession(loop=loop) as client:
+            async with ClientSession(loop=loop) as client:
                 yield from downloader.fetch_file(client, '2016-12-06-reibursements.xz')
