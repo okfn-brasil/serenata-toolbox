@@ -30,7 +30,7 @@ class Reimbursements:
         return file_path
 
     def fetch(self):
-        file_path = os.path.join(self.path, 'Ano-{self.year}.zip')
+        file_path = os.path.join(self.path, f'Ano-{self.year}.zip')
         urlretrieve(URL.format(self.year), file_path)
         extract_zip(file_path, self.path)
 
