@@ -123,17 +123,8 @@ class TestDownloader(TestCase):
         expected = 'https://s3-south.amazonaws.com/bucket/test.xz'
         self.assertEqual(expected, downloader.url('test.xz'))
 
-    def async_test(f):
-        def wrapper(*args, **kwargs):
-            coro = asyncio.coroutine(f)
-            future = coro(*args, **kwargs)
-            loop = asyncio.get_event_loop()
-            loop.run_until_complete(future)
-        return wrapper
-
     @patch('serenata_toolbox.datasets.downloader.os.path.isdir')
     @patch('serenata_toolbox.datasets.downloader.os.path.exists')
-    @async_test
     def test_download_timeout(self, exists, isdir):
         exists.return_value = True
         isdir.return_value = True
