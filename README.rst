@@ -81,17 +81,15 @@ If you ever wonder how did we generated these datasets, this toolbox can help yo
 .. code:: python
 
     from serenata_toolbox.federal_senate.dataset import Dataset as SenateDataset
-    from serenata_toolbox.chamber_of_deputies.dataset import Dataset as DeputiesDataset
+    from serenata_toolbox.chamber_of_deputies.reimbursements import Reimbursements as ChamberDataset
 
     senate = SenateDataset('data/')
     senate.fetch()
     senate.translate()
     senate.clean()
 
-    chamber = DeputiesDataset('data/')
-    chamber.fetch()
-    chamber.translate()
-    chamber.clean()
+    chamber = ChamberDataset('2018', 'data/')
+    chamber()
 
 Documentation (WIP)
 -------------------
