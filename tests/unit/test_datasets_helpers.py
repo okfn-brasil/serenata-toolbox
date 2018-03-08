@@ -115,21 +115,6 @@ class TestDatasetsHelpersConfigLookup(TestCase):
         os.rmdir(self.config_folder)
         os.rmdir(self.root_not_a_file)
 
-    def test_find_config(self):
-        os.chdir(self.subfolder)
-
-        self.assertEqual(helpers.find_config(), self.config_file)
-
-    def test_find_config_not_found(self):
-        os.chdir(self.root_not_found)
-
-        self.assertEqual(helpers.find_config(), 'config.ini')
-
-    def test_find_config_a_file(self):
-        os.chdir(self.root_not_a_file)
-
-        self.assertEqual(helpers.find_config(), 'config.ini')
-
 
 if __name__ == '__main__':
     main()
