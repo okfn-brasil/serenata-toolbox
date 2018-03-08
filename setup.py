@@ -22,6 +22,7 @@ setup(
         'beautifulsoup4>=4.4',
         'lxml>=3.6',
         'pandas>=0.18',
+        'python-decouple>=3.1',
         'tqdm'
     ],
     keywords='serenata de amor, data science, brazil, corruption',
@@ -36,5 +37,5 @@ setup(
     ],
     url=REPO_URL,
     python_requires='>=3.6',
-    version='13.0.0',
+    version='14.0.0',
 )
