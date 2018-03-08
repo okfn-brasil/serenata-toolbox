@@ -16,8 +16,8 @@ class Datasets:
     and the default value is data/ (following the default usage in the main
     repo, serenata-de-amor).
 
-    The remote part of the class expect to find Amazon credentials in a
-    config.ini file with an Amazon section (e.g. config.ini.exemple).
+    The remote part of the class expect to find Amazon credentials in
+    environment variables.
 
     Inside it object there are three main objects: local, remote, and
     downloader:

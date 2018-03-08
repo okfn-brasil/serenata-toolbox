@@ -87,34 +87,5 @@ class TestDatasetsHelpersDataframes(TestCase):
         )
 
 
-class TestDatasetsHelpersConfigLookup(TestCase):
-
-    def setUp(self):
-        # good case
-        self.root = os.path.realpath(tempfile.mkdtemp())
-        self.subfolder = os.path.relpath(tempfile.mkdtemp(dir=self.root))
-        self.config_file = os.path.join(self.root, 'config.ini')
-        self.cwd = os.getcwd()
-        open(self.config_file, 'a').close()
-
-        # not found case
-        self.root_not_found = os.path.relpath(tempfile.mkdtemp())
-
-        # not a file case
-        self.root_not_a_file = os.path.relpath(tempfile.mkdtemp())
-        self.config_folder = os.path.join(self.root_not_a_file, 'config.ini')
-        os.makedirs(self.config_folder)
-
-
-    def tearDown(self):
-        os.chdir(self.cwd)
-        os.remove(self.config_file)
-        os.rmdir(self.subfolder)
-        os.rmdir(self.root)
-        os.rmdir(self.root_not_found)
-        os.rmdir(self.config_folder)
-        os.rmdir(self.root_not_a_file)
-
-
 if __name__ == '__main__':
     main()
