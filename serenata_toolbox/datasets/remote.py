@@ -13,8 +13,8 @@ class RemoteDatasets:
     def __init__(self):
         self.client = None
         self.credentials = {
-            'aws_access_key_id': config('AMAZON_ACCESS_KEY'),
-            'aws_secret_access_key': config('AMAZON_SECRET_KEY'),
+            'aws_access_key_id': config('AMAZON_ACCESS_KEY', default=None),
+            'aws_secret_access_key': config('AMAZON_SECRET_KEY', default=None),
             'region_name': config('AMAZON_REGION'),
         }
 
