@@ -1,10 +1,8 @@
 import os
-from functools import partial
 
 import boto3
-from decouple import config
 
-from serenata_toolbox import log
+from serenata_toolbox import settings
 from serenata_toolbox.datasets.contextmanager import status_message
 
 
@@ -13,14 +11,11 @@ class RemoteDatasets:
     def __init__(self):
         self.client = None
         self.credentials = {
-            'aws_access_key_id': config('AMAZON_ACCESS_KEY', default=None),
-            'aws_secret_access_key': config('AMAZON_SECRET_KEY', default=None),
-            'region_name': config('AMAZON_REGION'),
+            'aws_access_key_id': settings.AMAZON_ACCESS_KEY,
+            'aws_secret_access_key': settings.AMAZON_SECRET_KEY,
+            'region_name': settings.AMAZON_REGION,
         }
-
-    @property
-    def bucket(self):
-        return config('AMAZON_BUCKET')
+        self.bucket = settings.AMAZON_BUCKET
 
     @property
     def s3(self):

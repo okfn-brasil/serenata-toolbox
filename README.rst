@@ -36,6 +36,10 @@ Installation
 
     $ pip install -U serenata-toolbox
 
+If you are a regular user you are ready to get started after `pip install`.
+
+If you are a core developer willing to upload datasets to the cloud you need to configure `AMAZON_ACCESS_KEY` and `AMAZON_SECRET_KEY` environment variables before running the toolbox.
+
 Usage
 -----
 
@@ -88,7 +92,6 @@ If you ever wonder how did we generated these datasets, this toolbox can help yo
 
     chamber = ChamberDataset('2018', 'data/')
     chamber()
-
 Documentation (WIP)
 -------------------
 
