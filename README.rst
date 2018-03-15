@@ -36,13 +36,17 @@ Installation
 
     $ pip install -U serenata-toolbox
 
+If you are a regular user you are ready to get started after `pip install`.
+
+If you are a core developer willing to upload datasets to the cloud you need to configure `AMAZON_ACCESS_KEY` and `AMAZON_SECRET_KEY` environment variables before running the toolbox.
+
 Usage
 -----
 
 Example 1: How do I download the datasets?
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-We have `plenty of them <https://github.com/datasciencebr/serenata-de-amor/blob/master/CONTRIBUTING.md#datasets-data>`_ ready for you to download from our servers. And this toolbox helps you get them. Let's say you want your datasets at `data/`:
+We have `plenty of them <https://github.com/okfn-brasil/serenata-de-amor/blob/master/research/CONTRIBUTING.md#datasets-data>`_ ready for you to download from our servers. And this toolbox helps you get them. Let's say you want your datasets at `data/`:
 
 .. code:: python
 
@@ -74,20 +78,20 @@ If the last example doesn't look that simple, there are some fancy shortcuts ava
 Example 3: Generating datasets
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-If you ever wonder how did we generated these datasets, this toolbox can help you too (at least with the more used ones — the other ones are generated `in our main repo <https://github.com/datasciencebr/serenata-de-amor/blob/master/CONTRIBUTING.md#the-toolbox-and-our-the-source-files-src>`_):
+If you ever wonder how did we generated these datasets, this toolbox can help you too (at least with the more used ones — the other ones are generated `in our main repo <https://github.com/okfn-brasil/serenata-de-amor/blob/master/research/CONTRIBUTING.md#the-toolbox-and-our-the-source-files-src>`_):
 
 .. code:: python
 
     from serenata_toolbox.federal_senate.dataset import Dataset as SenateDataset
     from serenata_toolbox.chamber_of_deputies.reimbursements import Reimbursements as ChamberDataset
 
+    chamber = ChamberDataset('2018', 'data/')
+    chamber()
+
     senate = SenateDataset('data/')
     senate.fetch()
     senate.translate()
     senate.clean()
-
-    chamber = ChamberDataset('2018', 'data/')
-    chamber()
 
 Documentation (WIP)
 -------------------

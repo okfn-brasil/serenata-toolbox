@@ -3,31 +3,22 @@ from unittest import TestCase
 from unittest.mock import PropertyMock, patch
 
 from serenata_toolbox.datasets.remote import RemoteDatasets
+from serenata_toolbox import settings
 
-
-os.environ['AMAZON_ACCESS_KEY'] = 'YOUR_ACCESS_KEY'
-os.environ['AMAZON_SECRET_KEY'] = 'YOUR_SECRET_KEY'
-os.environ['AMAZON_BUCKET'] = 'YOUR_BUCKET'
-os.environ['AMAZON_REGION'] = 'sa-east-1'
 
 
 class TestRemote(TestCase):
 
     def test_init(self):
+        """Test the RemoteDatasets properly load storage info from settings"""
         remote = RemoteDatasets()
-        self.assertIsNotNone(remote.s3)
-        self.assertIsNotNone(remote.bucket)
-
-    @patch('serenata_toolbox.datasets.remote.boto3')
-    def test_successful_init(self, boto3):
-        credentials = {
-            'aws_access_key_id': 'YOUR_ACCESS_KEY',
-            'aws_secret_access_key': 'YOUR_SECRET_KEY',
-            'region_name': 'sa-east-1'
-        }
-        remote = RemoteDatasets()
-        self.assertEqual('YOUR_BUCKET', remote.bucket)
-        self.assertEqual(credentials, remote.credentials)
+        expected_credentials = (
+            ('aws_access_key_id', settings.AMAZON_ACCESS_KEY),
+            ('aws_secret_access_key', settings.AMAZON_SECRET_KEY),
+            ('region_name', settings.AMAZON_REGION)
+        )
+        self.assertEqual(remote.BUCKET, settings.AMAZON_BUCKET)
+        self.assertEqual(remote.CREDENTIALS, expected_credentials)
 
     @patch('serenata_toolbox.datasets.remote.boto3')
     def test_s3(self, boto3):
@@ -37,7 +28,7 @@ class TestRemote(TestCase):
         boto3.client.assert_called_once_with('s3', test=42)
 
     @patch.object(RemoteDatasets, 's3', new_callable=PropertyMock)
-    @patch.object(RemoteDatasets, 'bucket', new_callable=PropertyMock)
+    @patch.object(RemoteDatasets, 'BUCKET', new_callable=PropertyMock)
     def test_all(self, bucket, s3):
         response = {'Contents': [{'Key': 'file1.xz'}, {'Key': 'file2.xz'}]}
         s3.return_value.list_objects.return_value = response
@@ -47,7 +38,7 @@ class TestRemote(TestCase):
 
     @patch('serenata_toolbox.datasets.contextmanager.print')
     @patch.object(RemoteDatasets, 's3', new_callable=PropertyMock)
-    @patch.object(RemoteDatasets, 'bucket', new_callable=PropertyMock)
+    @patch.object(RemoteDatasets, 'BUCKET', new_callable=PropertyMock)
     def test_upload(self, bucket, s3, print_):
         bucket.return_value = 'serenata-de-amor-data'
         remote = RemoteDatasets()
@@ -60,7 +51,7 @@ class TestRemote(TestCase):
 
     @patch('serenata_toolbox.datasets.contextmanager.print')
     @patch.object(RemoteDatasets, 's3', new_callable=PropertyMock)
-    @patch.object(RemoteDatasets, 'bucket', new_callable=PropertyMock)
+    @patch.object(RemoteDatasets, 'BUCKET', new_callable=PropertyMock)
     def test_delete(self, bucket, s3, print_):
         bucket.return_value = 'serenata-de-amor-data'
         remote = RemoteDatasets()
