@@ -1,17 +1,17 @@
-.. image:: https://travis-ci.org/datasciencebr/serenata-toolbox.svg?branch=master
-   :target: https://travis-ci.org/datasciencebr/serenata-toolbox
+.. image:: https://travis-ci.org/okfn-brasil/serenata-toolbox.svg?branch=master
+   :target: https://travis-ci.org/okfn-brasil/serenata-toolbox
    :alt: Travis CI build status (Linux)
 
 .. image:: https://readthedocs.org/projects/serenata-toolbox/badge/?version=latest
    :target: http://serenata-toolbox.readthedocs.io/en/latest/?badge=latest
    :alt: Documentation Status
 
-.. image:: https://landscape.io/github/datasciencebr/serenata-toolbox/master/landscape.svg?style=flat
-   :target: https://landscape.io/github/datasciencebr/serenata-toolbox/master
+.. image:: https://landscape.io/github/okfn-brasil/serenata-toolbox/master/landscape.svg?style=flat
+   :target: https://landscape.io/github/okfn-brasil/serenata-toolbox/master
    :alt: Code Health
 
-.. image:: https://coveralls.io/repos/github/datasciencebr/serenata-toolbox/badge.svg?branch=master
-   :target: https://coveralls.io/github/datasciencebr/serenata-toolbox?branch=master
+.. image:: https://coveralls.io/repos/github/okfn-brasil/serenata-toolbox/badge.svg?branch=master
+   :target: https://coveralls.io/github/okfn-brasil/serenata-toolbox?branch=master
    :alt: Coveralls
 
 .. image:: https://badge.fury.io/py/serenata-toolbox.svg
@@ -24,8 +24,8 @@
 Serenata de Amor Toolbox
 ========================
 
-`pip <https://pip.pypa.io/en/stable/>`_  installable package to support `Serenata de Amor <https://github.com/datasciencebr/serenata-de-amor>`_
-and `Rosie <https://github.com/datasciencebr/rosie>`_ development.
+`pip <https://pip.pypa.io/en/stable/>`_  installable package to support `Serenata de Amor <https://github.com/okfn-brasil/serenata-de-amor>`_
+and `Rosie <https://github.com/okfn-brasil/rosie>`_ development.
 
 Serenata_toolbox is compatible with Python 3+
 
@@ -110,7 +110,7 @@ Within your `virtualenv <https://virtualenv.pypa.io/en/stable/>`_:
 
 ::
 
-  $ git clone https://github.com/datasciencebr/serenata-toolbox.git
+  $ git clone https://github.com/okfn-brasil/serenata-toolbox.git
   $ python setup.py develop
 
 Always add tests to your contribution — if you want to test it locally before opening the PR:
