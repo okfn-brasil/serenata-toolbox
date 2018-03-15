@@ -1,6 +1,6 @@
 from setuptools import setup
 
-REPO_URL = 'http://github.com/datasciencebr/serenata-toolbox'
+REPO_URL = 'http://github.com/okfn-brasil/serenata-toolbox'
 
 
 setup(
@@ -37,5 +37,5 @@ setup(
     ],
     url=REPO_URL,
     python_requires='>=3.6',
-    version='14.0.2',
+    version='14.0.3',
 )
