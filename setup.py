@@ -37,5 +37,5 @@ setup(
     ],
     url=REPO_URL,
     python_requires='>=3.6',
-    version='14.0.3',
+    version='15.0.0',
 )
