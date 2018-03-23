@@ -11,6 +11,15 @@ from serenata_toolbox import settings
 MAX_REQUESTS = 4
 
 
+class RemoteFileNotFound(Exception):
+
+    def __init__(self, url):
+            self.url = url
+
+    def __str__(self):
+        return f'HTTP request to {self.url} returned a non 200 status'
+
+
 class Downloader:
 
     LATEST = (
@@ -98,6 +107,9 @@ class Downloader:
     async def fetch_size(self, client, filename):
         with (await self.semaphore):
             async with client.head(self.url(filename)) as resp:
+                if resp.status != 200:
+                    raise RemoteFileNotFound(self.url(filename))
+
                 size = resp.headers.get('CONTENT-LENGTH', '0')
 
         self.total += int(size)
