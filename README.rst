@@ -58,7 +58,7 @@ We have `plenty of them <https://github.com/okfn-brasil/serenata-de-amor/blob/ma
       print(dataset)  # and you'll see a long list of datasets!
 
   # and let's download one of them
-  datasets.downloader.download('2016-12-06-reimbursements.xz')  # yay, you've just downloaded this dataset to data/
+  datasets.downloader.download('2018-01-05-reimbursements.xz')  # yay, you've just downloaded this dataset to data/
 
   # you can also get the most recent version of all datasets:
   latest = list(datasets.downloader.LATEST)
@@ -72,7 +72,7 @@ If the last example doesn't look that simple, there are some fancy shortcuts ava
 .. code:: python
 
   from serenata_toolbox.datasets import fetch, fetch_latest_backup
-  fetch('2016-12-06-reimbursements.xz', 'data/')
+  fetch('2018-01-05-reimbursements.xz', 'data/')
   fetch_latest_backup( 'data/')  # yep, we've just did exactly the same thing
 
 Example 3: Generating datasets
