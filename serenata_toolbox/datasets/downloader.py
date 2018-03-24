@@ -5,13 +5,24 @@ import aiofiles
 import aiohttp
 from tqdm import tqdm
 
+from serenata_toolbox import settings
+
+
 MAX_REQUESTS = 4
+
+
+class RemoteFileNotFound(Exception):
+
+    def __init__(self, url):
+            self.url = url
+
+    def __str__(self):
+        return f'HTTP request to {self.url} returned a non 200 status'
 
 
 class Downloader:
 
     LATEST = (
-        '2016-08-08-ceap-datasets.md',
         '2016-08-08-current-year.xz',
         '2016-08-08-datasets-format.html',
         '2016-08-08-last-year.xz',
@@ -49,11 +60,6 @@ class Downloader:
     )
 
     def __init__(self, target, **kwargs):
-        self.bucket = kwargs.get('bucket')
-        self.region = kwargs.get('region_name')
-        if not all((self.bucket, self.region)):
-            raise RuntimeError('No bucket and/or region_name kwargs provided')
-
         self.target = os.path.abspath(target)
         if not all((os.path.exists(self.target), os.path.isdir(self.target))):
             msg = '{} does not exist or is not a directory.'
@@ -101,6 +107,9 @@ class Downloader:
     async def fetch_size(self, client, filename):
         with (await self.semaphore):
             async with client.head(self.url(filename)) as resp:
+                if resp.status != 200:
+                    raise RemoteFileNotFound(self.url(filename))
+
                 size = resp.headers.get('CONTENT-LENGTH', '0')
 
         self.total += int(size)
@@ -117,5 +126,8 @@ class Downloader:
             self.progress.update(len(contents))
 
     def url(self, filename):
-        url = 'https://s3-{}.amazonaws.com/{}/{}'
-        return url.format(self.region, self.bucket, filename)
+        base = f'https://s3-{settings.AMAZON_REGION}.amazonaws.com'
+        if settings.AMAZON_ENDPOINT:
+            base = settings.AMAZON_ENDPOINT
+
+        return f'{base}/{settings.AMAZON_BUCKET}/{filename}'
