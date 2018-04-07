@@ -50,8 +50,8 @@ class Downloader:
         '2017-05-29-sessions.xz',
         '2017-05-29-speeches.xz',
         '2017-06-17-official-missions.xz',
-        '2017-07-04-reimbursements.xz',
         '2017-07-20-tse-candidates.xz',
+        '2018-01-05-reimbursements.xz',
         '2018-02-05-congresspeople-social-accounts.xz'
     )
 
