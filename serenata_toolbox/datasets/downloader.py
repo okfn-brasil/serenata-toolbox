@@ -24,7 +24,6 @@ class Downloader:
 
     LATEST = (
         '2016-08-08-current-year.xz',
-        '2016-08-08-datasets-format.html',
         '2016-08-08-last-year.xz',
         '2016-08-08-previous-years.xz',
         '2016-09-03-companies.xz',
@@ -53,10 +52,7 @@ class Downloader:
         '2017-06-17-official-missions.xz',
         '2017-07-04-reimbursements.xz',
         '2017-07-20-tse-candidates.xz',
-        '2017-11-30-donations-candidates.xz',
-        '2017-11-30-donations-committees.xz',
-        '2017-11-30-donations-parties.xz',
-        '2018-02-05-congresspeople-social-accounts.xz',
+        '2018-02-05-congresspeople-social-accounts.xz'
     )
 
     def __init__(self, target, **kwargs):
