@@ -158,7 +158,7 @@ class ReimbursementsCleaner:
         data = self.data[self.data['reimbursement_number'] != '0'].copy()
         data.rename(columns=AGGREGATED_COLS, inplace=True)
         attributes = {
-            key: 'first' for key in sorted(data.columns)
+            key: 'first' for key in data.columns
             if key is not KEY
         }
         attributes['numbers'] = list
