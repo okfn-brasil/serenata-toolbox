@@ -157,9 +157,11 @@ class ReimbursementsCleaner:
     def _non_house_payments(self):
         data = self.data[self.data['reimbursement_number'] != '0'].copy()
         data.rename(columns=AGGREGATED_COLS, inplace=True)
-        attributes = {key: 'first' for key in sorted(data.columns)}
-        attributes['numbers'] = lambda x: list(x)
+        attributes = {
+            key: 'first' for key in sorted(data.columns)
+            if key is not KEY
+        }
+        attributes['numbers'] = list
         attributes['total_net_value'] = 'sum'
         attributes['total_value'] = 'sum'
-        del attributes['document_id']
         return data.groupby(KEY, as_index=False).agg(attributes)
