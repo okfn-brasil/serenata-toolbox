@@ -155,18 +155,13 @@ class ReimbursementsCleaner:
         return data
 
     def _non_house_payments(self):
-        def aggregate_attributes(df):
-            reimbursement_numbers = df['reimbursement_number'].tolist()
-            total_net_value = df['net_value'].sum()
-            total_reimbursement_value = df['reimbursement_value'].sum()
-            attributes = pd.Series({
-                'numbers': reimbursement_numbers,
-                'total_net_value': total_net_value,
-                'total_value': total_reimbursement_value,
-            })
-            attributes = pd.concat([df.iloc[0], attributes])
-            attributes.drop(AGGREGATED_COLS.keys(), inplace=True)
-            return attributes
-
-        data = self.data[self.data['reimbursement_number'] != '0']
-        return data.groupby(KEY).apply(aggregate_attributes)
+        data = self.data[self.data['reimbursement_number'] != '0'].copy()
+        data.rename(columns=AGGREGATED_COLS, inplace=True)
+        attributes = {
+            key: 'first' for key in data.columns
+            if key is not KEY
+        }
+        attributes['numbers'] = list
+        attributes['total_net_value'] = 'sum'
+        attributes['total_value'] = 'sum'
+        return data.groupby(KEY, as_index=False).agg(attributes)
