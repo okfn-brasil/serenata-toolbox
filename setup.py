@@ -2,6 +2,8 @@ from setuptools import setup
 
 REPO_URL = 'http://github.com/okfn-brasil/serenata-toolbox'
 
+with open('README.rst') as fobj:
+    long_description = fobj.read()
 
 setup(
     author='Serenata de Amor',
@@ -26,7 +28,7 @@ setup(
     ],
     keywords='serenata de amor, data science, brazil, corruption',
     license='MIT',
-    long_description='Check `Serenata Toolbox at GitHub <{}>`_.'.format(REPO_URL),
+    long_description=long_description,
     name='serenata-toolbox',
     packages=[
         'serenata_toolbox',
@@ -36,5 +38,5 @@ setup(
     ],
     url=REPO_URL,
     python_requires='>=3.6',
-    version='15.0.2',
+    version='15.0.3',
 )
