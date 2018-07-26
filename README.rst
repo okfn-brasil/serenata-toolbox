@@ -27,7 +27,7 @@ Serenata de Amor Toolbox
 `pip <https://pip.pypa.io/en/stable/>`_  installable package to support `Serenata de Amor <https://github.com/okfn-brasil/serenata-de-amor>`_
 and `Rosie <https://github.com/okfn-brasil/rosie>`_ development.
 
-Serenata_toolbox is compatible with Python 3+
+Serenata_toolbox is compatible with Python 3.6+
 
 Installation
 ------------
