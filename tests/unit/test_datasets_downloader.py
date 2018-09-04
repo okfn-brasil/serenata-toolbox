@@ -81,15 +81,6 @@ class TestDownloader(TestCase):
 
     @patch('serenata_toolbox.datasets.downloader.os.path.isdir')
     @patch('serenata_toolbox.datasets.downloader.os.path.exists')
-    def test_download_no_file(self, exists, isdir):
-        exists.return_value = True
-        isdir.return_value = True
-        downloader = Downloader('test')
-        self.assertIsNone(downloader.download(''))
-        self.assertIsNone(downloader.download([]))
-
-    @patch('serenata_toolbox.datasets.downloader.os.path.isdir')
-    @patch('serenata_toolbox.datasets.downloader.os.path.exists')
     def test_url(self, exists, isdir):
         exists.return_value = True
         isdir.return_value = True
