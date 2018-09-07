@@ -43,10 +43,32 @@ If you are a core developer willing to upload datasets to the cloud you need to 
 Usage
 -----
 
-Example 1: How do I download the datasets?
+We have `plenty of them <https://github.com/okfn-brasil/serenata-de-amor/blob/master/research/CONTRIBUTING.md#datasets-data>`_ ready for you to download from our servers. And this toolbox helps you get them. Here some examples:
+
+Example 1: Using the command line wrapper
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. code-block:: bash
+
+    # without any arguments will download our pre-processed datasets and store into data/ folder
+    $ serenata-toolbox
+
+    # will download these specific datasets and store into /tmp/serenata-data folder
+    $ serenata-toolbox /tmp/serenata-data --module federal_senate chamber_of_deputies
+
+    # you can specify a dataset and a year
+    $ serenata-toolbox --module chamber_of_deputies --year 2009
+
+    # or specify all options simultaneously
+    $ serenata-toolbox /tmp/serenata-data --module federal_senate --year 2017
+
+    # getting help
+    $ serenata-toolbox --help
+
+Example 2: How do I download the datasets?
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-We have `plenty of them <https://github.com/okfn-brasil/serenata-de-amor/blob/master/research/CONTRIBUTING.md#datasets-data>`_ ready for you to download from our servers. And this toolbox helps you get them. Let's say you want your datasets at `data/`:
+Another option is creating your own Python script:
 
 .. code-block:: python
 
@@ -64,7 +86,7 @@ We have `plenty of them <https://github.com/okfn-brasil/serenata-de-amor/blob/ma
   latest = list(datasets.downloader.LATEST)
   datasets.downloader.download(latest)
 
-Example 2: Using shortcuts
+Example 3: Using shortcuts
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 If the last example doesn't look that simple, there are some fancy shortcuts available:
@@ -75,7 +97,7 @@ If the last example doesn't look that simple, there are some fancy shortcuts ava
   fetch('2018-01-05-reimbursements.xz', 'data/')
   fetch_latest_backup( 'data/')  # yep, we've just did exactly the same thing
 
-Example 3: Generating datasets
+Example 4: Generating datasets
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 If you ever wonder how did we generated these datasets, this toolbox can help you too (at least with the more used ones — the other ones are generated `in our main repo <https://github.com/okfn-brasil/serenata-de-amor/blob/master/research/CONTRIBUTING.md#the-toolbox-and-our-the-source-files-src>`_):

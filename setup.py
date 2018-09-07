@@ -36,7 +36,8 @@ setup(
         'serenata_toolbox.chamber_of_deputies',
         'serenata_toolbox.datasets'
     ],
+    scripts=['serenata_toolbox/serenata-toolbox'],
     url=REPO_URL,
     python_requires='>=3.6',
-    version='15.0.5',
+    version='15.1.0',
 )

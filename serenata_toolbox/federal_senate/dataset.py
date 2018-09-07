@@ -1,4 +1,4 @@
-import os.path
+import os
 from datetime import date
 from urllib.error import HTTPError, URLError
 from urllib.request import urlretrieve
@@ -13,7 +13,9 @@ class Dataset:
 
     AVAILABLE_YEARS = [year for year in range(2008, date.today().year + 1)]
 
-    def __init__(self, path, years=AVAILABLE_YEARS):
+    def __init__(self, path='data', years=AVAILABLE_YEARS):
+        if not os.path.isdir(path):
+            os.mkdir(os.path.join(path))
         self.path = path
         self.years = years if isinstance(years, list) else [years]
 

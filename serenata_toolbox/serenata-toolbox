@@ -1,0 +1,46 @@
+#!/usr/bin/env python
+
+import os
+
+from argparse import ArgumentParser
+
+from serenata_toolbox import log
+from serenata_toolbox.chamber_of_deputies.reimbursements import Reimbursements as ChamberDataset
+from serenata_toolbox.datasets import Datasets
+from serenata_toolbox.federal_senate.dataset import Dataset as SenateDataset
+
+
+def parser():
+    parser = ArgumentParser(description='Support Serenata de Amor and Rosie development.',
+                            usage='%(prog)s path [options]')
+    parser.add_argument('path', nargs='?', default='data/', help='directory for storing the datsets')
+    parser.add_argument('--module', '-m', nargs='+', help='the desired module to be called')
+    parser.add_argument('--year', '-y', nargs='+', help='narrow the download to a list of years')
+    return parser.parse_args()
+
+
+def main():
+    args = parser()
+    path = args.path
+    if not args.module:
+        datasets = Datasets(path)
+        datasets.downloader.download(datasets.downloader.LATEST)
+        return
+    if 'chamber_of_deputies' in args.module:
+        if args.year:
+            chamber = ChamberDataset(path=path, year=args.year)
+        else:
+            chamber = ChamberDataset(path=path)
+        chamber()
+    if 'federal_senate' in args.module:
+        if args.year:
+            senate = SenateDataset(path, args.year)
+        else:
+            senate = SenateDataset(path)
+        senate.fetch()
+        senate.translate()
+        senate.clean()
+
+
+if __name__ == '__main__':
+    main()
