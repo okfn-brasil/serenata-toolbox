@@ -1,5 +1,4 @@
-import os.path
-from tempfile import gettempdir
+import os
 from urllib.request import urlretrieve
 from zipfile import ZipFile
 
@@ -19,9 +18,11 @@ class Reimbursements:
     Get an updated version of the reimbursements dataset for a given year.
     """
 
-    def __init__(self, year, path=None):
+    def __init__(self, year='2018', path='data'):
         self.year = year
-        self.path = path or gettempdir()
+        if not os.path.isdir(path):
+            os.mkdir(os.path.join(path))
+        self.path = path
 
     def __call__(self):
         self.fetch()
