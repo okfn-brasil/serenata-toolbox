@@ -28,13 +28,15 @@ def main():
         return
     if 'chamber_of_deputies' in args.module:
         if args.year:
-            chamber = ChamberDataset(path=path, year=args.year)
+            for year in args.year:
+                chamber = ChamberDataset(path=path, year=year)
         else:
             chamber = ChamberDataset(path=path)
         chamber()
     if 'federal_senate' in args.module:
         if args.year:
-            senate = SenateDataset(path, args.year)
+            for year in args.year:
+                senate = SenateDataset(path, year)
         else:
             senate = SenateDataset(path)
         senate.fetch()
