@@ -24,8 +24,8 @@ jobs:
 
 install:
   - rm -rf .coverage
-  - python -m pip install -e .
-  - python -m pip install coveralls pytest pytest-cov==2.5.1
+  - python -m pip install -U -e .
+  - python -m pip install -U coveralls pytest pytest-cov
 
 after_success:
   - coveralls
