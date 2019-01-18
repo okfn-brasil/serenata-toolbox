@@ -127,8 +127,6 @@ class ReimbursementsCleaner:
         file_path = os.path.join(self.path, f'Ano-{self.year}.csv')
         self.data = pd.read_csv(file_path,
                                 delimiter=';',
-                                quoting=csv.QUOTE_NONE,
-                                decimal=',',
                                 dtype=DTYPE,
                                 low_memory=False)
 
