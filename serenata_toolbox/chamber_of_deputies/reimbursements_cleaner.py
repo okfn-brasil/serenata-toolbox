@@ -90,15 +90,6 @@ DTYPE = {
     'nuDeputadoId': np.str,
     'ideDocumento': np.str,
 }
-
-
-def parse_float(value):
-    return float(value.replace(',', '.'))
-
-
-CONVERTERS = {
-    'vlrRestituicao': parse_float,
-}
 KEY = 'document_id'
 AGGREGATED_COLS = {
     'reimbursement_number': 'numbers',
@@ -127,8 +118,6 @@ class ReimbursementsCleaner:
         file_path = os.path.join(self.path, f'Ano-{self.year}.csv')
         self.data = pd.read_csv(file_path,
                                 delimiter=';',
-                                quoting=csv.QUOTE_NONE,
-                                decimal=',',
                                 dtype=DTYPE,
                                 low_memory=False)
 
@@ -141,8 +130,8 @@ class ReimbursementsCleaner:
     def aggregate_multiple_payments(self):
         self.data = pd.concat([
             self._house_payments(),
-            self._non_house_payments(),
-        ])
+            self._non_house_payments()
+        ], sort=False)
 
     def save(self):
         file_path = os.path.join(self.path, f'reimbursements-{self.year}.csv')
