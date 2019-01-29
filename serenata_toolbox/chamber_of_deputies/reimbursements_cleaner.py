@@ -7,7 +7,7 @@ import pandas as pd
 
 COLUMNS = {
     'txNomeParlamentar': 'congressperson_name',
-    'idecadastro': 'congressperson_id',
+    'ideCadastro': 'congressperson_id',
     'nuCarteiraParlamentar': 'congressperson_document',
     'nuLegislatura': 'term',
     'sgUF': 'state',
@@ -62,7 +62,7 @@ SUBQUOTAS = (
 )
 DTYPE = {
     'txNomeParlamentar': np.str,
-    'idecadastro': np.str,
+    'ideCadastro': np.str,
     'nuCarteiraParlamentar': np.str,
     'nuLegislatura': np.str,
     'sgUF': np.str,
