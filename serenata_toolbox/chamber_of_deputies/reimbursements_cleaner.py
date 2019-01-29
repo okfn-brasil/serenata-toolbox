@@ -112,6 +112,7 @@ class ReimbursementsCleaner:
         self.load_source_file()
         self.translate()
         self.aggregate_multiple_payments()
+        self.cleanup()
         self.save()
 
     def load_source_file(self):
@@ -132,6 +133,11 @@ class ReimbursementsCleaner:
             self._house_payments(),
             self._non_house_payments()
         ], sort=False)
+
+    def cleanup(self):
+        if self.data is None:
+            return
+        self.data['cnpj_cpf'] = self.data['cnpj_cpf'].str.replace(r'\D', '')
 
     def save(self):
         file_path = os.path.join(self.path, f'reimbursements-{self.year}.csv')
