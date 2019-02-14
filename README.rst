@@ -118,7 +118,7 @@ If you ever wonder how did we generated these datasets, this toolbox can help yo
 Documentation (WIP)
 -------------------
 
-The `full documentation <https://serenata_toolbox.readthedocs.io>`_ is still a work in progress. If you wanna give us a hand you will need `Sphinx <http://www.sphinx-doc.org/>`_:
+The `full documentation <https://serenata-toolbox.readthedocs.io>`_ is still a work in progress. If you wanna give us a hand you will need `Sphinx <http://www.sphinx-doc.org/>`_:
 
 .. code-block:: bash
 
