@@ -13,6 +13,7 @@ setup(
         'Intended Audience :: Science/Research',
         'License :: OSI Approved :: MIT License',
         'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3.7',
         'Topic :: Utilities',
     ],
     description='Toolbox for Serenata de Amor project',
@@ -39,5 +40,5 @@ setup(
     scripts=['serenata_toolbox/serenata-toolbox'],
     url=REPO_URL,
     python_requires='>=3.6',
-    version='15.1.4',
+    version='15.1.5',
 )
