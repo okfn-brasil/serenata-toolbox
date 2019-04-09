@@ -1,16 +1,20 @@
+sudo: false
 language: python
-python: 3.6
+python:
+  - "3.8"
+  - "3.7"
+  - "3.6"
+
 cache:
   directories:
+    - $HOME/virtualenv/python3.8/
+    - $HOME/virtualenv/python3.7/
     - $HOME/virtualenv/python3.6/
 
 jobs:
   include:
-    - stage: unit
-      script: pytest tests/unit
-
-    - stage: journey
-      script: travis_wait 40 pytest tests/journey
+    - stage: tests
+      script: tox
 
     - stage: deploy
       script: skip
@@ -23,9 +27,11 @@ jobs:
           branch: master
 
 install:
-  - rm -rf .coverage
+  - python -m pip install -U coveralls coverage tox-travis
   - python -m pip install -U -e .
-  - python -m pip install -U coveralls pytest pytest-cov
+  - coverage erase
 
 after_success:
+  - coverage combine
+  - coverage report
   - coveralls
