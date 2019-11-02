@@ -19,11 +19,14 @@ setup(
     zip_safe=False,
     install_requires=[
         'aiofiles',
+        'async_lru',
         'aiohttp',
         'beautifulsoup4>=4.4',
         'lxml>=3.6',
+        'openpyxl',
         'pandas>=0.18',
         'python-decouple>=3.1',
+        'requests',
         'tqdm'
     ],
     keywords='serenata de amor, data science, brazil, corruption',
@@ -32,9 +35,10 @@ setup(
     name='serenata-toolbox',
     packages=[
         'serenata_toolbox',
-        'serenata_toolbox.federal_senate',
         'serenata_toolbox.chamber_of_deputies',
-        'serenata_toolbox.datasets'
+        'serenata_toolbox.companies',
+        'serenata_toolbox.datasets',
+        'serenata_toolbox.federal_senate',
     ],
     scripts=['serenata_toolbox/serenata-toolbox'],
     url=REPO_URL,
