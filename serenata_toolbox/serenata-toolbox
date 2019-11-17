@@ -6,6 +6,7 @@ from argparse import ArgumentParser
 
 from serenata_toolbox import log
 from serenata_toolbox.chamber_of_deputies.reimbursements import Reimbursements as ChamberDataset
+from serenata_toolbox.companies.dataset import Dataset as CompaniesDataset
 from serenata_toolbox.datasets import Datasets
 from serenata_toolbox.federal_senate.dataset import Dataset as SenateDataset
 
@@ -26,6 +27,7 @@ def main():
         datasets = Datasets(path)
         datasets.downloader.download(datasets.downloader.LATEST)
         return
+
     if 'chamber_of_deputies' in args.module:
         if args.year:
             for year in args.year:
@@ -33,6 +35,7 @@ def main():
         else:
             chamber = ChamberDataset(path=path)
         chamber()
+
     if 'federal_senate' in args.module:
         if args.year:
             for year in args.year:
@@ -42,6 +45,10 @@ def main():
         senate.fetch()
         senate.translate()
         senate.clean()
+
+    if 'companies' in args.module:
+        companies = CompaniesDataset(path)
+        companies()
 
 
 if __name__ == '__main__':

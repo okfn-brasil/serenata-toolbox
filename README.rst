@@ -48,6 +48,8 @@ But you can specify which datasets to download and where to save them. For examp
 
     $ serenata-toolbox /tmp/serenata-data --module federal_senate chamber_of_deputies
 
+Available modules are ``chamber_of_deputies``, ``companies`` and ``federal_senate``.
+
 Yet, you can specify a specific year:
 
 .. code-block:: bash
@@ -58,7 +60,7 @@ Or use it all together:
 
 .. code-block:: bash
 
-    $ serenata-toolbox /tmp/serenata-data --module federal_senate --year 2017
+    $ serenata-toolbox /tmp/serenata-data --module federal_senate companies --year 2017
 
 Finally, you might want to get help:
 
