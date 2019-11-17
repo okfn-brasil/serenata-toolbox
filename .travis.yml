@@ -1,31 +1,38 @@
 language: python
-python: 3.6
-cache:
-  directories:
-    - $HOME/virtualenv/python3.6/
+
+python:
+  - '3.8'
+  - '3.7'
+  - '3.6'
+
+matrix:
+  include:
+    - python: 3.8
+      env: TOXENV=py38
+    - python: 3.7
+      env: TOXENV=py37
+    - python: 3.6
+      env: TOXENV=py36
 
 jobs:
   include:
-    - stage: unit
-      script: pytest tests/unit
-
-    - stage: journey
-      script: travis_wait 40 pytest tests/journey
-
     - stage: deploy
+      name: "Deploy to PyPI"
+      if: branch = master
       script: skip
       deploy:
         provider: pypi
         user: serenata
         password: $PYPI_PASSWORD
         distributions: "sdist bdist_wheel"
-        on:
-          branch: master
 
 install:
-  - rm -rf .coverage
-  - python -m pip install -U -e .
-  - python -m pip install -U coveralls pytest pytest-cov
+  - pip install coveralls coverage tox
+  - pip install .
+
+script: tox
 
 after_success:
+  - coverage combine
+  - coverage report
   - coveralls

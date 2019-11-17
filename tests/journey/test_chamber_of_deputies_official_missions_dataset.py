@@ -20,9 +20,9 @@ class TestOfficialMissionsDataset(TestCase):
             'canceled', 'report_status', 'report_details_link'
         ]
         self.assertTrue(np.array_equal(expectedColumns, actualColumns))
-        self.assertEqual(57, len(df))
+        self.assertEqual(53, len(df))
 
-        expectedCanceled = ['No', 'Yes']
+        expectedCanceled = ['No']
         actualCanceled = df.canceled.unique()
         self.assertTrue(np.array_equal(np.array(expectedCanceled), np.array(actualCanceled)))
 
