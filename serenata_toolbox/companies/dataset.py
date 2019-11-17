@@ -86,7 +86,7 @@ class Dataset:
 
     @property
     def documents(self):
-        numbers = []
+        numbers = set()
         for dataset in self.datasets:
             log.info(f"Reading {dataset}…")
             df = pd.read_csv(
@@ -97,9 +97,11 @@ class Dataset:
                 usecols=(self.header,),
             )
             log.info(f"Filtering unique CNPJs from {dataset}…")
-            numbers.extend(df[self.header].unique())
+            for number in df[self.header].unique():
+                if self.is_cnpj(number):
+                    numbers.add(number)
 
-        yield from (num for num in set(numbers) if self.is_cnpj(num))
+        yield from numbers
 
     def translate_dict_keys(self, obj, translations=None):
         translations = translations or self.TRANSLATION

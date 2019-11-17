@@ -19,8 +19,8 @@ setup(
     zip_safe=False,
     install_requires=[
         'aiofiles',
-        'async_lru',
         'aiohttp',
+        'async_lru',
         'beautifulsoup4>=4.4',
         'lxml>=3.6',
         'openpyxl',
