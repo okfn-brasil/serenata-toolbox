@@ -141,14 +141,14 @@ Always add tests to your contribution — if you want to test it locally before
 
 .. code-block:: bash
 
-  $ pip install pytest pytest-cov
-  $ pytest
+  $ pip install tox
+  $ tox
 
 When the tests are passing, also check for coverage of the modules you edited or added — if you want to check it before opening the PR:
 
 .. code-block:: bash
 
-  $ pytest
+  $ tox
   $ open htmlcov/index.html
 
 Follow `PEP8 <https://www.python.org/dev/peps/pep-0008/>`_ and best practices implemented by `Landscape <https://landscape.io>`_ in the `veryhigh` strictness level — if you want to check them locally before opening the PR:

@@ -1,9 +1,10 @@
 *.egg-info/
 *.pyc
-.coverage
+.*swp
+.coverage*
 .pytest_cache/
+.tox/
 __pycache__/
-htmlcov/
 build/
 dist/
-.*swp
+htmlcov/
