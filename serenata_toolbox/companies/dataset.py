@@ -94,10 +94,6 @@ class Dataset:
         )
         return self._datasets
 
-    @staticmethod
-    def is_cnpj(number):
-        return len(re.sub(r"\D", "", number)) == 14
-
     @property
     def documents(self):
         if self._documents:
@@ -119,11 +115,12 @@ class Dataset:
                 continue
 
             log.info(f"Filtering unique CNPJs from {dataset}…")
-            for number in df[self.header].unique():
-                if self.is_cnpj(number):
-                    numbers.add(number)
+            for num in df[self.header].unique():
+                if isinstance(num, str) and len(re.sub(r"\D", "", num)) == 14:
+                    numbers.add(num)
 
-        self._documents = tuple(numbers)
+        log.info(f"Consolidating {len(numbers):,} different CNPJ numbers…")
+        self._documents = tuple(numbers)  # tuple is way smaller than set
         return self._documents
 
     def translate_dict_keys(self, obj, translations=None):

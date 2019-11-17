@@ -23,7 +23,7 @@ class GoogleDriveFile:
         self.target = target
 
     def save(self, response):
-        log.debug(f"Dowloading {response.url} to {self.target}…")
+        log.info(f"Dowloading {response.url} to {self.target}…")
         with self.target.open("wb") as fobj:
             for chunk in response.iter_content(self.CHUNK):
                 if chunk:
@@ -52,5 +52,4 @@ class GoogleDriveFile:
             response = session.get(self.URL, params=params, stream=True)
             self.save(response)
 
-        log.info(f"Database file ready at {self.target}")
         return self.target

@@ -33,7 +33,7 @@ class Cnae:
         except ValueError:
             return
 
-    def _load_activities(self):
+    def load_activities(self):
         log.info("Fetching CNAE descriptions…")
         with NamedTemporaryFile(suffix=".xlsx") as tmp:
             response = requests.get(self.CNAE_DESCRIPTION_FILE)
@@ -60,7 +60,7 @@ class Cnae:
         if self._activities:
             return self._activities
 
-        self._load_activities()
+        self.load_activities()
         return self._activities
 
     def __call__(self, code):

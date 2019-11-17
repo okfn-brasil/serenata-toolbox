@@ -17,6 +17,7 @@ class Database:
     the Federal Revenue, and with geo-coordinates from Open Street Maps."""
 
     DEFAULT_FILENAME = "socios-brasil.sqlite"
+    CHUNK = 2 ** 12
 
     def __init__(self, path="data"):
         self.compressed = Path(path) / f"{self.DEFAULT_FILENAME}.gz"
@@ -29,6 +30,7 @@ class Database:
             self.decompress()
 
         self.cnae = Cnae()
+        self.cnae.load_activities()
         self.nominatim = Nominatim()
 
         self._to_close = []  # objects to close on self.close()
