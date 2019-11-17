@@ -2,20 +2,15 @@
    :target: https://travis-ci.org/okfn-brasil/serenata-toolbox
    :alt: Travis CI build status (Linux)
 
-.. image:: https://readthedocs.org/projects/serenata-toolbox/badge/?version=latest
-   :target: http://serenata-toolbox.readthedocs.io/en/latest/?badge=latest
-   :alt: Documentation Status
-
-.. image:: https://landscape.io/github/okfn-brasil/serenata-toolbox/master/landscape.svg?style=flat
-   :target: https://landscape.io/github/okfn-brasil/serenata-toolbox/master
-   :alt: Code Health
-
 .. image:: https://coveralls.io/repos/github/okfn-brasil/serenata-toolbox/badge.svg?branch=master
    :target: https://coveralls.io/github/okfn-brasil/serenata-toolbox?branch=master
    :alt: Coveralls
 
 .. image:: https://badge.fury.io/py/serenata-toolbox.svg
    :alt: PyPI package version
+
+.. image:: https://img.shields.io/pypi/pyversions/serenata_toolbox
+   :alt: PyPI - Python Version
 
 .. image:: https://img.shields.io/badge/donate-apoia.se-EB4A3B.svg
    :target: https://apoia.se/serenata
@@ -24,10 +19,7 @@
 Serenata de Amor Toolbox
 ========================
 
-`pip <https://pip.pypa.io/en/stable/>`_  installable package to support `Serenata de Amor <https://github.com/okfn-brasil/serenata-de-amor>`_
-and `Rosie <https://github.com/okfn-brasil/serenata-de-amor/blob/master/rosie/README.md>`_ development.
-
-Serenata_toolbox is compatible with Python 3.6+
+Python package to support `Serenata de Amor <https://github.com/okfn-brasil/serenata-de-amor>`_ development. ``serenata_toolbox`` is compatible with Python 3.6+.
 
 Installation
 ------------
@@ -36,39 +28,48 @@ Installation
 
     $ pip install -U serenata-toolbox
 
-If you are a regular user you are ready to get started after `pip install`.
-
-If you are a core developer willing to upload datasets to the cloud you need to configure `AMAZON_ACCESS_KEY` and `AMAZON_SECRET_KEY` environment variables before running the toolbox.
-
 Usage
 -----
 
-We have `plenty of them <https://github.com/okfn-brasil/serenata-de-amor/blob/51fad8c807cb353303c5f5a3f945693feeb82015/CONTRIBUTING.md#datasets-researchdata>`_ ready for you to download from our servers. And this toolbox helps you get them. Here some examples:
+This toolbox helps you get datasets used in `Serenata de Amor services <https://github.com/okfn-brasil/serenata-de-amor>`_ and `notebooks <https://github.com/okfn-brasil/notebooks>`_.
 
-Example 1: Using the command line wrapper
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Example 1: Using the CLI
+^^^^^^^^^^^^^^^^^^^^^^^^
+
+Without any arguments, it will download our pre-processed datasets and store into ``data`` folder:
 
 .. code-block:: bash
 
-    # without any arguments will download our pre-processed datasets and store into data/ folder
     $ serenata-toolbox
 
-    # will download these specific datasets and store into /tmp/serenata-data folder
+But you can specify which datasets to download and where to save them. For example, to download ``chamber_of_deputies`` and ``federal_senate`` datasets to ``/tmp/serenata-data``:
+
+.. code-block:: bash
+
     $ serenata-toolbox /tmp/serenata-data --module federal_senate chamber_of_deputies
 
-    # you can specify a dataset and a year
+Yet, you can specify a specific year:
+
+.. code-block:: bash
+
     $ serenata-toolbox --module chamber_of_deputies --year 2009
 
-    # or specify all options simultaneously
+Or use it all together:
+
+.. code-block:: bash
+
     $ serenata-toolbox /tmp/serenata-data --module federal_senate --year 2017
 
-    # getting help
+Finally, you might want to get help:
+
+.. code-block:: bash
+
     $ serenata-toolbox --help
 
-Example 2: How do I download the datasets?
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Example 2: Using Python
+^^^^^^^^^^^^^^^^^^^^^^^
 
-Another option is creating your own Python script:
+Another option is creating your own Python scripts:
 
 .. code-block:: python
 
@@ -100,7 +101,7 @@ If the last example doesn't look that simple, there are some fancy shortcuts ava
 Example 4: Generating datasets
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-If you ever wonder how did we generated these datasets, this toolbox can help you too (at least with the more used ones — the other ones are generated `in our main repo <https://github.com/okfn-brasil/serenata-de-amor/blob/51fad8c807cb353303c5f5a3f945693feeb82015/CONTRIBUTING.md#the-toolbox-and-our-the-source-files-researchsrc>`_):
+If you ever wonder how did we generated these datasets, this toolbox can help you too (at least with the most used used ones — the other ones are generated `in our main repo <https://github.com/okfn-brasil/serenata-de-amor/blob/51fad8c807cb353303c5f5a3f945693feeb82015/CONTRIBUTING.md#the-toolbox-and-our-the-source-files-researchsrc>`_):
 
 .. code-block:: python
 
@@ -128,8 +129,7 @@ The `full documentation <https://serenata-toolbox.readthedocs.io>`_ is still a w
 Contributing
 ------------
 
-Firstly, you should create a development environment with Python's `venv <https://docs.python.org/3/library/venv.html#creating-virtual-environments>`_ module to isolate your development.
-Then clone the repository and build the package by running:
+Firstly, you should create a development environment with Python's `venv <https://docs.python.org/3/library/venv.html#creating-virtual-environments>`_ module to isolate your development. Then clone the repository and build the package by running:
 
 .. code-block:: bash
 
@@ -137,21 +137,21 @@ Then clone the repository and build the package by running:
   $ cd serenata-toolbox
   $ python setup.py develop
 
-Always add tests to your contribution — if you want to test it locally before opening the PR:
+Always add tests to your contribution — if you want to test it locally before opening the PR:
 
 .. code-block:: bash
 
   $ pip install tox
   $ tox
 
-When the tests are passing, also check for coverage of the modules you edited or added — if you want to check it before opening the PR:
+When the tests are passing, also check for coverage of the modules you edited or added — if you want to check it before opening the PR:
 
 .. code-block:: bash
 
   $ tox
   $ open htmlcov/index.html
 
-Follow `PEP8 <https://www.python.org/dev/peps/pep-0008/>`_ and best practices implemented by `Landscape <https://landscape.io>`_ in the `veryhigh` strictness level — if you want to check them locally before opening the PR:
+Follow `PEP8 <https://www.python.org/dev/peps/pep-0008/>`_ and its best practices implemented by `Landscape <https://landscape.io>`_ in the `veryhigh` strictness level — if you want to check them locally before opening the PR:
 
 .. code-block:: bash
 
