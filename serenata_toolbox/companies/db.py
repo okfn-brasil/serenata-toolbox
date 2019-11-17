@@ -1,14 +1,8 @@
-import os
 import re
 import sqlite3
-from contextlib import contextmanager
 from functools import partial
 from gzip import GzipFile
-from tempfile import NamedTemporaryFile
-
-import requests
-from async_lru import alru_cache
-from openpyxl import load_workbook
+from pathlib import Path
 
 from serenata_toolbox import log
 from serenata_toolbox.companies.cnae import Cnae
@@ -22,28 +16,39 @@ class Database:
     economic activities (CNAE) description that comes from a separate file from
     the Federal Revenue, and with geo-coordinates from Open Street Maps."""
 
-    def __init__(self, file_id=None):
-        """`file_id` is the Google Drive file ID for the SQLite version of the
-        database maintaned by Brasil.IO. If the `file_id` is an existing local
-        path, the database is initiated loading this local file instead."""
-        self._to_close = []  # objects to close on self.close() method
-        self._cursor = None  # cache
+    DEFAULT_FILENAME = "socios-brasil.sqlite"
+
+    def __init__(self, path="data"):
+        self.compressed = Path(path) / f"{self.DEFAULT_FILENAME}.gz"
+        self.decompressed = Path(path) / self.DEFAULT_FILENAME
+
+        if not self.compressed.exists():
+            GoogleDriveFile(self.compressed).download()
+
+        if not self.decompressed.exists():
+            self.decompress()
+
         self.cnae = Cnae()
         self.nominatim = Nominatim()
 
-        if file_id and os.path.exists(file_id):
-            self.file = file_id
-        else:
-            google_drive = GoogleDriveFile(file_id)
-            self._to_close.append(self.google_drive.file)
-            self.file = google_drive.download()
+        self._to_close = []  # objects to close on self.close()
+        self._cursor = None  # cache
+
+    def decompress(self):
+        log.info(f"Decompressing {self.compressed} to {self.decompressed}…")
+        with GzipFile(self.compressed, mode="rb") as compressed:
+            with self.decompressed.open("wb") as decompressed:
+                chunck = compressed.read(self.CHUNK)
+                while chunck:
+                    decompressed.write(chunck)
+                    chunck = compressed.read(self.CHUNK)
 
     @property
     def cursor(self):
         if self._cursor:
             return self._cursor
 
-        conn = sqlite3.connect(self.file)
+        conn = sqlite3.connect(str(self.decompressed))
         self._to_close.append(conn)
         self._cursor = conn.cursor()
         self.assure_indexes()

@@ -1,6 +1,4 @@
 from contextlib import contextmanager
-from gzip import GzipFile
-from tempfile import NamedTemporaryFile
 
 import requests
 
@@ -18,15 +16,15 @@ class GoogleDriveFile:
     URL = "https://docs.google.com/uc?export=download"
     DEFAULT_GOOGLE_DRIVE_FILE_ID = "19DU3bi_XycAPISWrMniMYbwoiLpAO3D4"
 
-    def __init__(self, file_id=None):
+    def __init__(self, target, file_id=None):
         """`file_id` is the Google Drive file ID for the SQLite version of the
         database maintaned by Brasil.IO."""
         self.file_id = file_id or self.DEFAULT_GOOGLE_DRIVE_FILE_ID
-        self.file = NamedTemporaryFile(suffix=".sqlite3")
+        self.target = target
 
-    def save(self, response, target):
-        log.debug(f"Dowloading {response.url} to {target}…")
-        with open(target, "wb") as fobj:
+    def save(self, response):
+        log.debug(f"Dowloading {response.url} to {self.target}…")
+        with self.target.open("wb") as fobj:
             for chunk in response.iter_content(self.CHUNK):
                 if chunk:
                     fobj.write(chunk)
@@ -47,24 +45,12 @@ class GoogleDriveFile:
 
         yield token
 
-    def decompress(self, path):
-        log.info(f"Decompressing {path} to {self.file.name}…")
-        with GzipFile(path, mode="rb") as gzip:
-            with open(self.file.name, mode="wb") as fobj:
-                chunck = gzip.read(self.CHUNK)
-                while chunck:
-                    fobj.write(chunck)
-                    chunck = gzip.read(self.CHUNK)
-
     def download(self):
         session = requests.Session()
         with self.token(session) as token:
             params = {"id": self.file_id, "confirm": token}
             response = session.get(self.URL, params=params, stream=True)
+            self.save(response)
 
-        with NamedTemporaryFile(suffix=".gz") as tmp:
-            self.save(response, tmp.name)
-            self.decompress(tmp.name)
-
-        log.info(f"Database file ready at {self.file.name}")
-        return self.file.name
+        log.info(f"Database file ready at {self.target}")
+        return self.target

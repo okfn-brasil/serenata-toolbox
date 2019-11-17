@@ -105,8 +105,9 @@ If you ever wonder how did we generated these datasets, this toolbox can help yo
 
 .. code-block:: python
 
-    from serenata_toolbox.federal_senate.dataset import Dataset as SenateDataset
     from serenata_toolbox.chamber_of_deputies.reimbursements import Reimbursements as ChamberDataset
+    from serenata_toolbox.companies.dataset import Dataset as CompaniesDataset
+    from serenata_toolbox.federal_senate.dataset import Dataset as SenateDataset
 
     chamber = ChamberDataset('2018', 'data/')
     chamber()
@@ -115,6 +116,9 @@ If you ever wonder how did we generated these datasets, this toolbox can help yo
     senate.fetch()
     senate.translate()
     senate.clean()
+
+    companies = CompaniesDataset('data/')
+    companies()
 
 Documentation (WIP)
 -------------------

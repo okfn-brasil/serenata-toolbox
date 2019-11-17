@@ -1,8 +1,8 @@
 import asyncio
 import json
-import os
 import re
 from datetime import date, datetime
+from pathlib import Path
 
 import aiohttp
 import numpy as np
@@ -66,19 +66,35 @@ class Dataset:
         "codigo_qualificacao_representante_legal": "legal_representative_code",
     }
 
-    def __init__(self, datasets, path="data", db=None, header="cnpj_cpf"):
+    def __init__(self, path="data", header="cnpj_cpf"):
         """The `datasets` parameter expects a list of paths to datasets (CSV or
         LZMA) containing the `header` column."""
-        if not os.path.isdir(path):
-            os.mkdir(os.path.join(path))
+        self.path = Path(path)
+        if not self.path.exists():
+            self.path.mkdir()
 
-        self.path = path
+        self.output = self.path / f"{date.today()}-companies.csv.xz"
         self.header = header
-        self.db = Database(db)
-        self.datasets = (datasets,) if isinstance(datasets, str) else datasets
+        self.db = Database(path)
 
         self.last_count_at = datetime.now()
         self.count = 0
+        self._datasets = None  # cache
+
+    @property
+    def datasets(self):
+        if self._datasets:
+            return self._datasets
+
+        data = Path(self.path)
+        extensions = ("csv", "xz")
+        self._datasets = tuple(
+            str(dataset.resolve())
+            for extension in extensions
+            for dataset in data.glob(f"*.{extension}")
+            if not dataset.name.endswith("-companies.csv.xz")
+        )
+        return self._datasets
 
     @staticmethod
     def is_cnpj(number):
@@ -89,13 +105,18 @@ class Dataset:
         numbers = set()
         for dataset in self.datasets:
             log.info(f"Reading {dataset}…")
-            df = pd.read_csv(
-                dataset,
-                dtype={self.header: np.str},
-                encoding="utf-8",
-                low_memory=False,
-                usecols=(self.header,),
-            )
+            try:
+                df = pd.read_csv(
+                    dataset,
+                    dtype={self.header: np.str},
+                    encoding="utf-8",
+                    low_memory=False,
+                    usecols=(self.header,),
+                )
+            except ValueError:
+                log.info(f"Skipping {dataset} (no `{self.header}` column)")
+                continue
+
             log.info(f"Filtering unique CNPJs from {dataset}…")
             for number in df[self.header].unique():
                 if self.is_cnpj(number):
@@ -155,10 +176,7 @@ class Dataset:
         self.last_count_at = now
 
     def __call__(self):
-        timestamp = str(date.today())
-        path = os.path.join(self.path, f"{timestamp}-companies.csv.gz")
-
         companies = asyncio.run(self.companies())
         df = pd.DataFrame(companies)
-        df.to_csv(path, index=False, compression="xz")
-        log.info("Comanies dataset saved to {path}!")
+        df.to_csv(self.output, index=False, compression="xz")
+        log.info(f"Comanies dataset saved to {self.output}!")
