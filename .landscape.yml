@@ -1,6 +1,0 @@
-python-targets: 3
-max-line-length: 120
-strictness: veryhigh
-doc-warnings: true
-ignore-paths:
-  - docs
