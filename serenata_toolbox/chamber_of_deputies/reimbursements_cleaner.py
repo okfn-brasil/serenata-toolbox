@@ -139,9 +139,15 @@ class ReimbursementsCleaner:
             return
         self.data['cnpj_cpf'] = self.data['cnpj_cpf'].str.replace(r'\D', '')
 
+        translated = set(COLUMNS.values())
+        aggregated = set(AGGREGATED_COLS.values())
+        to_drop = set(self.data.columns) - translated.union(aggregated)
+        if to_drop:
+            self.data.drop(columns=to_drop, inplace=True)
+
     def save(self):
         file_path = os.path.join(self.path, f'reimbursements-{self.year}.csv')
-        self.data.to_csv(file_path, index=False, columns=COLUMNS.values())
+        self.data.to_csv(file_path, index=False)
 
     def _house_payments(self):
         data = self.data[self.data['reimbursement_number'] == '0'].copy()
