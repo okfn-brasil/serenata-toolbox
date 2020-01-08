@@ -63,10 +63,10 @@ class TestReimbursementsCleaner(TestCase):
         self.assertIsInstance(self.subject.data, pd.DataFrame)
 
     def test_translate_columns(self):
-        expected_cols = list(COLUMNS.values())
+        expected_cols = list(COLUMNS.values()) + ['cpf']
         self.subject.load_source_file()
         self.subject.translate()
-        self.assertEqual(expected_cols, list(self.subject.data.columns))
+        self.assertEqual(set(expected_cols), set(self.subject.data.columns))
 
     def test_translate_subquotas(self):
         expected_subquotas = [
@@ -89,7 +89,7 @@ class TestReimbursementsCleaner(TestCase):
         self.subject.load_source_file()
         self.subject.translate()
         self.subject.aggregate_multiple_payments()
-        self.assertEqual((5, 29), self.subject.data.shape)
+        self.assertEqual((5, 30), self.subject.data.shape)
 
     @patch.object(pd.DataFrame, 'to_csv')
     def test_save_into_csv_file(self, to_csv_mock):
@@ -104,7 +104,7 @@ class TestReimbursementsCleaner(TestCase):
         self.subject.load_source_file()
         self.subject.translate()
         data = self.subject._house_payments()
-        self.assertEqual(DATASET_COLS, data.columns.tolist())
+        self.assertEqual(set(DATASET_COLS + ['cpf']), set(data.columns))
 
     def test_house_payments_reshape_numbers_as_list(self):
         self.subject.load_source_file()
@@ -116,7 +116,7 @@ class TestReimbursementsCleaner(TestCase):
         self.subject.load_source_file()
         self.subject.translate()
         data = self.subject._non_house_payments()
-        self.assertEqual(sorted(DATASET_COLS), sorted(data.columns.tolist()))
+        self.assertEqual(set(DATASET_COLS + ['cpf']), set(data.columns))
         cols = ['numbers', 'total_net_value', 'total_value']
         values = [
             [['5828'], 296.0, 0.0],
@@ -125,3 +125,10 @@ class TestReimbursementsCleaner(TestCase):
             [['6041'], 100.0, 0.0],
         ]
         self.assertEqual(values, data[cols].values.tolist())
+
+    def test_cleanup(self):
+        expected_cols = set(COLUMNS.values())
+        self.subject.load_source_file()
+        self.subject.translate()
+        self.subject.cleanup()
+        self.assertEqual(expected_cols, set(self.subject.data.columns))
