@@ -141,7 +141,7 @@ class ReimbursementsCleaner:
 
     def save(self):
         file_path = os.path.join(self.path, f'reimbursements-{self.year}.csv')
-        self.data.to_csv(file_path, index=False)
+        self.data.to_csv(file_path, index=False, columns=COLUMNS.values())
 
     def _house_payments(self):
         data = self.data[self.data['reimbursement_number'] == '0'].copy()
