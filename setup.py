@@ -41,5 +41,5 @@ setup(
     scripts=['serenata_toolbox/serenata-toolbox'],
     url=REPO_URL,
     python_requires='>=3.6',
-    version='15.1.5',
+    version='15.1.6',
 )
