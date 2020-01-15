@@ -12,7 +12,7 @@ from serenata_toolbox.companies.open_street_maps import Nominatim
 
 class Database:
     """This database abstraction downloads the SQLite file from Brasil.IO and
-    offersa wrapper to make queries easier. Data is complemented with
+    offers a wrapper to make queries easier. Data is complemented with
     economic activities (CNAE) description that comes from a separate file from
     the Federal Revenue, and with geo-coordinates from Open Street Maps."""
 

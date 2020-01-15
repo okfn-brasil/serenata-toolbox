@@ -103,7 +103,7 @@ If the last example doesn't look that simple, there are some fancy shortcuts ava
 Example 4: Generating datasets
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-If you ever wonder how did we generated these datasets, this toolbox can help you too (at least with the most used used ones — the other ones are generated `in our main repo <https://github.com/okfn-brasil/serenata-de-amor/blob/51fad8c807cb353303c5f5a3f945693feeb82015/CONTRIBUTING.md#the-toolbox-and-our-the-source-files-researchsrc>`_):
+If you ever wonder how did we generate these datasets, this toolbox can help you too (at least with the most used ones — the other ones are generated `in our main repo <https://github.com/okfn-brasil/serenata-de-amor/blob/51fad8c807cb353303c5f5a3f945693feeb82015/CONTRIBUTING.md#the-toolbox-and-our-the-source-files-researchsrc>`_):
 
 .. code-block:: python
 

@@ -68,7 +68,7 @@ class Dataset:
     }
 
     def __init__(self, path="data", header="cnpj_cpf"):
-        """The `datasets` parameter expects a list of paths to datasets (CSV or
+        """The `path` parameter expects directory with datasets (CSV or
         LZMA) containing the `header` column."""
         self.path = Path(path)
         if not self.path.exists():
